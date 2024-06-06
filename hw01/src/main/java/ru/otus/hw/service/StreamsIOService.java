@@ -1,14 +1,12 @@
 package ru.otus.hw.service;
 
+import lombok.RequiredArgsConstructor;
+
 import java.io.PrintStream;
 
+@RequiredArgsConstructor
 public class StreamsIOService implements IOService {
     private final PrintStream printStream;
-
-    public StreamsIOService(PrintStream printStream) {
-
-        this.printStream = printStream;
-    }
 
     @Override
     public void printLine(String s) {
@@ -17,6 +15,6 @@ public class StreamsIOService implements IOService {
 
     @Override
     public void printFormattedLine(String s, Object... args) {
-        printStream.printf(s + "%n", args);
+        printStream.printf(s + "\n", args); //исправлен символ перевода на следующую строку
     }
 }

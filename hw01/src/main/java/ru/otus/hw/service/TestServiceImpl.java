@@ -1,6 +1,7 @@
 package ru.otus.hw.service;
 
 import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 
 @RequiredArgsConstructor
 public class TestServiceImpl implements TestService {
@@ -9,8 +10,8 @@ public class TestServiceImpl implements TestService {
 
     @Override
     public void executeTest() {
-        ioService.printLine("");
-        ioService.printFormattedLine("Please answer the questions below%n");
+        ioService.printLine("Please answer the questions below");
+
         // Получить вопросы из дао и вывести их с вариантами ответов
     }
 }
