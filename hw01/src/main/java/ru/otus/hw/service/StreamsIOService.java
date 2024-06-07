@@ -15,6 +15,6 @@ public class StreamsIOService implements IOService {
 
     @Override
     public void printFormattedLine(String s, Object... args) {
-        printStream.printf(s + "\n", args); //исправлен символ перевода на следующую строку
+        printStream.printf(s + "%n", args);
     }
 }

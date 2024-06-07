@@ -6,16 +6,27 @@
         http://www.springframework.org/schema/beans/spring-beans.xsd
         http://www.springframework.org/schema/util https://www.springframework.org/schema/util/spring-util.xsd">
 
-    <bean id="ioService" class="ru.otus.hw.service.StreamsIOService">
+    <bean id="IOService" class="ru.otus.hw.service.StreamsIOService">
         <constructor-arg index="0">
             <util:constant static-field="java.lang.System.out"/>
         </constructor-arg>
     </bean>
-    <bean id="testService" class="ru.otus.hw.service.TestServiceImpl">
-        <constructor-arg name="ioService" ref ="ioService"/>
+
+    <bean id="TestService" class="ru.otus.hw.service.TestServiceImpl">
+        <constructor-arg name="ioService" ref ="IOService"/>
+        <constructor-arg name="questionDao" ref ="CsvQuestionDao"/>
     </bean>
-    <bean id="testRunnerService" class="ru.otus.hw.service.TestRunnerServiceImpl">
-        <constructor-arg name="testService" ref ="testService"/>
+
+    <bean id="TestRunnerService" class="ru.otus.hw.service.TestRunnerServiceImpl">
+        <constructor-arg name="testService" ref ="TestService"/>
+    </bean>
+
+    <bean id="AppProperties" class="ru.otus.hw.config.AppProperties">
+        <constructor-arg name="testFileName" value ="/questions.csv"/>
+    </bean>
+
+    <bean id="CsvQuestionDao" class="ru.otus.hw.dao.CsvQuestionDao">
+        <constructor-arg name="fileNameProvider" ref ="AppProperties"/>
     </bean>
 
 </beans>

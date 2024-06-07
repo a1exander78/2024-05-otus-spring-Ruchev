@@ -1,17 +1,17 @@
 package ru.otus.hw.service;
 
 import lombok.RequiredArgsConstructor;
-import lombok.Setter;
+import ru.otus.hw.dao.QuestionDao;
 
 @RequiredArgsConstructor
 public class TestServiceImpl implements TestService {
 
     private final IOService ioService;
 
+    private final QuestionDao questionDao;
+
     @Override
     public void executeTest() {
-        ioService.printLine("Please answer the questions below");
-
-        // Получить вопросы из дао и вывести их с вариантами ответов
+        questionDao.findAll().forEach(q -> ioService.printLine(q.text() + "\n" + q.answers() + "\n"));
     }
 }
