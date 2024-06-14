@@ -7,6 +7,6 @@ public record Answer(String text, boolean isCorrect) {
     }
 
     public String getAnswerCorrectness() {
-        return isCorrect() == true ? "(Correct answer)" : "(Incorrect answer)";
+        return isCorrect() ? "(Correct answer)" : "(Incorrect answer)";
     }
 }
