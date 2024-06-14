@@ -3,27 +3,32 @@ package ru.otus.hw.service;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Mockito;
 
-import java.io.ByteArrayOutputStream;
-import java.io.OutputStream;
 import java.io.PrintStream;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-
 public class StreamsIOServiceTest {
-    private OutputStream output = new ByteArrayOutputStream();
-    private IOService sioservice = new StreamsIOService(new PrintStream(output));
+
+    private PrintStream printStream;
+    private ArgumentCaptor<String> captor;
+    private IOService streamsIOService;
 
     @BeforeEach
     void setUp() {
-        System.setOut(new PrintStream(output));
+        printStream = Mockito.mock(PrintStream.class);
+        streamsIOService = new StreamsIOService(printStream);
+        captor = ArgumentCaptor.forClass(String.class);
     }
 
     @Test
     void shouldPrintHelloWorld() {
-        sioservice.printLine("Hello world");
-        assertEquals("Hello world\r\n", output.toString());
+        String text = "Hello world";
+        streamsIOService.printLine(text);
+        Mockito.verify(printStream).println(captor.capture());
+        assertEquals(captor.getValue(), text);
     }
 
     @AfterEach
