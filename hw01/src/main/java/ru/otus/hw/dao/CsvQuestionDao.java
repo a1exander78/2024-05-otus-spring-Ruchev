@@ -10,7 +10,6 @@ import ru.otus.hw.exceptions.QuestionReadException;
 
 import java.io.InputStreamReader;
 import java.io.Reader;
-import java.util.ArrayList;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -20,8 +19,6 @@ public class CsvQuestionDao implements QuestionDao {
     @Override
     public List<Question> findAll() {
 
-        List<Question> questions = new ArrayList<>();
-
         try (Reader reader = new InputStreamReader(getClass().getResourceAsStream(fileNameProvider.getTestFileName()))) {
 
             CsvToBean<QuestionDto> cb = new CsvToBeanBuilder<QuestionDto>(reader)
@@ -30,12 +27,11 @@ public class CsvQuestionDao implements QuestionDao {
                     .withSeparator(';')
                     .build();
 
-            questions = cb.parse().stream().map(QuestionDto::toDomainObject).toList();
+            return cb.parse().stream().map(QuestionDto::toDomainObject).toList();
 
         } catch (Exception e) {
             throw new QuestionReadException("Ошибка чтения файла", e);
         }
 
-        return questions;
     }
 }
