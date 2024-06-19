@@ -1,6 +1,5 @@
 package ru.otus.hw.service;
 
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
@@ -29,10 +28,5 @@ public class StreamsIOServiceTest {
         streamsIOService.printLine(text);
         Mockito.verify(printStream).println(captor.capture());
         assertEquals(captor.getValue(), text);
-    }
-
-    @AfterEach
-    void cleanUp() {
-        System.setOut(null);
     }
 }

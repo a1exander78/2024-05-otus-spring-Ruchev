@@ -6,27 +6,36 @@
         http://www.springframework.org/schema/beans/spring-beans.xsd
         http://www.springframework.org/schema/util https://www.springframework.org/schema/util/spring-util.xsd">
 
-    <bean id="IOService" class="ru.otus.hw.service.StreamsIOService">
+    <bean id="iOService" class="ru.otus.hw.service.StreamsIOService">
         <constructor-arg index="0">
             <util:constant static-field="java.lang.System.out"/>
         </constructor-arg>
     </bean>
 
-    <bean id="TestService" class="ru.otus.hw.service.TestServiceImpl">
-        <constructor-arg name="ioService" ref ="IOService"/>
-        <constructor-arg name="questionDao" ref ="CsvQuestionDao"/>
+    <bean id="answerPrinter" class="ru.otus.hw.dao.dto.AnswerPrinter">
+        <constructor-arg name="ioService" ref ="iOService"/>
     </bean>
 
-    <bean id="TestRunnerService" class="ru.otus.hw.service.TestRunnerServiceImpl">
-        <constructor-arg name="testService" ref ="TestService"/>
+    <bean id="questionPrinter" class="ru.otus.hw.dao.dto.QuestionPrinter">
+        <constructor-arg name="ioService" ref ="iOService"/>
     </bean>
 
-    <bean id="AppProperties" class="ru.otus.hw.config.AppProperties">
+    <bean id="testService" class="ru.otus.hw.service.TestServiceImpl">
+        <constructor-arg name="questionDao" ref ="csvQuestionDao"/>
+        <constructor-arg name="questionPrinter" ref ="questionPrinter"/>
+        <constructor-arg name="answerPrinter" ref ="answerPrinter"/>
+    </bean>
+
+    <bean id="testRunnerService" class="ru.otus.hw.service.TestRunnerServiceImpl">
+        <constructor-arg name="testService" ref ="testService"/>
+    </bean>
+
+    <bean id="appProperties" class="ru.otus.hw.config.AppProperties">
         <constructor-arg name="testFileName" value ="/questions.csv"/>
     </bean>
 
-    <bean id="CsvQuestionDao" class="ru.otus.hw.dao.CsvQuestionDao">
-        <constructor-arg name="fileNameProvider" ref ="AppProperties"/>
+    <bean id="csvQuestionDao" class="ru.otus.hw.dao.CsvQuestionDao">
+        <constructor-arg name="fileNameProvider" ref ="appProperties"/>
     </bean>
 
 </beans>

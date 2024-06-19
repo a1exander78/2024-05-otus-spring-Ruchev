@@ -2,37 +2,44 @@ package ru.otus.hw.service;
 
 import lombok.RequiredArgsConstructor;
 import ru.otus.hw.dao.QuestionDao;
+import ru.otus.hw.dao.dto.AnswerPrinter;
+import ru.otus.hw.dao.dto.QuestionPrinter;
+import ru.otus.hw.domain.Question;
+
+import java.util.List;
 
 @RequiredArgsConstructor
 public class TestServiceImpl implements TestService {
 
-    private final IOService iOService;
-
     private final QuestionDao questionDao;
+
+    private final QuestionPrinter questionPrinter;
+
+    private final AnswerPrinter answerPrinter;
 
     @Override
     public void executeTest() {
-        var questions = questionDao.findAll();
+        printQuestionsAndAnswers(questionDao.findAll());
+    }
+
+    private void printQuestionsAndAnswers(List<Question> questions) {
 
         for (int i = 0; i < questions.size(); i++) {
 
             int numberOfQuestion = i + 1;
-            var currentQuestionText = questions.get(i).getQuestionText();
+            var currentQuestion = questions.get(i);
 
-            iOService.printFormattedLine("%s" + currentQuestionText, "\nQuestion #" + numberOfQuestion + ": ");
+            questionPrinter.printQuestionText(numberOfQuestion, currentQuestion);
 
             var answers = questions.get(i).answers();
 
             for (int j = 0; j < answers.size(); j++) {
 
                 int numberOfAnswer = j + 1;
-                var currentAnswerText = answers.get(j).getAnswerText();
-                var currentAnswerCorrectness = answers.get(j).getAnswerCorrectness();
+                var currentAnswer = answers.get(j);
 
-
-                iOService.printFormattedLine("%s" + currentAnswerText, "Answer #" + numberOfAnswer + ": ");
-                iOService.printLine(currentAnswerCorrectness);
-
+                answerPrinter.printAnswerText(numberOfAnswer, currentAnswer);
+                answerPrinter.printAnswerCorrectness(currentAnswer);
             }
         }
     }
