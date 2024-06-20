@@ -1,8 +1,10 @@
 package ru.otus.hw.converters;
 
+import lombok.RequiredArgsConstructor;
 import ru.otus.hw.domain.Answer;
 import ru.otus.hw.domain.Question;
 
+@RequiredArgsConstructor
 public class QuestionToStringConverter {
 
     public String convertQuestionToString(Question question) {
