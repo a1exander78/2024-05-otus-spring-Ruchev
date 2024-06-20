@@ -6,24 +6,19 @@
         http://www.springframework.org/schema/beans/spring-beans.xsd
         http://www.springframework.org/schema/util https://www.springframework.org/schema/util/spring-util.xsd">
 
-    <bean id="iOService" class="ru.otus.hw.service.StreamsIOService">
+    <bean id="ioService" class="ru.otus.hw.service.StreamsIOService">
         <constructor-arg index="0">
             <util:constant static-field="java.lang.System.out"/>
         </constructor-arg>
     </bean>
 
-    <bean id="answerPrinter" class="ru.otus.hw.dao.dto.AnswerPrinter">
-        <constructor-arg name="ioService" ref ="iOService"/>
-    </bean>
-
-    <bean id="questionPrinter" class="ru.otus.hw.dao.dto.QuestionPrinter">
-        <constructor-arg name="ioService" ref ="iOService"/>
+    <bean id="questionToStringConverter" class="ru.otus.hw.converters.QuestionToStringConverter">
     </bean>
 
     <bean id="testService" class="ru.otus.hw.service.TestServiceImpl">
+        <constructor-arg name="ioService" ref ="ioService"/>
         <constructor-arg name="questionDao" ref ="csvQuestionDao"/>
-        <constructor-arg name="questionPrinter" ref ="questionPrinter"/>
-        <constructor-arg name="answerPrinter" ref ="answerPrinter"/>
+        <constructor-arg name="questionToStringConverter" ref ="questionToStringConverter"/>
     </bean>
 
     <bean id="testRunnerService" class="ru.otus.hw.service.TestRunnerServiceImpl">
