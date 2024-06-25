@@ -20,4 +20,6 @@ public class AppProperties implements TestConfig, TestFileNameProvider {
         this.rightAnswersCountToPass = rightAnswersCountToPass;
         this.testFileName = testFileName;
     }
+
+
 }
