@@ -17,6 +17,7 @@
         <opencsv.version>5.9</opencsv.version>
         <junit.version>5.10.2</junit.version>
         <mockito.version>5.10.0</mockito.version>
+        <mockito.junit.jupiter.version>4.3.1</mockito.junit.jupiter.version>
         <assertj.version>3.25.2</assertj.version>
         <lombok.version>1.18.32</lombok.version>
         <shade-plugin.version>3.3.0</shade-plugin.version>
@@ -73,6 +74,13 @@
             <artifactId>lombok</artifactId>
             <optional>true</optional>
             <version>${lombok.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-junit-jupiter</artifactId>
+            <version>${mockito.junit.jupiter.version}</version>
+            <scope>test</scope>
         </dependency>
 
     </dependencies>
