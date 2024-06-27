@@ -8,6 +8,8 @@ import ru.otus.hw.domain.Question;
 import ru.otus.hw.domain.Student;
 import ru.otus.hw.domain.TestResult;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class TestServiceImpl implements TestService {
@@ -19,20 +21,14 @@ public class TestServiceImpl implements TestService {
     private final QuestionToStringConverter questionToStringConverter;
 
     @Override
-    public void executeTest() {
-        var questions = questionDao.findAll();
-        for (Question currentQuestion : questions) {
-            ioService.printLine(questionToStringConverter.convertQuestionToString(currentQuestion));
-        }
-    }
-
-    @Override
     public TestResult executeTestFor(Student student) {
         ioService.printLine("");
         ioService.printFormattedLine("Please answer the questions below%n");
-        var questions = questionDao.findAll();
-        var testResult = new TestResult(student);
+        return getTestResult(questionDao.findAll(), student);
+    }
 
+    private TestResult getTestResult(List<Question> questions, Student student) {
+        var testResult = new TestResult(student);
         for (var question: questions) {
             var isAnswerValid = false; // Задать вопрос, получить ответ
             var answers = question.answers();

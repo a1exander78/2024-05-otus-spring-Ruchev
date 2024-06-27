@@ -15,7 +15,6 @@ public class TestRunnerServiceImpl implements TestRunnerService {
 
     @Override
     public void run() {
-        //testService.executeTest();
         var student = studentService.determineCurrentStudent();
         var testResult = testService.executeTestFor(student);
         resultService.showResult(testResult);
