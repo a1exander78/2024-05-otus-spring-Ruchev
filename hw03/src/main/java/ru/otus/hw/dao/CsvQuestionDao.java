@@ -11,7 +11,6 @@ import ru.otus.hw.exceptions.QuestionReadException;
 
 import java.io.InputStreamReader;
 import java.io.Reader;
-import java.util.ArrayList;
 import java.util.List;
 
 @RequiredArgsConstructor
