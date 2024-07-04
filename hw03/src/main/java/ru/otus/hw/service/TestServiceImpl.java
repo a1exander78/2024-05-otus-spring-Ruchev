@@ -22,10 +22,7 @@ public class TestServiceImpl implements TestService {
 
     @Override
     public TestResult executeTestFor(Student student) {
-        ioService.printLine("");
         ioService.printLineLocalized("TestService.answer.the.questions");
-        ioService.printLine("");
-
         return getTestResult(questionDao.findAll(), student);
     }
 
@@ -34,8 +31,9 @@ public class TestServiceImpl implements TestService {
         for (var question: questions) {
             var isAnswerValid = false; // Задать вопрос, получить ответ
             var answers = question.answers();
-            var numberOfAnswer = ioService.readIntForRangeWithPrompt(1, answers.size(),
-                    questionToStringConverter.convertQuestionToString(question), "Invalid answer");
+            var numberOfAnswer = ioService.readIntForRangeWithPromptLocalized(1, answers.size(),
+                    "TestService.answer.the.question", "TestService.answer.invalid",
+                    questionToStringConverter.convertQuestionToString(question));
             if (answers.get(numberOfAnswer - 1).isCorrect()) {
                 isAnswerValid = true;
             }
@@ -43,5 +41,4 @@ public class TestServiceImpl implements TestService {
         }
         return testResult;
     }
-
 }

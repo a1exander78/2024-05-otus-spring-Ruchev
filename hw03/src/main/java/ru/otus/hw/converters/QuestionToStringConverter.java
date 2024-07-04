@@ -15,6 +15,6 @@ public class QuestionToStringConverter {
             int numberOfAnswer = i + 1;
             questionWithAnswers.append(numberOfAnswer).append(") ").append(answers.get(i)).append("\t\t\t");
         }
-        return questionWithAnswers.append("\n").toString();
+        return questionWithAnswers.toString();
     }
 }
