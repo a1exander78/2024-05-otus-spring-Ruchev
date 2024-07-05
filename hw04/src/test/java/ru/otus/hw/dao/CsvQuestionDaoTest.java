@@ -3,10 +3,9 @@ package ru.otus.hw.dao;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import ru.otus.hw.config.AppProperties;
 import ru.otus.hw.domain.Answer;
 import ru.otus.hw.domain.Question;
@@ -18,13 +17,13 @@ import static org.mockito.BDDMockito.given;
 
 
 @DisplayName("Class CsvQuestionDao")
-@ExtendWith({MockitoExtension.class})
+@SpringBootTest(classes = CsvQuestionDao.class)
 class CsvQuestionDaoTest {
 
-    @Mock
+    @MockBean
     private AppProperties properties;
 
-    @InjectMocks
+    @Autowired
     private CsvQuestionDao csvQuestionDao;
 
     private List<Question> expectedQuestionsList;
