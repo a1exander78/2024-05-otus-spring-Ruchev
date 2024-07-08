@@ -2,30 +2,32 @@ package ru.otus.hw.service;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 
 import java.io.InputStream;
 import java.io.PrintStream;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.*;
 
 @DisplayName("Class StreamsIOService")
-@ExtendWith({MockitoExtension.class})
+@SpringBootTest
 public class StreamsIOServiceTest {
 
-    @Mock
-    private PrintStream printStream;
+    @Configuration
+    static class StreamsIOServiceTestConfiguration {
+        @Bean
+        StreamsIOService streamsIOService() {
+            return new StreamsIOService(mock(PrintStream.class), mock(InputStream.class));
+        }
+    }
 
-    @Mock
-    private InputStream inputStream;
-
-    @InjectMocks
+    @Autowired
     private StreamsIOService streamsIOService;
 
     @Captor
@@ -36,7 +38,7 @@ public class StreamsIOServiceTest {
     void shouldPrintHelloWorld() {
         String text = "Hello world";
         streamsIOService.printLine(text);
-        verify(printStream).println(captor.capture());
+        verify(streamsIOService.getPrintStream(), times(1)).println(captor.capture());
         assertEquals(captor.getValue(), text);
     }
 }
