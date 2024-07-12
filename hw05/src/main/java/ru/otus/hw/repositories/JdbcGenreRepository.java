@@ -3,12 +3,13 @@ package ru.otus.hw.repositories;
 import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcOperations;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
 import ru.otus.hw.models.Genre;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.HashMap;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -19,19 +20,21 @@ public class JdbcGenreRepository implements GenreRepository {
 
     private final NamedParameterJdbcOperations jdbc;
 
+    private final GenreRowMapper genreRowMapper;
+
     @Override
     public List<Genre> findAll() {
-        return jdbc.query("select id, name from genres", new GenreRowMapper());
+        return jdbc.query("select id, name from genres", genreRowMapper);
     }
 
     @Override
     public Optional<Genre> findById(long id) {
-        final Map<String, Object> params = new HashMap<>(1);
-        params.put("id", id);
-        var genre = jdbc.queryForObject("select id, name from genres where id = :id", params, new GenreRowMapper());
+        final Map<String, Object> params = Collections.singletonMap("id", id);
+        var genre = jdbc.queryForObject("select id, name from genres where id = :id", params, genreRowMapper);
         return Optional.ofNullable(genre);
     }
 
+    @Component
     private static class GenreRowMapper implements RowMapper<Genre> {
 
         @Override
