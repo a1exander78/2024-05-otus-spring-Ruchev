@@ -8,6 +8,9 @@ import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.JdbcTest;
 import org.springframework.context.annotation.Import;
+import ru.otus.hw.mappers.AuthorRowMapper;
+import ru.otus.hw.mappers.BookRowMapper;
+import ru.otus.hw.mappers.GenreRowMapper;
 import ru.otus.hw.models.Author;
 import ru.otus.hw.models.Book;
 import ru.otus.hw.models.Genre;
@@ -19,7 +22,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @DisplayName("Репозиторий на основе Jdbc для работы с книгами ")
 @JdbcTest
-@Import({JdbcBookRepository.class, JdbcGenreRepository.class, JdbcAuthorRepository.class})
+@Import({JdbcBookRepository.class, JdbcGenreRepository.class, JdbcAuthorRepository.class,
+        AuthorRowMapper.class, BookRowMapper.class, GenreRowMapper.class})
 class JdbcBookRepositoryTest {
 
     @Autowired

@@ -2,17 +2,14 @@ package ru.otus.hw.repositories;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.EmptyResultDataAccessException;
-import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcOperations;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
 import ru.otus.hw.exceptions.EntityNotFoundException;
+import ru.otus.hw.mappers.BookRowMapper;
 import ru.otus.hw.models.Book;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -95,35 +92,5 @@ public class JdbcBookRepository implements BookRepository {
             throw new EntityNotFoundException("Book with id %d not found".formatted(book.getId()));
         }
         return book;
-    }
-
-
-    @RequiredArgsConstructor
-    @Component
-    private static class BookRowMapper implements RowMapper<Book> {
-
-        private final AuthorRepository authorRepository;
-
-        private final GenreRepository genreRepository;
-
-        @Override
-        public Book mapRow(ResultSet rs, int rowNum) throws SQLException {
-            long id = rs.getLong("id");
-            String title = rs.getString("title");
-            var authorId = rs.getLong("author_id");
-            var author = authorRepository.findById(authorId);
-            var genreId = rs.getLong("genre_id");
-            var genre = genreRepository.findById(genreId);
-
-            return new Book(
-                    id,
-                    title,
-                    author
-                            .orElseThrow(() -> new EntityNotFoundException(
-                                    "Author with id %d not found".formatted(authorId))),
-                    genre
-                            .orElseThrow(() -> new EntityNotFoundException(
-                                    "Genre with id %d not found".formatted(genreId))));
-        }
     }
 }

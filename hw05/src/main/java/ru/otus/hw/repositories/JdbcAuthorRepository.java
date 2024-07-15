@@ -2,14 +2,11 @@ package ru.otus.hw.repositories;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.EmptyResultDataAccessException;
-import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcOperations;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
+import ru.otus.hw.mappers.AuthorRowMapper;
 import ru.otus.hw.models.Author;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -40,16 +37,5 @@ public class JdbcAuthorRepository implements AuthorRepository {
             return Optional.empty();
         }
         return Optional.ofNullable(author);
-    }
-
-    @Component
-    private static class AuthorRowMapper implements RowMapper<Author> {
-
-        @Override
-        public Author mapRow(ResultSet rs, int i) throws SQLException {
-            long id = rs.getLong("id");
-            String fullName = rs.getString("full_name");
-            return new Author(id, fullName);
-        }
     }
 }
