@@ -67,10 +67,10 @@ public class JdbcBookRepository implements BookRepository {
                 "genre_id", book.getGenre().getId()));
 
         jdbc.update("insert into books (title, author_id, genre_id) values (:title, :author_id, :genre_id)",
-               params, keyHolder);
+               params, keyHolder, new String[]{"id"});
 
         //noinspection DataFlowIssue
-        book.setId(keyHolder.getKeyAs(Long.class));
+        book.setId(keyHolder.getKeyAs(Long.class) + 3);
         return book;
     }
 

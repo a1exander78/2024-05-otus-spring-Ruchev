@@ -1,0 +1,17 @@
+databaseChangeLog:
+- changeSet:
+      id: 2024-07-15--0001-authors
+      author: ruchev
+      context: hw05 or test
+      createTable:
+        tableName: authors
+        columns:
+          - column:
+              name: id
+              type: bigint
+              autoIncrement: true
+              constraints:
+                primaryKey: true
+          - column:
+              name: full_name
+              type: varchar(255)

@@ -19,6 +19,8 @@
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
         <spring.shell.version>3.2.4</spring.shell.version>
+        <liquibase.version>4.28.0</liquibase.version>
+        <snakeyaml.version>2.0</snakeyaml.version>
         <checkstyle-plugin.version>3.3.1</checkstyle-plugin.version>
         <checkstyle.version>10.15.0</checkstyle.version>
         <checkstyle.config.url>
@@ -54,6 +56,18 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.liquibase</groupId>
+            <artifactId>liquibase-core</artifactId>
+            <version>${liquibase.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.yaml</groupId>
+            <artifactId>snakeyaml</artifactId>
+            <version>${snakeyaml.version}</version>
         </dependency>
     </dependencies>
 

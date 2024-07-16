@@ -1,0 +1,17 @@
+databaseChangeLog:
+  - changeSet:
+      id: 2024-07-15--0002-genres
+      author: ruchev
+      context: hw05 or test
+      createTable:
+        tableName: genres
+        columns:
+          - column:
+              name: id
+              type: bigint
+              autoIncrement: true
+              constraints:
+                primaryKey: true
+          - column:
+              name: name
+              type: varchar(255)
