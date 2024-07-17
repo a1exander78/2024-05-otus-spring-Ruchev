@@ -70,7 +70,7 @@ public class JdbcBookRepository implements BookRepository {
                params, keyHolder, new String[]{"id"});
 
         //noinspection DataFlowIssue
-        book.setId(keyHolder.getKeyAs(Long.class) + 3);
+        book.setId(keyHolder.getKeyAs(Long.class));
         return book;
     }
 

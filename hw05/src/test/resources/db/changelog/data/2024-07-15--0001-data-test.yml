@@ -4,8 +4,13 @@ databaseChangeLog:
     author: ruchev
     context: test
     runOnChange: true
-    loadUpdateData:
-      primaryKey: id
+    loadData:
+      columns:
+        - column:
+            name: id
+            generationType: always
+        - column:
+            name: full_name
       file: data/2024-07-15--0001-authors-test.csv
       relativeToChangelogFile: true
       separator: ;
@@ -18,8 +23,13 @@ databaseChangeLog:
     author: ruchev
     context: test
     runOnChange: true
-    loadUpdateData:
-      primaryKey: id
+    loadData:
+      columns:
+        - column:
+              name: id
+              generationType: always
+        - column:
+            name: name
       file: data/2024-07-15--0002-genres-test.csv
       relativeToChangelogFile: true
       separator: ;
@@ -32,8 +42,17 @@ databaseChangeLog:
     author: ruchev
     context: test
     runOnChange: true
-    loadUpdateData:
-      primaryKey: id
+    loadData:
+      columns:
+        - column:
+              name: id
+              generationType: always
+        - column:
+            name: title
+        - column:
+            name: author_id
+        - column:
+            name: genre_id
       file: data/2024-07-15--0003-books-test.csv
       relativeToChangelogFile: true
       separator: ;
