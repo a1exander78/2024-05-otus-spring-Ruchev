@@ -11,14 +11,15 @@
 
     <groupId>ru.otus.hw</groupId>
     <artifactId>hw06-jpa</artifactId>
+    <name>spring-jpa</name>
     <version>0.0.1-SNAPSHOT</version>
-    <name>spring-jdbc-demo</name>
 
     <properties>
         <java.version>17</java.version>
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
         <spring.shell.version>3.2.4</spring.shell.version>
+        <h2.version>2.2.220</h2.version>
         <liquibase.version>4.28.0</liquibase.version>
         <snakeyaml.version>2.0</snakeyaml.version>
         <reflections.version>0.10.2</reflections.version>
@@ -49,7 +50,7 @@
         <dependency>
             <groupId>com.h2database</groupId>
             <artifactId>h2</artifactId>
-            <scope>runtime</scope>
+            <version>${h2.version}</version>
         </dependency>
 
         <dependency>
