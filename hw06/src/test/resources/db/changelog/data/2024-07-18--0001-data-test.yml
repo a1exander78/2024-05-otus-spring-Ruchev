@@ -1,6 +1,6 @@
 databaseChangeLog:
 - changeSet:
-    id: 2024-07-15--0001-authors
+    id: 2024-07-18--0001-author
     author: ruchev
     context: test
     runOnChange: true
@@ -11,15 +11,15 @@ databaseChangeLog:
             generationType: always
         - column:
             name: full_name
-      file: data/2024-07-15--0001-authors-test.csv
+      file: data/2024-07-18--0001-author-test.csv
       relativeToChangelogFile: true
       separator: ;
       quotChar: '"'
       encoding: UTF-8
-      tableName: authors
+      tableName: author
 
 - changeSet:
-    id: 2024-07-15--0002-genres
+    id: 2024-07-18--0002-genre
     author: ruchev
     context: test
     runOnChange: true
@@ -30,15 +30,15 @@ databaseChangeLog:
               generationType: always
         - column:
             name: name
-      file: data/2024-07-15--0002-genres-test.csv
+      file: data/2024-07-18--0002-genre-test.csv
       relativeToChangelogFile: true
       separator: ;
       quotChar: '"'
       encoding: UTF-8
-      tableName: genres
+      tableName: genre
 
 - changeSet:
-    id: 2024-07-15--0003-books
+    id: 2024-07-18--0003-book
     author: ruchev
     context: test
     runOnChange: true
@@ -53,9 +53,9 @@ databaseChangeLog:
             name: author_id
         - column:
             name: genre_id
-      file: data/2024-07-15--0003-books-test.csv
+      file: data/2024-07-18--0003-book-test.csv
       relativeToChangelogFile: true
       separator: ;
       quotChar: '"'
       encoding: UTF-8
-      tableName: books
+      tableName: book
