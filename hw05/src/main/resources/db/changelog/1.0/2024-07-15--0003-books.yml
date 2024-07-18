@@ -1,0 +1,33 @@
+databaseChangeLog:
+  - changeSet:
+      id: 2024-07-15--0003-books
+      author: ruchev
+      context: hw05 or test
+      createTable:
+        tableName: books
+        columns:
+          - column:
+              name: id
+              type: bigint
+              autoIncrement: true
+              constraints:
+                primaryKey: true
+                nullable: false
+          - column:
+              name: title
+              type: varchar(255)
+          - column:
+              name: author_id
+              type: bigint
+              constraints:
+                foreignKeyName: fk_book_author
+                references: authors(id)
+                deleteCascade: true
+          - column:
+              name: genre_id
+              type: bigint
+              constraints:
+                foreignKeyName: fk_book_genre
+                references: genres(id)
+                deleteCascade: true
+

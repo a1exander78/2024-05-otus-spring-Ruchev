@@ -1,0 +1,61 @@
+databaseChangeLog:
+- changeSet:
+    id: 2024-07-15--0001-authors
+    author: ruchev
+    context: test
+    runOnChange: true
+    loadData:
+      columns:
+        - column:
+            name: id
+            generationType: always
+        - column:
+            name: full_name
+      file: data/2024-07-15--0001-authors-test.csv
+      relativeToChangelogFile: true
+      separator: ;
+      quotChar: '"'
+      encoding: UTF-8
+      tableName: authors
+
+- changeSet:
+    id: 2024-07-15--0002-genres
+    author: ruchev
+    context: test
+    runOnChange: true
+    loadData:
+      columns:
+        - column:
+              name: id
+              generationType: always
+        - column:
+            name: name
+      file: data/2024-07-15--0002-genres-test.csv
+      relativeToChangelogFile: true
+      separator: ;
+      quotChar: '"'
+      encoding: UTF-8
+      tableName: genres
+
+- changeSet:
+    id: 2024-07-15--0003-books
+    author: ruchev
+    context: test
+    runOnChange: true
+    loadData:
+      columns:
+        - column:
+              name: id
+              generationType: always
+        - column:
+            name: title
+        - column:
+            name: author_id
+        - column:
+            name: genre_id
+      file: data/2024-07-15--0003-books-test.csv
+      relativeToChangelogFile: true
+      separator: ;
+      quotChar: '"'
+      encoding: UTF-8
+      tableName: books
