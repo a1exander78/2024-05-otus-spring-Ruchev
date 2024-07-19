@@ -10,7 +10,6 @@ import org.springframework.stereotype.Repository;
 import ru.otus.hw.exceptions.EntityNotFoundException;
 import ru.otus.hw.models.Book;
 import ru.otus.hw.models.Comment;
-import ru.otus.hw.services.BookService;
 
 import java.util.Collections;
 import java.util.List;
@@ -22,8 +21,6 @@ import static org.springframework.data.jpa.repository.EntityGraph.EntityGraphTyp
 @RequiredArgsConstructor
 @Repository
 public class JpaCommentRepository implements CommentRepository {
-
-    private final BookService bookService;
 
     @PersistenceContext
     private final EntityManager em;
