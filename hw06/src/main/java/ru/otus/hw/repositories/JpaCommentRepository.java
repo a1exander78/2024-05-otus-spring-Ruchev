@@ -1,5 +1,6 @@
 package ru.otus.hw.repositories;
 
+import jakarta.persistence.EntityGraph;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.TypedQuery;
@@ -9,21 +10,30 @@ import org.springframework.stereotype.Repository;
 import ru.otus.hw.exceptions.EntityNotFoundException;
 import ru.otus.hw.models.Book;
 import ru.otus.hw.models.Comment;
+import ru.otus.hw.services.BookService;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+
+import static org.springframework.data.jpa.repository.EntityGraph.EntityGraphType.FETCH;
 
 @RequiredArgsConstructor
 @Repository
 public class JpaCommentRepository implements CommentRepository {
+
+    private final BookService bookService;
 
     @PersistenceContext
     private final EntityManager em;
 
     @Override
     public List<Comment> findAllCommentsByBook(Book book) {
+        EntityGraph<?> commentEntityGraph = em.getEntityGraph("comment-book-entity-graph");
         TypedQuery<Comment> query = em.createQuery("select c from Comment c where c.book = :book", Comment.class);
         query.setParameter("book", book);
+        query.setHint(FETCH.getKey(), commentEntityGraph);
         return query.getResultList();
     }
 
@@ -31,7 +41,9 @@ public class JpaCommentRepository implements CommentRepository {
     public Optional<Comment> findById(long id) {
         Comment comment;
         try {
-            comment = em.find(Comment.class, id);
+            EntityGraph<?> entityGraph = em.getEntityGraph("comment-book-entity-graph");
+            Map<String, Object> properties = Collections.singletonMap(FETCH.getKey(), entityGraph);
+            comment = em.find(Comment.class, id, properties);
         } catch (EmptyResultDataAccessException e) {
             return Optional.empty();
         }

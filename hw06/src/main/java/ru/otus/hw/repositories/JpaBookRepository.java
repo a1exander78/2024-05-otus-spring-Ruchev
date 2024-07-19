@@ -10,7 +10,10 @@ import org.springframework.stereotype.Repository;
 import ru.otus.hw.exceptions.EntityNotFoundException;
 import ru.otus.hw.models.Book;
 
+
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import static org.springframework.data.jpa.repository.EntityGraph.EntityGraphType.FETCH;
@@ -34,7 +37,9 @@ public class JpaBookRepository implements BookRepository {
     public Optional<Book> findById(long id) {
         Book book;
         try {
-            book = em.find(Book.class, id);
+            EntityGraph<?> entityGraph = em.getEntityGraph("book-author-genre-entity-graph");
+            Map<String, Object> properties = Collections.singletonMap(FETCH.getKey(), entityGraph);
+            book = em.find(Book.class, id, properties);
         } catch (EmptyResultDataAccessException e) {
             return Optional.empty();
         }
