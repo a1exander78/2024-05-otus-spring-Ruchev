@@ -23,6 +23,14 @@ public class JpaBookRepository implements BookRepository {
     private final EntityManager em;
 
     @Override
+    public List<Book> findAll() {
+        EntityGraph<?> entityGraph = em.getEntityGraph("book-author-genre-entity-graph");
+        TypedQuery<Book> query = em.createQuery("select b from Book b", Book.class);
+        query.setHint(FETCH.getKey(), entityGraph);
+        return query.getResultList();
+    }
+
+    @Override
     public Optional<Book> findById(long id) {
         Book book;
         try {
@@ -31,14 +39,6 @@ public class JpaBookRepository implements BookRepository {
             return Optional.empty();
         }
         return Optional.ofNullable(book);
-    }
-
-    @Override
-    public List<Book> findAll() {
-        EntityGraph<?> entityGraph = em.getEntityGraph("book-author-genre-entity-graph");
-        TypedQuery<Book> query = em.createQuery("select b from Book b", Book.class);
-        query.setHint(FETCH.getKey(), entityGraph);
-        return query.getResultList();
     }
 
     @Override

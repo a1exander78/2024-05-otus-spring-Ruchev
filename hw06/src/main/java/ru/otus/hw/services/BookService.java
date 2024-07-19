@@ -6,9 +6,9 @@ import java.util.List;
 import java.util.Optional;
 
 public interface BookService {
-    Optional<Book> findById(long id);
-
     List<Book> findAll();
+
+    Optional<Book> findById(long id);
 
     Book insert(String title, long authorId, long genreId);
 

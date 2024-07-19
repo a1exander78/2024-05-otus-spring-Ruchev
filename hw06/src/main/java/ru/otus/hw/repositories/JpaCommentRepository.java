@@ -28,15 +28,6 @@ public class JpaCommentRepository implements CommentRepository {
     }
 
     @Override
-    public Comment save(Comment comment) {
-        if (comment.getId() == 0) {
-            em.persist(comment);
-            return comment;
-        }
-        return em.merge(comment);
-    }
-
-    @Override
     public Optional<Comment> findById(long id) {
         Comment comment;
         try {
@@ -45,6 +36,15 @@ public class JpaCommentRepository implements CommentRepository {
             return Optional.empty();
         }
         return Optional.ofNullable(comment);
+    }
+
+    @Override
+    public Comment save(Comment comment) {
+        if (comment.getId() == 0) {
+            em.persist(comment);
+            return comment;
+        }
+        return em.merge(comment);
     }
 
     @Override
