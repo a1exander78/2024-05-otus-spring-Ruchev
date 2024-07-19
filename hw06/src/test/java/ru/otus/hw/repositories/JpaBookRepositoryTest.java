@@ -1,52 +1,35 @@
 package ru.otus.hw.repositories;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.jdbc.JdbcTest;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.context.annotation.Import;
-import ru.otus.hw.mappers.AuthorRowMapper;
-import ru.otus.hw.mappers.BookRowMapper;
-import ru.otus.hw.mappers.GenreRowMapper;
 import ru.otus.hw.models.Author;
 import ru.otus.hw.models.Book;
 import ru.otus.hw.models.Genre;
 
 import java.util.List;
-import java.util.stream.IntStream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@DisplayName("Репозиторий на основе Jdbc для работы с книгами ")
-@JdbcTest
-@Import({JpaBookRepository.class, JpaGenreRepository.class, JpaAuthorRepository.class,
-        AuthorRowMapper.class, BookRowMapper.class, GenreRowMapper.class})
+@DisplayName("Репозиторий на основе Jpa для работы с книгами ")
+@DataJpaTest
+@Import(JpaBookRepository.class)
 class JpaBookRepositoryTest {
 
     @Autowired
     private JpaBookRepository jpaBookRepository;
 
-    private List<Author> dbAuthors;
-
-    private List<Genre> dbGenres;
-
-    private List<Book> dbBooks;
-
-    @BeforeEach
-    void setUp() {
-        dbAuthors = getDbAuthors();
-        dbGenres = getDbGenres();
-        dbBooks = getDbBooks(dbAuthors, dbGenres);
-    }
+    @Autowired
+    private TestEntityManager em;
 
     @DisplayName("должен загружать книгу по id")
-    @ParameterizedTest
-    @MethodSource("getDbBooks")
-    void shouldReturnCorrectBookById(Book expectedBook) {
-        var actualBook = jpaBookRepository.findById(expectedBook.getId());
+    @Test
+    void shouldReturnCorrectBookById() {
+        var actualBook = jpaBookRepository.findById(1L);
+        var expectedBook = em.find(Book.class, 1L);
         assertThat(actualBook).isPresent()
                 .get()
                 .isEqualTo(expectedBook);
@@ -56,16 +39,23 @@ class JpaBookRepositoryTest {
     @Test
     void shouldReturnCorrectBooksList() {
         var actualBooks = jpaBookRepository.findAll();
-        var expectedBooks = dbBooks;
 
-        assertThat(actualBooks).containsExactlyElementsOf(expectedBooks);
+        var expectedBook1 = em.find(Book.class, 1L);
+        var expectedBook2 = em.find(Book.class, 2L);
+        var expectedBook3 = em.find(Book.class, 3L);
+
+        assertThat(actualBooks).containsExactlyElementsOf(List.of(expectedBook1, expectedBook2, expectedBook3));
         actualBooks.forEach(System.out::println);
     }
 
     @DisplayName("должен сохранять новую книгу")
     @Test
     void shouldSaveNewBook() {
-        var expectedBook = new Book(0, "BookTitle_10500", dbAuthors.get(0), dbGenres.get(0));
+        var author = em.find(Author.class, 1L);
+        var genre = em.find(Genre.class, 1L);
+        var newBook = new Book(0, "BookTitle_10500", author, genre);
+
+        var expectedBook = em.persist(newBook);
         var returnedBook = jpaBookRepository.save(expectedBook);
         assertThat(returnedBook).isNotNull()
                 .matches(book -> book.getId() > 0)
@@ -80,7 +70,9 @@ class JpaBookRepositoryTest {
     @DisplayName("должен сохранять измененную книгу")
     @Test
     void shouldSaveUpdatedBook() {
-        var expectedBook = new Book(1L, "BookTitle_10500", dbAuthors.get(2), dbGenres.get(2));
+        var author = em.find(Author.class, 1L);
+        var genre = em.find(Genre.class, 1L);
+        var expectedBook = new Book(1L, "BookTitle_10501", author, genre);
 
         assertThat(jpaBookRepository.findById(expectedBook.getId()))
                 .isPresent()
@@ -104,29 +96,5 @@ class JpaBookRepositoryTest {
         assertThat(jpaBookRepository.findById(1L)).isPresent();
         jpaBookRepository.deleteById(1L);
         assertThat(jpaBookRepository.findById(1L)).isEmpty();
-    }
-
-    private static List<Author> getDbAuthors() {
-        return IntStream.range(1, 4).boxed()
-                .map(id -> new Author(id, "Author_" + id))
-                .toList();
-    }
-
-    private static List<Genre> getDbGenres() {
-        return IntStream.range(1, 4).boxed()
-                .map(id -> new Genre(id, "Genre_" + id))
-                .toList();
-    }
-
-    private static List<Book> getDbBooks(List<Author> dbAuthors, List<Genre> dbGenres) {
-        return IntStream.range(1, 4).boxed()
-                .map(id -> new Book(id, "BookTitle_" + id, dbAuthors.get(id - 1), dbGenres.get(id - 1)))
-                .toList();
-    }
-
-    private static List<Book> getDbBooks() {
-        var dbAuthors = getDbAuthors();
-        var dbGenres = getDbGenres();
-        return getDbBooks(dbAuthors, dbGenres);
     }
 }
