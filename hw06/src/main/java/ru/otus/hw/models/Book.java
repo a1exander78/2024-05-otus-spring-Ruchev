@@ -4,6 +4,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.NamedEntityGraph;
 import jakarta.persistence.NamedAttributeNode;
 import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import jakarta.persistence.GenerationType;
@@ -14,7 +15,6 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.ToString;
 import lombok.NoArgsConstructor;
-
 
 @Getter
 @EqualsAndHashCode(exclude = {"author", "genre"})
@@ -33,8 +33,10 @@ public class Book {
     private String title;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "author_id")
     private Author author;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "genre_id")
     private Genre genre;
 }
