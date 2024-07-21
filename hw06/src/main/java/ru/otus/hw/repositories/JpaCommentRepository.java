@@ -8,7 +8,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Repository;
 import ru.otus.hw.exceptions.EntityNotFoundException;
-import ru.otus.hw.models.Book;
 import ru.otus.hw.models.Comment;
 
 import java.util.Collections;
@@ -26,10 +25,10 @@ public class JpaCommentRepository implements CommentRepository {
     private final EntityManager em;
 
     @Override
-    public List<Comment> findAllCommentsByBook(Book book) {
+    public List<Comment> findAllCommentsByBookId(long bookId) {
         EntityGraph<?> commentEntityGraph = em.getEntityGraph("comment-book-entity-graph");
-        TypedQuery<Comment> query = em.createQuery("select c from Comment c where c.book = :book", Comment.class);
-        query.setParameter("book", book);
+        TypedQuery<Comment> query = em.createQuery("select c from Comment c where c.book.id = :bookId", Comment.class);
+        query.setParameter("bookId", bookId);
         query.setHint(FETCH.getKey(), commentEntityGraph);
         return query.getResultList();
     }

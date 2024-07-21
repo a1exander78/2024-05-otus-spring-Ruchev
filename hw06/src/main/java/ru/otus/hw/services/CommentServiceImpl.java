@@ -4,7 +4,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.otus.hw.exceptions.EntityNotFoundException;
-import ru.otus.hw.models.Book;
 import ru.otus.hw.models.Comment;
 import ru.otus.hw.repositories.BookRepository;
 import ru.otus.hw.repositories.CommentRepository;
@@ -21,8 +20,12 @@ public class CommentServiceImpl implements CommentService {
 
     @Transactional(readOnly = true)
     @Override
-    public List<Comment> findAllCommentsByBook(Book book) {
-        return commentRepository.findAllCommentsByBook(book);
+    public List<Comment> findAllCommentsByBookId(long bookId) {
+        var commentsList = commentRepository.findAllCommentsByBookId(bookId);
+        if (commentsList.isEmpty()) {
+            throw new EntityNotFoundException("Book with id %d not found or haven't got comments yet".formatted(bookId));
+        }
+        return commentsList;
     }
 
     @Transactional(readOnly = true)

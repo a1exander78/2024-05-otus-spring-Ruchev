@@ -23,9 +23,7 @@ public class CommentCommands {
 
     @ShellMethod(value = "Find all comments by Book", key = "acbb")
     public String findAllCommentsByBook(long bookId) {
-        var book = bookService.findById(bookId)
-                .orElseThrow(() -> new EntityNotFoundException("Book with id %d not found".formatted(bookId)));
-        return commentService.findAllCommentsByBook(book).stream()
+        return commentService.findAllCommentsByBookId(bookId).stream()
                 .map(commentConverter::commentToString)
                 .collect(Collectors.joining("," + System.lineSeparator()));
     }
