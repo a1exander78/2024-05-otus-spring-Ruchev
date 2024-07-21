@@ -6,10 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.context.annotation.Import;
-import ru.otus.hw.models.Author;
 import ru.otus.hw.models.Book;
 import ru.otus.hw.models.Comment;
-import ru.otus.hw.models.Genre;
 
 import java.util.List;
 
@@ -31,35 +29,33 @@ class JpaCommentRepositoryTest {
     void shouldReturnCorrectCommentById() {
         var actualComment = jpaCommentRepository.findById(1L);
         var expectedComment = em.find(Comment.class, 1L);
+
         assertThat(actualComment).isPresent()
                 .get()
                 .isEqualTo(expectedComment);
     }
 
-//    @DisplayName("должен загружать список всех комментариев по книге")
-//    @Test
-//    void shouldReturnCorrectBooksList() {
-//
-//
-//        var actualComments = jpaCommentRepository.findAllCommentsByBook()
-//
-//        var expectedBook1 = em.find(Book.class, 1L);
-//        var expectedBook2 = em.find(Book.class, 2L);
-//        var expectedBook3 = em.find(Book.class, 3L);
-//
-//        assertThat(actualBooks).containsExactlyElementsOf(List.of(expectedBook1, expectedBook2, expectedBook3));
-//        actualBooks.forEach(System.out::println);
-//    }
+    @DisplayName("должен загружать список всех комментариев по книге")
+    @Test
+    void shouldReturnCorrectCommentsList() {
+        var actualComments = jpaCommentRepository.findAllCommentsByBookId(1L);
+        var expectedComment1 = em.find(Comment.class, 1L);
+        var expectedComment2 = em.find(Comment.class, 4L);
+
+        assertThat(actualComments).containsExactlyElementsOf(List.of(expectedComment1, expectedComment2));
+        actualComments.forEach(System.out::println);
+    }
 
     @DisplayName("должен сохранять новый коментарий")
     @Test
     void shouldSaveNewComment() {
         String description = "newComment";
+
         var book = em.find(Book.class, 1L);
         var newComment = new Comment(0, description, book);
-
         var expectedComment = em.persist(newComment);
         var returnedComment = jpaCommentRepository.save(expectedComment);
+
         assertThat(returnedComment).isNotNull()
                 .matches(comment -> comment.getId() > 0)
                 .usingRecursiveComparison().ignoringExpectedNullFields().isEqualTo(expectedComment);
@@ -74,6 +70,7 @@ class JpaCommentRepositoryTest {
     @Test
     void shouldSaveUpdatedComment() {
         String description = "editedComment";
+
         var book = em.find(Book.class, 1L);
         var expectedComment = new Comment(1L, description, book);
 

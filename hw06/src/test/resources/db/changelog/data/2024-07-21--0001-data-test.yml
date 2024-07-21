@@ -1,0 +1,21 @@
+databaseChangeLog:
+  - changeSet:
+      id: 2024-07-21--0001-comment
+      author: ruchev
+      context: test
+      runOnChange: true
+      loadData:
+        columns:
+          - column:
+              name: id
+              generationType: always
+          - column:
+              name: description
+          - column:
+              name: book_id
+        file: data/2024-07-21--0001-comment-test.csv
+        relativeToChangelogFile: true
+        separator: ;
+        quotChar: '"'
+        encoding: UTF-8
+        tableName: comment
