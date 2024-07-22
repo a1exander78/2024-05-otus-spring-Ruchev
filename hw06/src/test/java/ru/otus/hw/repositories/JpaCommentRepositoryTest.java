@@ -24,17 +24,6 @@ class JpaCommentRepositoryTest {
     @Autowired
     private TestEntityManager em;
 
-    @DisplayName("должен загружать комментарий по id")
-    @Test
-    void shouldReturnCorrectCommentById() {
-        var actualComment = jpaCommentRepository.findById(1L);
-        var expectedComment = em.find(Comment.class, 1L);
-
-        assertThat(actualComment).isPresent()
-                .get()
-                .isEqualTo(expectedComment);
-    }
-
     @DisplayName("должен загружать список всех комментариев по книге")
     @Test
     void shouldReturnCorrectCommentsList() {
@@ -44,6 +33,17 @@ class JpaCommentRepositoryTest {
 
         assertThat(actualComments).containsExactlyElementsOf(List.of(expectedComment1, expectedComment2));
         actualComments.forEach(System.out::println);
+    }
+
+    @DisplayName("должен загружать комментарий по id")
+    @Test
+    void shouldReturnCorrectCommentById() {
+        var actualComment = jpaCommentRepository.findById(1L);
+        var expectedComment = em.find(Comment.class, 1L);
+
+        assertThat(actualComment).isPresent()
+                .get()
+                .isEqualTo(expectedComment);
     }
 
     @DisplayName("должен сохранять новый коментарий")

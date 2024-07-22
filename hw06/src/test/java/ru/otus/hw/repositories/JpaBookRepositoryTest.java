@@ -25,16 +25,6 @@ class JpaBookRepositoryTest {
     @Autowired
     private TestEntityManager em;
 
-    @DisplayName("должен загружать книгу по id")
-    @Test
-    void shouldReturnCorrectBookById() {
-        var actualBook = jpaBookRepository.findById(1L);
-        var expectedBook = em.find(Book.class, 1L);
-        assertThat(actualBook).isPresent()
-                .get()
-                .isEqualTo(expectedBook);
-    }
-
     @DisplayName("должен загружать список всех книг")
     @Test
     void shouldReturnCorrectBooksList() {
@@ -46,6 +36,16 @@ class JpaBookRepositoryTest {
 
         assertThat(actualBooks).containsExactlyElementsOf(List.of(expectedBook1, expectedBook2, expectedBook3));
         actualBooks.forEach(System.out::println);
+    }
+
+    @DisplayName("должен загружать книгу по id")
+    @Test
+    void shouldReturnCorrectBookById() {
+        var actualBook = jpaBookRepository.findById(1L);
+        var expectedBook = em.find(Book.class, 1L);
+        assertThat(actualBook).isPresent()
+                .get()
+                .isEqualTo(expectedBook);
     }
 
     @DisplayName("должен сохранять новую книгу")
