@@ -15,8 +15,9 @@ import ru.otus.hw.repositories.JpaAuthorRepository;
 import ru.otus.hw.repositories.JpaBookRepository;
 import ru.otus.hw.repositories.JpaGenreRepository;
 
+import java.util.List;
+
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatCode;
 
 @Transactional(propagation = Propagation.NEVER)
 @DisplayName("Сервис для работы с книгами")
@@ -29,12 +30,16 @@ public class BookServiceTest {
     private static final long ID_4 = 4L;
 
     private static final Author AUTHOR_1 = new Author(ID_1, "Author_Test_1");
+    private static final Author AUTHOR_2 = new Author(ID_2, "Author_Test_2");
     private static final Author AUTHOR_3 = new Author(ID_3, "Author_Test_3");
 
     private static final Genre GENRE_1 = new Genre(ID_1, "Genre_Test_1");
     private static final Genre GENRE_2 = new Genre(ID_2, "Genre_Test_2");
+    private static final Genre GENRE_3 = new Genre(ID_3, "Genre_Test_3");
 
     private static final Book BOOK_1 = new Book(ID_1, "Book_Test_1", AUTHOR_1, GENRE_1);
+    private static final Book BOOK_2 = new Book(ID_2, "Book_Test_2", AUTHOR_2, GENRE_2);
+    private static final Book BOOK_3 = new Book(ID_3, "Book_Test_3", AUTHOR_3, GENRE_3);
 
     private static final Book NEW_BOOK = new Book(ID_4, "New_Book", AUTHOR_3, GENRE_2);
 
@@ -46,7 +51,7 @@ public class BookServiceTest {
     @DisplayName("должен загружать список всех книг")
     @Test
     void shouldReturnCorrectBooksList() {
-        assertThatCode(() -> bookService.findAll()).doesNotThrowAnyException();
+        assertThat(bookService.findAll()).containsExactlyElementsOf(List.of(BOOK_1, BOOK_2, BOOK_3));
     }
 
     @DisplayName("должен загружать книгу по id")
