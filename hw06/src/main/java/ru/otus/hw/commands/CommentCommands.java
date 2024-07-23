@@ -4,7 +4,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
 import ru.otus.hw.converters.CommentConverter;
-import ru.otus.hw.exceptions.EntityNotFoundException;
 import ru.otus.hw.services.BookService;
 import ru.otus.hw.services.CommentService;
 
@@ -32,7 +31,7 @@ public class CommentCommands {
     public String findCommentById(long id) {
         return commentService.findById(id)
                 .map(commentConverter::commentToString)
-                .orElseThrow(() -> new EntityNotFoundException("Comment with id %d not found".formatted(id)));
+                .orElse("Comment with id %d not found".formatted(id));
     }
 
     // cins newComment 2
