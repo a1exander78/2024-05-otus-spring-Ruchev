@@ -4,7 +4,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
 import ru.otus.hw.converters.BookConverter;
-import ru.otus.hw.exceptions.EntityNotFoundException;
 import ru.otus.hw.services.BookService;
 
 import java.util.stream.Collectors;
@@ -29,7 +28,7 @@ public class BookCommands {
     public String findBookById(long id) {
         return bookService.findById(id)
                 .map(bookConverter::bookToString)
-                .orElseThrow(() -> new EntityNotFoundException("Book with id %d not found".formatted(id)));
+                .orElse("Book with id %d not found".formatted(id));
     }
 
     // bins newBook 1 1
