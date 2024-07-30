@@ -4,7 +4,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
 import ru.otus.hw.converters.AuthorConverter;
-import ru.otus.hw.exceptions.EntityNotFoundException;
 import ru.otus.hw.services.AuthorService;
 
 import java.util.stream.Collectors;
@@ -28,6 +27,6 @@ public class AuthorCommands {
     public String findAuthorById(long id) {
         return authorService.findById(id)
                 .map(authorConverter::authorToString)
-                .orElseThrow(() -> new EntityNotFoundException("Author with id %d not found".formatted(id)));
+                .orElse("Author with id %d not found".formatted(id));
     }
 }
