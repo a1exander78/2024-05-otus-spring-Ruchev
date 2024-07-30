@@ -4,6 +4,7 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.TypedQuery;
 import lombok.RequiredArgsConstructor;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Repository;
 import ru.otus.hw.models.Author;
 
@@ -27,7 +28,11 @@ public class JpaAuthorRepository implements AuthorRepository {
     @Override
     public Optional<Author> findById(long id) {
         Author author;
-        author = em.find(Author.class, id);
+        try {
+            author = em.find(Author.class, id);
+        } catch (EmptyResultDataAccessException e) {
+            return Optional.empty();
+        }
         return Optional.ofNullable(author);
     }
 }

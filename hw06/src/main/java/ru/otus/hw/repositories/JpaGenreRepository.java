@@ -4,6 +4,7 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.TypedQuery;
 import lombok.RequiredArgsConstructor;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Repository;
 import ru.otus.hw.models.Genre;
 
@@ -26,7 +27,11 @@ public class JpaGenreRepository implements GenreRepository {
     @Override
     public Optional<Genre> findById(long id) {
         Genre genre;
-        genre = em.find(Genre.class, id);
+        try {
+            genre = em.find(Genre.class, id);
+        } catch (EmptyResultDataAccessException e) {
+            return Optional.empty();
+        }
         return Optional.ofNullable(genre);
     }
 }
