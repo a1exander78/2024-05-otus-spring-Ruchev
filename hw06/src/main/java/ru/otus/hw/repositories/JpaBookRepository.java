@@ -5,6 +5,7 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.TypedQuery;
 import lombok.RequiredArgsConstructor;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Repository;
 import ru.otus.hw.exceptions.EntityNotFoundException;
 import ru.otus.hw.models.Book;
@@ -34,9 +35,14 @@ public class JpaBookRepository implements BookRepository {
 
     @Override
     public Optional<Book> findById(long id) {
-        EntityGraph<?> entityGraph = em.getEntityGraph("book-author-genre-entity-graph");
-        Map<String, Object> properties = Collections.singletonMap(FETCH.getKey(), entityGraph);
-        var book = em.find(Book.class, id, properties);
+        Book book;
+        try {
+            EntityGraph<?> entityGraph = em.getEntityGraph("book-author-genre-entity-graph");
+            Map<String, Object> properties = Collections.singletonMap(FETCH.getKey(), entityGraph);
+            book = em.find(Book.class, id, properties);
+        } catch (EmptyResultDataAccessException e) {
+            return Optional.empty();
+        }
         return Optional.ofNullable(book);
     }
 

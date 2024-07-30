@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
 import ru.otus.hw.converters.GenreConverter;
+import ru.otus.hw.exceptions.EntityNotFoundException;
 import ru.otus.hw.services.GenreService;
 
 import java.util.stream.Collectors;
@@ -27,6 +28,6 @@ public class GenreCommands {
     public String findGenreById(long id) {
         return genreService.findById(id)
                 .map(genreConverter::genreToString)
-                .orElse("Genre with id %d not found".formatted(id));
+                .orElseThrow(() -> new EntityNotFoundException("Genre with id %d not found".formatted(id)));
     }
 }
