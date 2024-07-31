@@ -11,9 +11,6 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.otus.hw.models.Author;
 import ru.otus.hw.models.Book;
 import ru.otus.hw.models.Genre;
-import ru.otus.hw.repositories.JpaAuthorRepository;
-import ru.otus.hw.repositories.JpaBookRepository;
-import ru.otus.hw.repositories.JpaGenreRepository;
 
 import java.util.List;
 
@@ -22,7 +19,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @Transactional(propagation = Propagation.NEVER)
 @DisplayName("Сервис для работы с книгами")
 @DataJpaTest
-@Import({BookServiceImpl.class, JpaAuthorRepository.class, JpaGenreRepository.class, JpaBookRepository.class})
+@Import(BookServiceImpl.class)
 public class BookServiceTest {
     private static final long ID_1 = 1L;
     private static final long ID_2 = 2L;

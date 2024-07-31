@@ -5,7 +5,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
-import org.springframework.context.annotation.Import;
 import ru.otus.hw.models.Author;
 import ru.otus.hw.models.Book;
 import ru.otus.hw.models.Genre;
@@ -16,11 +15,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @DisplayName("Репозиторий на основе Jpa для работы с книгами ")
 @DataJpaTest
-@Import(JpaBookRepository.class)
-class JpaBookRepositoryTest {
+class BookRepositoryTest {
 
     @Autowired
-    private JpaBookRepository jpaBookRepository;
+    private BookRepository bookRepository;
 
     @Autowired
     private TestEntityManager em;
@@ -28,7 +26,7 @@ class JpaBookRepositoryTest {
     @DisplayName("должен загружать список всех книг")
     @Test
     void shouldReturnCorrectBooksList() {
-        var actualBooks = jpaBookRepository.findAll();
+        var actualBooks = bookRepository.findAll();
 
         var expectedBook1 = em.find(Book.class, 1L);
         var expectedBook2 = em.find(Book.class, 2L);
@@ -41,7 +39,7 @@ class JpaBookRepositoryTest {
     @DisplayName("должен загружать книгу по id")
     @Test
     void shouldReturnCorrectBookById() {
-        var actualBook = jpaBookRepository.findById(1L);
+        var actualBook = bookRepository.findById(1L);
         var expectedBook = em.find(Book.class, 1L);
         assertThat(actualBook).isPresent()
                 .get()
@@ -56,12 +54,12 @@ class JpaBookRepositoryTest {
         var newBook = new Book(0, "BookTitle_10500", author, genre);
 
         var expectedBook = em.persist(newBook);
-        var returnedBook = jpaBookRepository.save(expectedBook);
+        var returnedBook = bookRepository.save(expectedBook);
         assertThat(returnedBook).isNotNull()
                 .matches(book -> book.getId() > 0)
                 .usingRecursiveComparison().ignoringExpectedNullFields().isEqualTo(expectedBook);
 
-        assertThat(jpaBookRepository.findById(returnedBook.getId()))
+        assertThat(bookRepository.findById(returnedBook.getId()))
                 .isPresent()
                 .get()
                 .isEqualTo(returnedBook);
@@ -74,17 +72,17 @@ class JpaBookRepositoryTest {
         var genre = em.find(Genre.class, 1L);
         var expectedBook = new Book(1L, "BookTitle_10501", author, genre);
 
-        assertThat(jpaBookRepository.findById(expectedBook.getId()))
+        assertThat(bookRepository.findById(expectedBook.getId()))
                 .isPresent()
                 .get()
                 .isNotEqualTo(expectedBook);
 
-        var returnedBook = jpaBookRepository.save(expectedBook);
+        var returnedBook = bookRepository.save(expectedBook);
         assertThat(returnedBook).isNotNull()
                 .matches(book -> book.getId() > 0)
                 .usingRecursiveComparison().ignoringExpectedNullFields().isEqualTo(expectedBook);
 
-        assertThat(jpaBookRepository.findById(returnedBook.getId()))
+        assertThat(bookRepository.findById(returnedBook.getId()))
                 .isPresent()
                 .get()
                 .isEqualTo(returnedBook);
@@ -93,8 +91,8 @@ class JpaBookRepositoryTest {
     @DisplayName("должен удалять книгу по id ")
     @Test
     void shouldDeleteBook() {
-        assertThat(jpaBookRepository.findById(1L)).isPresent();
-        jpaBookRepository.deleteById(1L);
-        assertThat(jpaBookRepository.findById(1L)).isEmpty();
+        assertThat(bookRepository.findById(1L)).isPresent();
+        bookRepository.deleteById(1L);
+        assertThat(bookRepository.findById(1L)).isEmpty();
     }
 }
