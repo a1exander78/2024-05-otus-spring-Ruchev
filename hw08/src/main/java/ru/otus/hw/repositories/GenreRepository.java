@@ -1,10 +1,7 @@
 package ru.otus.hw.repositories;
 
-import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.mongodb.repository.MongoRepository;
 import ru.otus.hw.models.Genre;
 
-import java.util.Optional;
-
-public interface GenreRepository extends JpaRepository<Genre, Long> {
-    Optional<Genre> findById(long id);
+public interface GenreRepository extends MongoRepository<Genre, Long> {
 }

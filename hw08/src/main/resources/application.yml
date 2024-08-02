@@ -1,28 +1,28 @@
 spring:
+  data:
+    mongodb:
+      host: localhost
+      port: 27017
+      database: Library
 
-  datasource:
-    url: jdbc:h2:mem:maindb
+  shell:
+    interactive:
+      enabled: true
+    noninteractive:
+      enabled: false
 
-  sql:
-    init:
-      mode: never
-      data-locations: data.sql
-      schema-locations: schema.sql
+    command:
+      version:
+        enabled: false
 
-  liquibase:
-    enabled: true
-    change-log: classpath:db/changelog/db.changelog-master.yml
-    contexts: hw05
-
-  jpa:
-    generate-ddl: false
-    hibernate:
-      ddl-auto: none
-
-    show-sql: true
-    properties:
-      hibernate:
-        format_sql: true
+mongock:
+  runner-type: "InitializingBean"
+  change-logs-scan-package:
+    - ru.otus.hw.changelogs
+  mongo-db:
+    write-concern:
+      journal: false
+    read-concern: local
 
 logging:
   level:
