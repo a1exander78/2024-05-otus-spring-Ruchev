@@ -3,7 +3,9 @@ spring:
     mongodb:
       host: localhost
       port: 27017
-      database: Library
+      database: library
+      #port: 0
+      #database: test
 
   shell:
     interactive:
@@ -16,6 +18,7 @@ spring:
         enabled: false
 
 mongock:
+  #runner-type: "ApplicationRunner" # default
   runner-type: "InitializingBean"
   change-logs-scan-package:
     - ru.otus.hw.changelogs

@@ -19,7 +19,7 @@ public class CommentServiceImpl implements CommentService {
     private final BookRepository bookRepository;
 
     @Override
-    public List<Comment> findAllCommentsByBookId(long bookId) {
+    public List<Comment> findAllCommentsByBookId(String bookId) {
         var commentsList = commentRepository.findAllCommentsByBookId(bookId);
         if (commentsList.isEmpty()) {
             throw new EntityNotFoundException("Book with id %d not found or haven't got comments yet".formatted(bookId));
@@ -28,35 +28,39 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public Optional<Comment> findById(long id) {
+    public Optional<Comment> findById(String id) {
         return commentRepository.findById(id);
     }
 
     @Transactional
     @Override
-    public Comment insert(String description, long bookId) {
-        return save(0, description, bookId);
+    public Comment insert(String description, String bookId) {
+        return save("", description, bookId);
     }
 
     @Transactional
     @Override
-    public Comment update(long id, String description) {
+    public Comment update(String id, String description) {
         var comment = commentRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Comment with id %d not found".formatted(id)));
+                .orElseThrow(() -> new EntityNotFoundException("Comment with id %s not found".formatted(id)));
         var bookId = comment.getBook().getId();
         return save(id, description, bookId);
     }
 
     @Transactional
     @Override
-    public void deleteById(long id) {
+    public void deleteById(String id) {
         commentRepository.deleteById(id);
     }
 
-    private Comment save(long id, String description, long bookId) {
+    private Comment save(String id, String description, String bookId) {
         var book = bookRepository.findById(bookId)
-                .orElseThrow(() -> new EntityNotFoundException("Book with id %d not found".formatted(bookId)));
+                .orElseThrow(() -> new EntityNotFoundException("Book with id %s not found".formatted(bookId)));
         var comment = new Comment(id, description, book);
-        return commentRepository.save(comment);
+
+        if (id.equals("")) {
+            return commentRepository.save(new Comment(description, book));
+        }
+        return commentRepository.save(new Comment(id, description, book));
     }
 }
