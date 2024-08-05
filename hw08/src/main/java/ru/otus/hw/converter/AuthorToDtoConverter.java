@@ -1,12 +1,10 @@
 package ru.otus.hw.converter;
 
-import org.springframework.stereotype.Component;
+import org.mapstruct.Mapper;
 import ru.otus.hw.dto.AuthorDto;
 import ru.otus.hw.model.Author;
 
-@Component
-public class AuthorToDtoConverter {
-    public AuthorDto convert(Author author) {
-        return new AuthorDto(author.getId(), author.getFullName());
-    }
+@Mapper(componentModel = "spring")
+public interface AuthorToDtoConverter {
+    AuthorDto convert(Author author);
 }

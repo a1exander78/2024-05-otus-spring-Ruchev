@@ -14,6 +14,8 @@ import ru.otus.hw.repository.GenreRepository;
 import java.util.List;
 import java.util.Optional;
 
+import static java.util.Objects.isNull;
+
 @RequiredArgsConstructor
 @Service
 public class BookServiceImpl implements BookService {
@@ -61,6 +63,9 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public String bookDtoToString(BookDto bookDto) {
+        if (isNull(bookDto)) {
+            throw new EntityNotFoundException("Book not found");
+        }
         return "Id: %s, title: %s, author: [%s], genre: [%s]".formatted(
                 bookDto.getId(),
                 bookDto.getTitle(),

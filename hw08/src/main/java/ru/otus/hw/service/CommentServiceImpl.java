@@ -31,7 +31,7 @@ public class CommentServiceImpl implements CommentService {
                 .map(commentToDtoConverter::convert)
                 .toList();
         if (commentsList.isEmpty()) {
-            throw new EntityNotFoundException("Book with id %d not found or haven't got comments yet".formatted(bookId));
+            throw new EntityNotFoundException("Book with id %s not found or haven't got comments yet".formatted(bookId));
         }
         return commentsList;
     }
@@ -73,8 +73,6 @@ public class CommentServiceImpl implements CommentService {
     private CommentDto save(String id, String description, String bookId) {
         var book = bookRepository.findById(bookId)
                 .orElseThrow(() -> new EntityNotFoundException("Book with id %s not found".formatted(bookId)));
-        var comment = new Comment(id, description, book);
-
         if (id.equals("")) {
             return commentToDtoConverter.convert(commentRepository.save(new Comment(description, book)));
         }

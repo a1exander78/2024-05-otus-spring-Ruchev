@@ -1,17 +1,14 @@
 package ru.otus.hw.converter;
 
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Component;
+import org.mapstruct.Mapper;
+import ru.otus.hw.dto.BookDto;
 import ru.otus.hw.dto.CommentDto;
+import ru.otus.hw.model.Book;
 import ru.otus.hw.model.Comment;
 
-@RequiredArgsConstructor
-@Component
-public class CommentToDtoConverter {
-    private final BookToDtoConverter bookToDtoConverter;
+@Mapper(componentModel = "spring")
+public interface CommentToDtoConverter {
+    CommentDto convert(Comment comment);
 
-    public CommentDto convert(Comment comment) {
-        var bookDto = bookToDtoConverter.convert(comment.getBook());
-        return new CommentDto(comment.getId(), comment.getDescription(), bookDto);
-    }
+    BookDto convertBook(Book book);
 }

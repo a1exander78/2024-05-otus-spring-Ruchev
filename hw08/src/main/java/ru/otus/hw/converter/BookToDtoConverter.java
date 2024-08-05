@@ -1,20 +1,18 @@
 package ru.otus.hw.converter;
 
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Component;
+import org.mapstruct.Mapper;
+import ru.otus.hw.dto.AuthorDto;
 import ru.otus.hw.dto.BookDto;
+import ru.otus.hw.dto.GenreDto;
+import ru.otus.hw.model.Author;
 import ru.otus.hw.model.Book;
+import ru.otus.hw.model.Genre;
 
-@RequiredArgsConstructor
-@Component
-public class BookToDtoConverter {
-    private final AuthorToDtoConverter authorToDtoConverter;
+@Mapper(componentModel = "spring")
+public interface BookToDtoConverter {
+    BookDto convert(Book book);
 
-    private final GenreToDtoConverter genreToDtoConverter;
+    AuthorDto convertAuthor(Author author);
 
-    public BookDto convert(Book book) {
-        var authorDto = authorToDtoConverter.convert(book.getAuthor());
-        var genreDto = genreToDtoConverter.convert(book.getGenre());
-        return new BookDto(book.getId(), book.getTitle(), authorDto, genreDto);
-    }
+    GenreDto convertGenre(Genre genre);
 }
