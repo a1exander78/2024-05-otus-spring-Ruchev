@@ -9,6 +9,7 @@ import ru.otus.hw.exception.EntityNotFoundException;
 import ru.otus.hw.model.Book;
 import ru.otus.hw.repository.AuthorRepository;
 import ru.otus.hw.repository.BookRepository;
+import ru.otus.hw.repository.CommentRepository;
 import ru.otus.hw.repository.GenreRepository;
 
 import java.util.List;
@@ -24,6 +25,8 @@ public class BookServiceImpl implements BookService {
     private final GenreRepository genreRepository;
 
     private final BookRepository bookRepository;
+
+    private final CommentRepository commentRepository;
 
     private final BookToDtoConverter bookToDtoConverter;
 
@@ -58,6 +61,7 @@ public class BookServiceImpl implements BookService {
     @Transactional
     @Override
     public void deleteById(String id) {
+        commentRepository.findAllCommentsByBookId(id).forEach(comment -> commentRepository.deleteById(comment.getId()));
         bookRepository.deleteById(id);
     }
 
