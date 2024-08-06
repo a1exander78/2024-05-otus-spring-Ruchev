@@ -8,20 +8,23 @@ import org.springframework.context.annotation.Import;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-import ru.otus.hw.converter.AuthorToDtoConverterImpl;
-import ru.otus.hw.converter.BookToDtoConverterImpl;
-import ru.otus.hw.converter.GenreToDtoConverterImpl;
+import ru.otus.hw.converter.toDto.AuthorToDtoConverterImpl;
+import ru.otus.hw.converter.toDto.BookToDtoConverterImpl;
+import ru.otus.hw.converter.toDto.CommentToDtoConverterImpl;
+import ru.otus.hw.converter.toDto.GenreToDtoConverterImpl;
 import ru.otus.hw.dto.AuthorDto;
 import ru.otus.hw.dto.BookDto;
 import ru.otus.hw.dto.GenreDto;
+import ru.otus.hw.exception.UnmodifyEntityException;
 
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @Transactional(propagation = Propagation.NEVER)
-@Import({BookServiceImpl.class, AuthorServiceImpl.class, GenreServiceImpl.class,
-        BookToDtoConverterImpl.class, AuthorToDtoConverterImpl.class, GenreToDtoConverterImpl.class})
+@Import({BookServiceImpl.class, AuthorServiceImpl.class, GenreServiceImpl.class, CommentServiceImpl.class,
+        BookToDtoConverterImpl.class, AuthorToDtoConverterImpl.class, GenreToDtoConverterImpl.class, CommentToDtoConverterImpl.class})
 @DisplayName("Сервис для работы с книгами")
 @DataMongoTest
 public class BookServiceTest {
@@ -48,6 +51,9 @@ public class BookServiceTest {
     @Autowired
     private BookService bookService;
 
+    @Autowired
+    private CommentService commentService;
+
     @DisplayName("должен загружать список всех книг")
     @Test
     void shouldReturnCorrectBooksList() {
@@ -71,19 +77,25 @@ public class BookServiceTest {
     }
 
     @DirtiesContext(methodMode = DirtiesContext.MethodMode.AFTER_METHOD)
+    @DisplayName("должен юросать исключение при попытке изменить книгу у которой уже есть комментарии")
+    @Test
+    void shouldThrownUnmodifyEntityException() {
+        assertThatThrownBy(() -> bookService.update(ID_1, UPDATING_TITLE, ID_1, ID_1)).isInstanceOf(UnmodifyEntityException.class);
+    }
+
+    @DirtiesContext(methodMode = DirtiesContext.MethodMode.AFTER_METHOD)
     @DisplayName("должен сохранять измененную книгу")
     @Test
     void shouldSaveUpdatedBook() {
-        assertThat(bookService.findById(ID_1)).contains(BOOK_1);
-        bookService.update(ID_1, UPDATING_TITLE, ID_1, ID_1);
-        assertThat(bookService.findById(ID_1).orElseGet(() -> BOOK_1)).isNotEqualTo(BOOK_1);
+        commentService.deleteById(ID_2);
+        bookService.update(ID_2, UPDATING_TITLE, ID_1, ID_1);
+        assertThat(bookService.findById(ID_2).orElseGet(() -> BOOK_2)).isNotEqualTo(BOOK_2);
     }
 
     @DirtiesContext(methodMode = DirtiesContext.MethodMode.AFTER_METHOD)
     @DisplayName("должен удалять книгу по id")
     @Test
     void shouldDeleteBook() {
-        assertThat(bookService.findById(ID_1)).contains(BOOK_1);
         bookService.deleteById(ID_1);
         assertThat(bookService.findById(ID_1)).isEmpty();
     }

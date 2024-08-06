@@ -22,8 +22,6 @@ public class CommentServiceImpl implements CommentService {
 
     private final CommentToDtoConverter commentToDtoConverter;
 
-    private final BookService bookService;
-
     @Override
     public List<CommentDto> findAllCommentsByBookId(String bookId) {
         var commentsList = commentRepository.findAllCommentsByBookId(bookId)
@@ -66,8 +64,11 @@ public class CommentServiceImpl implements CommentService {
         var book = bookRepository.findById(bookId)
                 .orElseThrow(() -> new EntityNotFoundException("Book with id %s not found".formatted(bookId)));
         if (id.equals("")) {
-            return commentToDtoConverter.convert(commentRepository.save(new Comment(description, book)));
+            var newComment = commentRepository.save(new Comment(description, book));
+            return commentToDtoConverter.convert(newComment);
         }
-        return commentToDtoConverter.convert(commentRepository.save(new Comment(id, description, book)));
+
+        var updateComment = commentRepository.save(new Comment(id, description, book));
+        return commentToDtoConverter.convert(updateComment);
     }
 }

@@ -6,6 +6,7 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.otus.hw.converter.toDto.BookToDtoConverter;
 import ru.otus.hw.dto.BookDto;
 import ru.otus.hw.exception.EntityNotFoundException;
+import ru.otus.hw.exception.UnmodifyEntityException;
 import ru.otus.hw.model.Book;
 import ru.otus.hw.repository.AuthorRepository;
 import ru.otus.hw.repository.BookRepository;
@@ -28,10 +29,6 @@ public class BookServiceImpl implements BookService {
 
     private final BookToDtoConverter bookToDtoConverter;
 
-    private final AuthorService authorService;
-
-    private final GenreService genreService;
-
     @Transactional(readOnly = true)
     @Override
     public List<BookDto> findAll() {
@@ -53,13 +50,17 @@ public class BookServiceImpl implements BookService {
     @Transactional
     @Override
     public BookDto update(String id, String title, String authorId, String genreId) {
+        if (!commentRepository.findAllCommentsByBookId(id).isEmpty()) {
+            throw new UnmodifyEntityException(
+                    "Book with id %s has already bean commented. Remove comments first".formatted(id));
+        }
         return save(id, title, authorId, genreId);
     }
 
     @Transactional
     @Override
     public void deleteById(String id) {
-        commentRepository.findAllCommentsByBookId(id).forEach(comment -> commentRepository.deleteById(comment.getId()));
+        commentRepository.deleteAllCommentsByBookId(id);
         bookRepository.deleteById(id);
     }
 
@@ -70,9 +71,11 @@ public class BookServiceImpl implements BookService {
                 .orElseThrow(() -> new EntityNotFoundException("Genre with id %s not found".formatted(genreId)));
 
         if (id.equals("")) {
-            return bookToDtoConverter.convert(bookRepository.save(new Book(title, author, genre)));
+            var newBook = bookRepository.save(new Book(title, author, genre));
+            return bookToDtoConverter.convert(newBook);
         }
 
-        return bookToDtoConverter.convert(bookRepository.save(new Book(id, title, author, genre)));
+        var updateBook = bookRepository.save(new Book(id, title, author, genre));
+        return bookToDtoConverter.convert(updateBook);
     }
 }
