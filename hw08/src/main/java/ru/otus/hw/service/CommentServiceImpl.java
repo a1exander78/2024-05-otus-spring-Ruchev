@@ -3,7 +3,7 @@ package ru.otus.hw.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.otus.hw.converter.CommentToDtoConverter;
+import ru.otus.hw.converter.toDto.CommentToDtoConverter;
 import ru.otus.hw.dto.CommentDto;
 import ru.otus.hw.exception.EntityNotFoundException;
 import ru.otus.hw.model.Comment;
@@ -60,14 +60,6 @@ public class CommentServiceImpl implements CommentService {
     @Override
     public void deleteById(String id) {
         commentRepository.deleteById(id);
-    }
-
-    @Override
-    public String commentDtoToString(CommentDto commentDto) {
-        return "Id: %s, description: %s, bookId: %s".formatted(
-                commentDto.getId(),
-                commentDto.getDescription(),
-                bookService.bookDtoToString(commentDto.getBook()));
     }
 
     private CommentDto save(String id, String description, String bookId) {

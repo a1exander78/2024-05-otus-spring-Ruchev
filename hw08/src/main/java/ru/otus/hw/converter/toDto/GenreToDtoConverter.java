@@ -1,4 +1,4 @@
-package ru.otus.hw.converter;
+package ru.otus.hw.converter.toDto;
 
 import org.mapstruct.Mapper;
 import ru.otus.hw.dto.GenreDto;

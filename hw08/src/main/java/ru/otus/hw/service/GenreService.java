@@ -9,6 +9,4 @@ public interface GenreService {
     List<GenreDto> findAll();
 
     Optional<GenreDto> findById(String id);
-
-    String genreDtoToString(GenreDto genreDto);
 }

@@ -3,7 +3,7 @@ package ru.otus.hw.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.otus.hw.converter.BookToDtoConverter;
+import ru.otus.hw.converter.toDto.BookToDtoConverter;
 import ru.otus.hw.dto.BookDto;
 import ru.otus.hw.exception.EntityNotFoundException;
 import ru.otus.hw.model.Book;
@@ -14,8 +14,6 @@ import ru.otus.hw.repository.GenreRepository;
 
 import java.util.List;
 import java.util.Optional;
-
-import static java.util.Objects.isNull;
 
 @RequiredArgsConstructor
 @Service
@@ -63,18 +61,6 @@ public class BookServiceImpl implements BookService {
     public void deleteById(String id) {
         commentRepository.findAllCommentsByBookId(id).forEach(comment -> commentRepository.deleteById(comment.getId()));
         bookRepository.deleteById(id);
-    }
-
-    @Override
-    public String bookDtoToString(BookDto bookDto) {
-        if (isNull(bookDto)) {
-            throw new EntityNotFoundException("Book not found");
-        }
-        return "Id: %s, title: %s, author: [%s], genre: [%s]".formatted(
-                bookDto.getId(),
-                bookDto.getTitle(),
-                authorService.authorDtoToString(bookDto.getAuthor()),
-                genreService.genreDtoToString(bookDto.getGenre()));
     }
 
     private BookDto save(String id, String title, String authorId, String genreId) {

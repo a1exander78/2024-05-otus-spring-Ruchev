@@ -15,6 +15,4 @@ public interface CommentService {
     CommentDto update(String id, String description);
 
     void deleteById(String id);
-
-    String commentDtoToString(CommentDto commentDto);
 }

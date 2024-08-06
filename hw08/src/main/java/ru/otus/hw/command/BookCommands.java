@@ -3,6 +3,7 @@ package ru.otus.hw.command;
 import lombok.RequiredArgsConstructor;
 import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
+import ru.otus.hw.converter.toString.BookDtoToStringConverter;
 import ru.otus.hw.service.BookService;
 
 import java.util.stream.Collectors;
@@ -11,20 +12,21 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @ShellComponent
 public class BookCommands {
-
     private final BookService bookService;
+
+    private final BookDtoToStringConverter bookDtoToStringConverter;
 
     @ShellMethod(value = "Find all books", key = "ab")
     public String findAllBooks() {
         return bookService.findAll().stream()
-                .map(bookService::bookDtoToString)
+                .map(bookDtoToStringConverter::bookDtoToString)
                 .collect(Collectors.joining("," + System.lineSeparator()));
     }
 
     @ShellMethod(value = "Find book by id", key = "bbid")
     public String findBookById(String id) {
         return bookService.findById(id)
-                .map(bookService::bookDtoToString)
+                .map(bookDtoToStringConverter::bookDtoToString)
                 .orElse("Book with id %s not found".formatted(id));
     }
 
@@ -32,14 +34,14 @@ public class BookCommands {
     @ShellMethod(value = "Insert book", key = "bins")
     public String insertBook(String title, String authorId, String genreId) {
         var savedBook = bookService.insert(title, authorId, genreId);
-        return bookService.bookDtoToString(savedBook);
+        return bookDtoToStringConverter.bookDtoToString(savedBook);
     }
 
     // bupd 4 editedBook 3 2
     @ShellMethod(value = "Update book", key = "bupd")
     public String updateBook(String id, String title, String authorId, String genreId) {
         var savedBook = bookService.update(id, title, authorId, genreId);
-        return bookService.bookDtoToString(savedBook);
+        return bookDtoToStringConverter.bookDtoToString(savedBook);
     }
 
     // bdel 4

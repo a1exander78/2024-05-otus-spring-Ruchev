@@ -9,6 +9,4 @@ public interface AuthorService {
     List<AuthorDto> findAll();
 
     Optional<AuthorDto> findById(String id);
-
-    String authorDtoToString(AuthorDto authorDto);
 }
