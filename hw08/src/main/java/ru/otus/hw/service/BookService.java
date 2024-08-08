@@ -14,5 +14,7 @@ public interface BookService {
 
     BookDto update(String id, String title, String authorId, String genreId);
 
+    BookDto forceUpdate(String id, String title, String authorId, String genreId);
+
     void deleteById(String id);
 }

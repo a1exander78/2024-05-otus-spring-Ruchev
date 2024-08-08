@@ -8,6 +8,7 @@ import ru.otus.hw.dto.BookDto;
 import ru.otus.hw.exception.EntityNotFoundException;
 import ru.otus.hw.exception.UnmodifyEntityException;
 import ru.otus.hw.model.Book;
+import ru.otus.hw.model.Comment;
 import ru.otus.hw.repository.AuthorRepository;
 import ru.otus.hw.repository.BookRepository;
 import ru.otus.hw.repository.CommentRepository;
@@ -29,13 +30,11 @@ public class BookServiceImpl implements BookService {
 
     private final BookToDtoConverter bookToDtoConverter;
 
-    @Transactional(readOnly = true)
     @Override
     public List<BookDto> findAll() {
         return bookRepository.findAll().stream().map(bookToDtoConverter::convert).toList();
     }
 
-    @Transactional(readOnly = true)
     @Override
     public Optional<BookDto> findById(String id) {
         return bookRepository.findById(id).map(bookToDtoConverter::convert);
@@ -44,17 +43,34 @@ public class BookServiceImpl implements BookService {
     @Transactional
     @Override
     public BookDto insert(String title, String authorId, String genreId) {
-        return save("", title, authorId, genreId);
+        var newBook = save("", title, authorId, genreId);
+        return bookToDtoConverter.convert(newBook);
     }
 
     @Transactional
     @Override
     public BookDto update(String id, String title, String authorId, String genreId) {
-        if (!commentRepository.findAllCommentsByBookId(id).isEmpty()) {
-            throw new UnmodifyEntityException(
-                    "Book with id %s has already bean commented. Remove comments first".formatted(id));
+        if (commentRepository.existsByBookId(id)) {
+            throw new UnmodifyEntityException(("Book with id %s has already bean commented." +
+                    "Remove comments first or use force update").formatted(id));
         }
-        return save(id, title, authorId, genreId);
+        var updatedBook = save(id, title, authorId, genreId);
+        return bookToDtoConverter.convert(updatedBook);
+    }
+
+    @Transactional
+    @Override
+    public BookDto forceUpdate(String id, String title, String authorId, String genreId) {
+        if (!commentRepository.existsByBookId(id)) {
+            return update(id, title, authorId, genreId);
+        }
+        var updatedBook = save(id, title, authorId, genreId);
+        var updateComments = commentRepository.findAllCommentsByBookId(id);
+        for (var updateComment : updateComments) {
+            commentRepository.save(
+                    new Comment(updateComment.getId(), updateComment.getDescription(), updatedBook));
+        }
+        return bookToDtoConverter.convert(updatedBook);
     }
 
     @Transactional
@@ -64,18 +80,17 @@ public class BookServiceImpl implements BookService {
         bookRepository.deleteById(id);
     }
 
-    private BookDto save(String id, String title, String authorId, String genreId) {
+    private Book save(String id, String title, String authorId, String genreId) {
         var author = authorRepository.findById(authorId)
                 .orElseThrow(() -> new EntityNotFoundException("Author with id %s not found".formatted(authorId)));
         var genre = genreRepository.findById(genreId)
                 .orElseThrow(() -> new EntityNotFoundException("Genre with id %s not found".formatted(genreId)));
-
+        Book savedBook;
         if (id.equals("")) {
-            var newBook = bookRepository.save(new Book(title, author, genre));
-            return bookToDtoConverter.convert(newBook);
+            savedBook = bookRepository.save(new Book(title, author, genre));
+        } else {
+            savedBook = bookRepository.save(new Book(id, title, author, genre));
         }
-
-        var updateBook = bookRepository.save(new Book(id, title, author, genre));
-        return bookToDtoConverter.convert(updateBook);
+        return savedBook;
     }
 }

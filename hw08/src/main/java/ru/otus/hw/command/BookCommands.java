@@ -44,6 +44,13 @@ public class BookCommands {
         return bookDtoToStringConverter.bookDtoToString(savedBook);
     }
 
+    // bupd -f 4 editedBook 3 2
+    @ShellMethod(value = "Force update book (update inner comments)", key = "bupd -f")
+    public String forceUpdateBook(String id, String title, String authorId, String genreId) {
+        var savedBook = bookService.forceUpdate(id, title, authorId, genreId);
+        return bookDtoToStringConverter.bookDtoToString(savedBook);
+    }
+
     // bdel 4
     @ShellMethod(value = "Delete book by id", key = "bdel")
     public void deleteBook(String id) {

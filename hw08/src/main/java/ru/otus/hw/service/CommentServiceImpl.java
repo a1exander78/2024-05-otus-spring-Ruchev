@@ -42,7 +42,8 @@ public class CommentServiceImpl implements CommentService {
     @Transactional
     @Override
     public CommentDto insert(String description, String bookId) {
-        return save("", description, bookId);
+        var newComment = save("", description, bookId);
+        return commentToDtoConverter.convert(newComment);
     }
 
     @Transactional
@@ -51,7 +52,8 @@ public class CommentServiceImpl implements CommentService {
         var comment = commentRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Comment with id %s not found".formatted(id)));
         var bookId = comment.getBook().getId();
-        return save(id, description, bookId);
+        var updatedComment = save(id, description, bookId);
+        return commentToDtoConverter.convert(updatedComment);
     }
 
     @Transactional
@@ -60,15 +62,15 @@ public class CommentServiceImpl implements CommentService {
         commentRepository.deleteById(id);
     }
 
-    private CommentDto save(String id, String description, String bookId) {
+    private Comment save(String id, String description, String bookId) {
         var book = bookRepository.findById(bookId)
                 .orElseThrow(() -> new EntityNotFoundException("Book with id %s not found".formatted(bookId)));
+        Comment savedComment;
         if (id.equals("")) {
-            var newComment = commentRepository.save(new Comment(description, book));
-            return commentToDtoConverter.convert(newComment);
+            savedComment = commentRepository.save(new Comment(description, book));
+        } else {
+            savedComment = commentRepository.save(new Comment(id, description, book));
         }
-
-        var updateComment = commentRepository.save(new Comment(id, description, book));
-        return commentToDtoConverter.convert(updateComment);
+        return savedComment;
     }
 }
