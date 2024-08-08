@@ -1,0 +1,37 @@
+spring:
+  data:
+    mongodb:
+      #port: 27017
+      #database: library
+      host: localhost
+      port: 0
+      database: testLibrary
+
+  shell:
+    interactive:
+      enabled: true
+    noninteractive:
+      enabled: false
+
+    command:
+      version:
+        enabled: false
+de:
+  flapdoodle:
+    mongodb:
+      embedded:
+        version: 4.0.2
+
+mongock:
+  runner-type: "ApplicationRunner" # default
+  #runner-type: "InitializingBean"
+  change-logs-scan-package:
+    - ru.otus.hw.changelogs
+  mongo-db:
+    write-concern:
+      journal: false
+    read-concern: local
+
+logging:
+  level:
+    root: ERROR
