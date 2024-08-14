@@ -8,7 +8,7 @@ import org.springframework.context.annotation.Import;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-import ru.otus.hw.converter.toDto.CommentToDtoConverterImpl;
+import ru.otus.hw.converter.dto.CommentDtoConverterImpl;
 import ru.otus.hw.dto.AuthorDto;
 import ru.otus.hw.dto.BookDto;
 import ru.otus.hw.dto.CommentDto;
@@ -20,7 +20,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @Transactional(propagation = Propagation.NEVER)
 @DisplayName("Сервис для работы с комментариями")
-@Import({CommentServiceImpl.class, CommentToDtoConverterImpl.class})
+@Import({CommentServiceImpl.class, CommentDtoConverterImpl.class})
 @DataJpaTest
 public class CommentServiceTest {
     private static final long ID_1 = 1L;

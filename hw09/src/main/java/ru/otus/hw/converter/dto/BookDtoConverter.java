@@ -1,4 +1,4 @@
-package ru.otus.hw.converter.toDto;
+package ru.otus.hw.converter.dto;
 
 import org.mapstruct.Mapper;
 import ru.otus.hw.dto.AuthorDto;
@@ -9,8 +9,8 @@ import ru.otus.hw.model.Book;
 import ru.otus.hw.model.Genre;
 
 @Mapper(componentModel = "spring")
-public interface BookToDtoConverter {
-    BookDto convert(Book book);
+public interface BookDtoConverter {
+    BookDto toDto(Book book);
 
     AuthorDto convertAuthor(Author author);
 

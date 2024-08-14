@@ -3,7 +3,7 @@ package ru.otus.hw.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.otus.hw.converter.toDto.CommentToDtoConverter;
+import ru.otus.hw.converter.dto.CommentDtoConverter;
 import ru.otus.hw.dto.CommentDto;
 import ru.otus.hw.exception.EntityNotFoundException;
 import ru.otus.hw.model.Comment;
@@ -20,7 +20,7 @@ public class CommentServiceImpl implements CommentService {
 
     private final BookRepository bookRepository;
 
-    private final CommentToDtoConverter commentToDtoConverter;
+    private final CommentDtoConverter converter;
 
     @Override
     public List<CommentDto> findAllCommentsByBookId(long bookId) {
@@ -28,19 +28,19 @@ public class CommentServiceImpl implements CommentService {
         if (commentsList.isEmpty()) {
             throw new EntityNotFoundException("Book with id %d not found or haven't got comments yet".formatted(bookId));
         }
-        return commentsList.stream().map(commentToDtoConverter::convert).toList();
+        return commentsList.stream().map(converter::toDto).toList();
     }
 
     @Override
     public Optional<CommentDto> findById(long id) {
-        return commentRepository.findById(id).map(commentToDtoConverter::convert);
+        return commentRepository.findById(id).map(converter::toDto);
     }
 
     @Transactional
     @Override
     public CommentDto insert(String description, long bookId) {
         var newComment = save(0, description, bookId);
-        return commentToDtoConverter.convert(newComment);
+        return converter.toDto(newComment);
     }
 
     @Transactional
@@ -50,7 +50,7 @@ public class CommentServiceImpl implements CommentService {
                 .orElseThrow(() -> new EntityNotFoundException("Comment with id %d not found".formatted(id)));
         var bookId = comment.getBook().getId();
         var updatedComment = save(id, description, bookId);
-        return commentToDtoConverter.convert(updatedComment);
+        return converter.toDto(updatedComment);
     }
 
     @Transactional

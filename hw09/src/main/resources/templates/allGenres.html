@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>List of all genres</title>
+    <style type="text/css">
+        body {
+            padding: 50px;
+        }
+
+        .genre {
+            border: 1px solid steelblue;
+            width: 300px;
+            border-collapse: collapse;
+        }
+
+        .genre tr td, th {
+            padding: 5px;
+            border: 1px solid steelblue;
+        }
+
+        .genre td:last-child, td:first-child {
+            width: 50px;
+        }
+
+        h3 {
+            background-image: url("../static/listmark.png");
+            background-repeat: no-repeat;
+            padding: 2px;
+            padding-left: 30px;
+        }
+
+    </style>
+
+    <style type="text/css" th:inline="text">
+        [[h3]] {
+            background-image: url([[@{/listmark.png}]]);
+            background-repeat: no-repeat;
+            padding: 2px;
+            padding-left: 30px;
+        }
+
+    </style>
+</head>
+<body>
+
+<h3 th:text="#{genre-table-header}">Genres:</h3>
+
+<table class="genre">
+    <thead>
+    <tr>
+        <th th:text="#{genre-field-id}">ID</th>
+        <th th:text="#{genre-field-name}">Name</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="genre : ${genres}" th:object ="${genre}">
+        <td th:text="*{id}">1</td>
+        <td th:text="*{name}">Dystopian novel</td>
+    </tr>
+    </tbody>
+</table>
+<p/>
+<div>
+    <a href="pageStart.html" th:href="@{/}" th:text="#{main-page-button-caption}">Main page</a>
+</div>
+</body>
+</html>

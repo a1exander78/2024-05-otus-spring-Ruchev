@@ -8,7 +8,7 @@ import org.springframework.context.annotation.Import;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-import ru.otus.hw.converter.toDto.BookToDtoConverterImpl;
+import ru.otus.hw.converter.dto.BookDtoConverterImpl;
 import ru.otus.hw.dto.AuthorDto;
 import ru.otus.hw.dto.BookDto;
 import ru.otus.hw.dto.GenreDto;
@@ -20,7 +20,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @Transactional(propagation = Propagation.NEVER)
 @DisplayName("Сервис для работы с книгами")
 @DataJpaTest
-@Import({BookServiceImpl.class, BookToDtoConverterImpl.class})
+@Import({BookServiceImpl.class, BookDtoConverterImpl.class})
 public class BookServiceTest {
     private static final long ID_1 = 1L;
     private static final long ID_2 = 2L;
