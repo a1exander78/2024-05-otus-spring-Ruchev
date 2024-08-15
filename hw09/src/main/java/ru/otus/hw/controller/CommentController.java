@@ -55,6 +55,17 @@ public class CommentController {
         return path;
     }
 
+    @GetMapping("/comment/{id}/del")
+    public String deleteComment(@PathVariable("id") long id) {
+        return "deleteComment";
+    }
+
+    @PostMapping("/comment/{id}/del")
+    public String deleteComment(@PathVariable("id") long id, Model model) {
+        commentService.deleteById(id);
+        return "redirect:/book";
+    }
+
     @ExceptionHandler(EntityNotFoundException.class)
     public ResponseEntity<String> handleNotFound(EntityNotFoundException ex) {
         return ResponseEntity.badRequest().body(ex.getMessage());

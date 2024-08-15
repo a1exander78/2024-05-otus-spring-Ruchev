@@ -62,6 +62,17 @@ public class BookController {
         return "redirect:/book";
     }
 
+    @GetMapping("/book/{id}/del")
+    public String deleteBook(@PathVariable("id") long id) {
+        return "deleteBook";
+    }
+
+    @PostMapping("/book/{id}/del")
+    public String deleteBook(@PathVariable("id") long id, Model model) {
+        bookService.deleteById(id);
+        return "redirect:/book";
+    }
+
     @ExceptionHandler(EntityNotFoundException.class)
     public ResponseEntity<String> handleNotFound(EntityNotFoundException ex) {
         return ResponseEntity.badRequest().body(ex.getMessage());

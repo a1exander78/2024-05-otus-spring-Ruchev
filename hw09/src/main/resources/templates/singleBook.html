@@ -71,8 +71,12 @@
     <div class="row">
         <button type="submit" th:text="#{save-button-caption}">Save</button>
 
-        <button type="button" th:text="#{delete-button-caption}">Delete</button>
+        <a href="deleteBook.html" th:href="@{/book/{id}/del(id=${id})}">
+            <button type="button" th:text="#{delete-button-caption}">Delete</button>
+        </a>
+    </div>
 
+    <div class="row">
         <a href="allBooks.html" th:href="@{/book}">
             <button type="button" th:text="#{cancel-button-caption}">Cancel</button>
         </a>

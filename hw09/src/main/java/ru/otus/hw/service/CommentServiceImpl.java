@@ -26,7 +26,7 @@ public class CommentServiceImpl implements CommentService {
     public List<CommentDto> findAllCommentsByBookId(long bookId) {
         var commentsList = commentRepository.findAllCommentsByBookId(bookId);
         if (commentsList.isEmpty()) {
-            throw new EntityNotFoundException("Book with id %d not found or haven't got comments yet".formatted(bookId));
+            throw new EntityNotFoundException("Book with id %d haven't got comments yet".formatted(bookId));
         }
         return commentsList.stream().map(converter::toDto).toList();
     }
