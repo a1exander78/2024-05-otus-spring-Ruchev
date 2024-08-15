@@ -2,7 +2,7 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8"/>
-    <title>Edit comment</title>
+    <title>Add book</title>
     <style type="text/css">
         body {
             padding: 50px;
@@ -43,27 +43,30 @@
 
     </style>
 </head>
-<body th:object="${comment}">
+<body>
 
-<form id="edit-form" action="singleComment.html" th:action="@{/comment(id=*{id})}" th:method="post">
-    <h3 th:text = "#{comment-update-form-header}">Comment Info:</h3>
+<form id="add-form" action="addBook.html" th:action="@{/book/new}" th:method="post">
+    <h3 th:text = "#{book-form-header}">Book Info:</h3>
 
     <div class="row">
-        <label for="id-input" th:text="#{comment-field-id} + ':'">ID:</label>
-        <input id="id-input" type="text" readonly="readonly" name="id" th:value="*{id}" value="1"/>
+        <label for="book-title-input" th:text="#{book-field-title} + ':'">Title:</label>
+        <input id="book-title-input" name="title" type="text" value="New book"/>
     </div>
 
     <div class="row">
-        <label for="comment-description-input" th:text="#{comment-field-description} + ':'">Description:</label>
-        <input id="comment-description-input" name="description" type="text" th:value="*{description}" value="Updated comment"/>
+        <label for="book-authorId-input" th:text="#{book-field-author} + ':'">Author:</label>
+        <input id="book-authorId-input" name="authorId" type="text" value="1"/>
+    </div>
+
+    <div class="row">
+        <label for="book-genreId-input" th:text="#{book-field-genre} + ':'">Genre:</label>
+        <input id="book-genreId-input" name="genreId" type="text" value="1"/>
     </div>
 
     <div class="row">
         <button type="submit" th:text="#{save-button-caption}">Save</button>
 
-        <button type="button" th:text="#{delete-button-caption}">Delete</button>
-
-        <a href="commentsList.html" th:href="@{/comment(bookId=*{bookId})}">
+        <a href="allBooks.html" th:href="@{/book}">
             <button type="button" th:text="#{cancel-button-caption}">Cancel</button>
         </a>
     </div>

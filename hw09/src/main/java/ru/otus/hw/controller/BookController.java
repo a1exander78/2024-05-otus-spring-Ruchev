@@ -22,7 +22,7 @@ public class BookController {
 
     @GetMapping("/")
     public String startPage() {
-        return "pageStart";
+        return "start";
     }
 
     @GetMapping("/book")
@@ -46,6 +46,19 @@ public class BookController {
                              @RequestParam("authorId") long authorId,
                              @RequestParam("genreId") long genreId) {
         bookService.update(id, title, authorId, genreId);
+        return "redirect:/book";
+    }
+
+    @GetMapping("/book/new")
+    public String addBook() {
+        return "addBook";
+    }
+
+    @PostMapping("/book/new")
+    public String addBook(@RequestParam("title") String title,
+                          @RequestParam("authorId") long authorId,
+                          @RequestParam("genreId") long genreId) {
+        bookService.insert(title, authorId, genreId);
         return "redirect:/book";
     }
 

@@ -44,7 +44,7 @@
 </head>
 <body>
 
-<h3 th:text="#{comment-table-header}">All comments on the book</h3>
+<h3 th:text="#{comment-table-header(${bookId})}">All comments on the book</h3>
 
 <table class="comment">
     <thead>
@@ -65,10 +65,6 @@
     </tbody>
 </table>
 <p/>
-<div>
-    <a href="singleComment.html" th:href="@{/comment}" th:text="#{add-button-caption}">Add</a>
-</div>
-
 <div>
     <a href="allBooks.html" th:href="@{/book}" th:text="#{back-button-caption}">Back</a>
 </div>

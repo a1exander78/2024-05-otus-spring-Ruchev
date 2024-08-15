@@ -17,11 +17,11 @@ import ru.otus.hw.service.CommentService;
 public class CommentController {
     private final CommentService commentService;
 
-
     @GetMapping("/comment")
     public String readAllCommentsByBookId(@RequestParam("bookId") long bookId, Model model) {
         var comments = commentService.findAllCommentsByBookId(bookId);
         model.addAttribute("comments", comments);
+        model.addAttribute("bookId", bookId);
         return "allCommentsByBook";
     }
 
@@ -35,9 +35,23 @@ public class CommentController {
 
     @PostMapping("/comment")
     public String updateComment(@RequestParam("id") long id,
-                                @RequestParam("description") String description, Model model) {
+                                @RequestParam("description") String description) {
         var updatedComment = commentService.update(id, description);
         String path = "redirect:/comment?bookId=" + updatedComment.getBookId();
+        return path;
+    }
+
+    @GetMapping("/comment/new")
+    public String addComment(@RequestParam("bookId") long bookId, Model model) {
+        model.addAttribute("bookId", bookId);
+        return "addComment";
+    }
+
+    @PostMapping("/comment/new")
+    public String addComment(@RequestParam("bookId") long bookId,
+                              @RequestParam("description") String description) {
+        commentService.insert(description, bookId);
+        String path = "redirect:/comment?bookId=" + bookId;
         return path;
     }
 

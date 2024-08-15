@@ -55,6 +55,7 @@
         <th th:text="#{book-field-genre}">Genre</th>
         <th th:text="#{table-column-action}">Action</th>
         <th th:text="#{table-column-action}">Action</th>
+        <th th:text="#{table-column-action}">Action</th>
     </tr>
     </thead>
     <tbody>
@@ -69,16 +70,19 @@
         <td>
             <a href="allCommentsByBook.html" th:href="@{/comment(bookId=*{id})}" th:text="#{comment-button-caption}">Get comments</a>
         </td>
+        <td>
+            <a href="addComment.html" th:href="@{/comment/new(bookId=*{id})}" th:text="#{add-button-caption}">Add</a>
+        </td>
     </tr>
     </tbody>
 </table>
 <p/>
 <div>
-    <a href="singleBook.html" th:href="@{/book/__*{id}__}" th:text="#{add-button-caption}">Add</a>
+    <a href="addBook.html" th:href="@{/book/new}" th:text="#{add-button-caption}">Add</a>
 </div>
 <p/>
 <div>
-    <a href="pageStart.html" th:href="@{/}" th:text="#{main-page-button-caption}">Main page</a>
+    <a href="start.html" th:href="@{/}" th:text="#{main-page-button-caption}">Main page</a>
 </div>
 </body>
 </html>
