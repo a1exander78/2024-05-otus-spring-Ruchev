@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import ru.otus.hw.exception.EntityNotFoundException;
+import ru.otus.hw.service.BookService;
 import ru.otus.hw.service.CommentService;
 
 @RequiredArgsConstructor
@@ -17,11 +18,14 @@ import ru.otus.hw.service.CommentService;
 public class CommentController {
     private final CommentService commentService;
 
+    private final BookService bookService;
+
     @GetMapping("/comment")
     public String readAllCommentsByBookId(@RequestParam("bookId") long bookId, Model model) {
         var comments = commentService.findAllCommentsByBookId(bookId);
+        var book = bookService.findById(bookId).get();
         model.addAttribute("comments", comments);
-        model.addAttribute("bookId", bookId);
+        model.addAttribute("book", book);
         return "allCommentsByBook";
     }
 

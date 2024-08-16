@@ -9,16 +9,19 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import ru.otus.hw.converter.dto.BookDtoConverter;
 import ru.otus.hw.exception.EntityNotFoundException;
+import ru.otus.hw.service.AuthorService;
 import ru.otus.hw.service.BookService;
+import ru.otus.hw.service.GenreService;
 
 @RequiredArgsConstructor
 @Controller
 public class BookController {
     private final BookService bookService;
 
-    private final BookDtoConverter converter;
+    private final AuthorService authorService;
+
+    private final GenreService genreService;
 
     @GetMapping("/")
     public String startPage() {
@@ -36,7 +39,11 @@ public class BookController {
     public String readBook(@PathVariable("id") long id, Model model) {
         var book = bookService.findById(id).orElseThrow(
                 () -> new EntityNotFoundException("Book with id %d not found".formatted(id)));
+        var authors = authorService.findAll();
+        var genres = genreService.findAll();
         model.addAttribute("book", book);
+        model.addAttribute("authors", authors);
+        model.addAttribute("genres", genres);
         return "singleBook";
     }
 
@@ -50,7 +57,11 @@ public class BookController {
     }
 
     @GetMapping("/book/new")
-    public String addBook() {
+    public String addBook(Model model) {
+        var authors = authorService.findAll();
+        var genres = genreService.findAll();
+        model.addAttribute("authors", authors);
+        model.addAttribute("genres", genres);
         return "addBook";
     }
 

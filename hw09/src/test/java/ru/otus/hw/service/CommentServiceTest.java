@@ -9,10 +9,7 @@ import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import ru.otus.hw.converter.dto.CommentDtoConverterImpl;
-import ru.otus.hw.dto.AuthorDto;
-import ru.otus.hw.dto.BookDto;
 import ru.otus.hw.dto.CommentDto;
-import ru.otus.hw.dto.GenreDto;
 
 import java.util.List;
 
@@ -25,12 +22,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class CommentServiceTest {
     private static final long ID_1 = 1L;
     private static final long ID_4 = 4L;
-
-    private static final AuthorDto AUTHOR_1 = new AuthorDto(ID_1, "Author_Test_1");
-
-    private static final GenreDto GENRE_1 = new GenreDto(ID_1, "Genre_Test_1");
-
-    private static final BookDto BOOK_1 = new BookDto(ID_1, "Book_Test_1", AUTHOR_1, GENRE_1);
 
     private static final CommentDto COMMENT_1 = new CommentDto(ID_1, "Comment_Test_1", ID_1);
     private static final CommentDto COMMENT_4 = new CommentDto(ID_4, "Comment_Test_4", ID_1);
