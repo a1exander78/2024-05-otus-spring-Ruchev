@@ -5,7 +5,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -55,8 +54,7 @@ public class BookController {
     public String updateBook(@RequestParam("id") long id,
                              @RequestParam("title") @NotBlank String title,
                              @RequestParam("authorId") long authorId,
-                             @RequestParam("genreId") long genreId,
-                             BindingResult bindingResult) {
+                             @RequestParam("genreId") long genreId) {
         bookService.update(id, title, authorId, genreId);
         return "redirect:/book";
     }
@@ -79,12 +77,12 @@ public class BookController {
     }
 
     @GetMapping("/book/{id}/del")
-    public String deleteBook(@PathVariable("id") long id) {
+    public String deleteBook() {
         return "deleteBook";
     }
 
     @PostMapping("/book/{id}/del")
-    public String deleteBook(@PathVariable("id") long id, Model model) {
+    public String deleteBook(@PathVariable("id") long id) {
         bookService.deleteById(id);
         return "redirect:/book";
     }

@@ -48,11 +48,6 @@
 <form id="add-form" action="addComment.html" th:action="@{/comment/new(bookId=${bookId})}" th:method="post">
     <h3 th:text = "#{comment-add-form-header}">Add new:</h3>
 
-<!--    <div class="row">-->
-<!--        <label for="comment-bookId-input" th:text="#{comment-field-bookId} + ':'">BookId:</label>-->
-<!--        <input id="comment-bookId-input" name="bookId" type="text" readonly="readonly" th:value="${bookId}" value="1"/>-->
-<!--    </div>-->
-
     <div class="row">
         <label for="comment-description-input" th:text="#{comment-field-description} + ':'">Description:</label>
         <input id="comment-description-input" name="description" type="text" value="New comment"/>
