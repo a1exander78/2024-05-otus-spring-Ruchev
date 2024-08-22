@@ -45,12 +45,13 @@
 </head>
 <body>
 
-<form id="add-form" action="addBook.html" th:action="@{/book/new}" th:method="post">
+<form id="add-form" action="addBook.html" th:action="@{/book/new}" th:method="post" th:object="${book}">
     <h3 th:text = "#{book-form-header}">Book Info:</h3>
 
     <div class="row">
         <label for="book-title-input" th:text="#{book-field-title} + ':'">Title:</label>
         <input id="book-title-input" name="title" type="text" value="New book"/>
+        <div class="errors" th:if="${#fields.hasErrors('title')}" th:errors="*{title}">Wrong title</div>
     </div>
 
     <div class="row">

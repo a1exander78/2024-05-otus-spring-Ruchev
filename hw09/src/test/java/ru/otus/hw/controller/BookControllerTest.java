@@ -120,7 +120,7 @@ class BookControllerTest {
         requestParams.add("authorId", String.valueOf(ID_2));
         requestParams.add("genreId", String.valueOf(ID_3));
 
-        mvc.perform(post("/book").params(requestParams))
+        mvc.perform(post("/book/" + ID_1).params(requestParams))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/book"));
 

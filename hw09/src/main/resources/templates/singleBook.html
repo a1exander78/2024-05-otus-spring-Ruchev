@@ -45,7 +45,7 @@
 </head>
 <body th:object="${book}">
 
-<form id="edit-form" action="singleBook.html" th:action="@{/book(id=*{id})}" th:method="post">
+<form id="edit-form" action="singleBook.html" th:action="@{/book/__*{id}__}" th:method="post" th:object="${book}">
     <h3 th:text = "#{book-form-header}">Book Info:</h3>
 
     <div class="row">
@@ -56,6 +56,7 @@
     <div class="row">
         <label for="book-title-input" th:text="#{book-field-title} + ':'">Title:</label>
         <input id="book-title-input" name="title" type="text" th:value="*{title}" value="Updated book"/>
+        <div class="errors" th:if="${#fields.hasErrors('title')}" th:errors="*{title}">Wrong title</div>
     </div>
 
     <div class="row">
