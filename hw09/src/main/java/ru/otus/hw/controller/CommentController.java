@@ -2,7 +2,6 @@ package ru.otus.hw.controller;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -12,6 +11,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import ru.otus.hw.dto.CommentDtoRequest;
 import ru.otus.hw.exception.EntityNotFoundException;
@@ -102,8 +102,10 @@ public class CommentController {
     }
 
     @ExceptionHandler(EntityNotFoundException.class)
-    public ResponseEntity<String> handleNotFound(EntityNotFoundException ex) {
-        return ResponseEntity.badRequest().body(ex.getMessage());
+    public ModelAndView handleNotFound(EntityNotFoundException ex) {
+        ModelAndView modelAndView = new ModelAndView("error");
+        modelAndView.addObject("message", ex.getMessage());
+        return modelAndView;
     }
 
     private void redirectRequestWithError(CommentDtoRequest commentDtoRequest,

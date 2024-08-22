@@ -5,7 +5,7 @@
     <title>Error page</title>
 </head>
 <body>
-<h3 th:text="#{error-page}">Error page</h3>
+<h3 th:text="#{error-page(${message})}">Error page</h3>
 <p/>
 <div>
     <a href="start.html" th:href="@{/}" th:text="#{main-page-button-caption}">Main page</a>
