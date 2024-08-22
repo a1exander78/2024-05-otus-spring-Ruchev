@@ -43,9 +43,11 @@ class CommentControllerTest {
     private static final CommentDto COMMENT_1 = new CommentDto(ID_1, "Comment_Test_1", ID_1);
     private static final CommentDto COMMENT_4 = new CommentDto(ID_4, "Comment_Test_4", ID_1);
 
-    private static final String NEW_COMMENT = "New_Comment";;
+    private static final String NEW_COMMENT = "New_Comment";
 
     private static final String UPDATING_COMMENT = "Updating_Comment";
+
+    private static final String SHORT_COMMENT = "ABCD";
 
     @Autowired
     private MockMvc mvc;
@@ -112,7 +114,7 @@ class CommentControllerTest {
         requestParams.add("id", String.valueOf(ID_1));
         requestParams.add("description", UPDATING_COMMENT);
 
-        mvc.perform(post("/comment").params(requestParams))
+        mvc.perform(post("/comment/1").params(requestParams))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/comment?bookId=1"));
 
@@ -127,5 +129,33 @@ class CommentControllerTest {
                 .andExpect(redirectedUrl("/book"));
 
         verify(commentService, times(1)).deleteById(ID_1);
+    }
+
+    @DisplayName("не должен добавлять комментарий, длиной меньше 5 символов")
+    @Test
+    void shouldNotSaveShortComment() throws Exception {
+        var requestParams = new LinkedMultiValueMap<String, String>();
+
+        requestParams.add("description", SHORT_COMMENT);
+        requestParams.add("bookId", String.valueOf(ID_1));
+
+        mvc.perform(post("/comment/new").params(requestParams))
+                .andExpect(status().is3xxRedirection());
+
+        verify(commentService, times(0)).insert(SHORT_COMMENT, ID_1);
+    }
+
+    @DisplayName("не должен обновлять комментарий длиной меньше 5 символов")
+    @Test
+    void shouldNotUpdateShortComment() throws Exception {
+        var requestParams = new LinkedMultiValueMap<String, String>();
+
+        requestParams.add("id", String.valueOf(ID_1));
+        requestParams.add("description", SHORT_COMMENT);
+
+        mvc.perform(post("/comment/1").params(requestParams))
+                .andExpect(status().is3xxRedirection());
+
+        verify(commentService, times(0)).update(ID_1, SHORT_COMMENT);
     }
 }

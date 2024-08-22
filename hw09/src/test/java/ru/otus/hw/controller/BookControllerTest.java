@@ -51,6 +51,10 @@ class BookControllerTest {
 
     private static final String UPDATING_TITLE = "Updating_Title";
 
+    private static final String SHORT_TITLE = "";
+
+    private static final String LONG_TITLE = "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA";
+
     @Autowired
     private MockMvc mvc;
 
@@ -135,5 +139,50 @@ class BookControllerTest {
                 .andExpect(redirectedUrl("/book"));
 
         verify(bookService, times(1)).deleteById(ID_1);
+    }
+
+    @DisplayName("не должен сохранять новую книгу, если наименование пустое или больше 30 символов")
+    @Test
+    void shouldNotSaveShortOrTooLongTitleBook() throws Exception {
+        var requestParams = new LinkedMultiValueMap<String, String>();
+
+        requestParams.add("title", SHORT_TITLE);
+        requestParams.add("authorId", String.valueOf(ID_1));
+        requestParams.add("genreId", String.valueOf(ID_1));
+
+        mvc.perform(post("/book/new").params(requestParams))
+                .andExpect(status().is3xxRedirection());
+
+        verify(bookService, times(0)).insert(SHORT_TITLE, ID_1, ID_1);
+
+        requestParams.add("title", LONG_TITLE);
+
+        mvc.perform(post("/book/new").params(requestParams))
+                .andExpect(status().is3xxRedirection());
+
+        verify(bookService, times(0)).insert(LONG_TITLE, ID_1, ID_1);
+    }
+
+    @DisplayName("не должен обновлять книгу, если наименование пустое или больше 30 символов")
+    @Test
+    void shouldNotUpdateShortOrTooLongTitleBook() throws Exception {
+        var requestParams = new LinkedMultiValueMap<String, String>();
+
+        requestParams.add("id", String.valueOf(ID_1));
+        requestParams.add("title", SHORT_TITLE);
+        requestParams.add("authorId", String.valueOf(ID_2));
+        requestParams.add("genreId", String.valueOf(ID_3));
+
+        mvc.perform(post("/book/" + ID_1).params(requestParams))
+                .andExpect(status().is3xxRedirection());
+
+        verify(bookService, times(0)).update(ID_1, SHORT_TITLE, ID_2, ID_3);
+
+        requestParams.add("title", LONG_TITLE);
+
+        mvc.perform(post("/book/" + ID_1).params(requestParams))
+                .andExpect(status().is3xxRedirection());
+
+        verify(bookService, times(0)).update(ID_1, SHORT_TITLE, ID_2, ID_3);
     }
 }
