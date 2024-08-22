@@ -46,7 +46,7 @@
 <body>
 
 <form id="delete-form" action="deleteComment.html" th:action="@{/comment/{id}/del(id=${id})}" th:method="post">
-    <h3 th:text = "#{confirm-header}">Are you sure?</h3>
+    <h3 th:text = "#{confirm-header(${comment.description})}">Are you sure?</h3>
 
     <div class="row">
         <button type="submit" th:text="#{confirm-button-caption}">Confirm</button>

@@ -45,7 +45,7 @@
 </head>
 <body th:object="${comment}">
 
-<form id="edit-form" action="singleComment.html" th:action="@{/comment(id=*{id})}" th:method="post">
+<form id="edit-form" action="singleComment.html" th:action="@{/comment/__*{id}__}" th:method="post" th:object="${comment}">
     <h3 th:text = "#{comment-update-form-header}">Comment Info:</h3>
 
     <div class="row">
@@ -56,6 +56,7 @@
     <div class="row">
         <label for="comment-description-input" th:text="#{comment-field-description} + ':'">Description:</label>
         <input id="comment-description-input" name="description" type="text" th:value="*{description}" value="Updated comment"/>
+        <div class="errors" th:if="${#fields.hasErrors('description')}" th:errors="*{description}">Wrong description</div>
     </div>
 
     <div class="row">
