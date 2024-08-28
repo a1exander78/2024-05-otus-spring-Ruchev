@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Add comment</title>
+    <style type="text/css">
+        body {
+            padding: 50px;
+        }
+
+        label {
+            display: inline-block;
+            width: 100px;
+        }
+
+        input:read-only {
+            background: lightgray;
+        }
+
+        .row {
+            margin-top: 10px;
+        }
+
+        h3 {
+            background-image: url("../static/listmark.png");
+            background-repeat: no-repeat;
+            padding: 2px;
+            padding-left: 30px;
+        }
+
+        .errors {
+            color: red;
+        }
+    </style>
+
+    <style type="text/css" th:inline="text">
+        [[h3]] {
+            background-image: url([[@{/listmark.png}]]);
+            background-repeat: no-repeat;
+            padding: 2px;
+            padding-left: 30px;
+        }
+
+    </style>
+</head>
+<body>
+
+<form id="add-form" action="addComment.html" th:action="@{/comment/new(bookId=${bookId})}" th:method="post" th:object="${comment}">
+    <h3 th:text = "#{comment-add-form-header}">Add new:</h3>
+
+    <div class="row">
+        <label for="comment-description-input" th:text="#{comment-field-description} + ':'">Description:</label>
+        <input id="comment-description-input" name="description" type="text" value="New comment"/>
+        <div class="errors" th:if="${#fields.hasErrors('description')}" th:errors="*{description}">Wrong description</div>
+    </div>
+
+    <div class="row">
+        <button type="submit" th:text="#{save-button-caption}">Save</button>
+
+        <a href="allBooks.html" th:href="@{/book}">
+            <button type="button" th:text="#{cancel-button-caption}">Cancel</button>
+        </a>
+    </div>
+</form>
+</body>
+</html>
