@@ -10,8 +10,8 @@
     </parent>
 
     <groupId>ru.otus.hw</groupId>
-    <artifactId>hw09-spring-mvc</artifactId>
-    <name>spring-mvc-classic</name>
+    <artifactId>hw10-mvc-ajax</artifactId>
+    <name>spring-mvc-ajax</name>
     <version>0.0.1-SNAPSHOT</version>
 
     <properties>

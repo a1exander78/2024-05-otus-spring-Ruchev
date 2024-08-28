@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import ru.otus.hw.dto.BookDtoRequest;
 import ru.otus.hw.exception.EntityNotFoundException;
 import ru.otus.hw.service.AuthorService;
@@ -41,30 +40,19 @@ public class BookController {
 
     @GetMapping("/book/{id}")
     public String readBook(@PathVariable("id") long id, Model model) {
-        var authors = authorService.findAll();
-        var genres = genreService.findAll();
         var book = bookService.findById(id).orElseThrow(
                 () -> new EntityNotFoundException("Book with id %d not found".formatted(id)));
-
-        if (!model.containsAttribute("book")) {
-            model.addAttribute("book", book);
-        } else {
-            var bookWithError = (BookDtoRequest) model.getAttribute("book");
-            bookWithError.setTitle(book.getTitle());
-            model.addAttribute("book", bookWithError);
-        }
-
-        model.addAttribute("authors", authors);
-        model.addAttribute("genres", genres);
+        model.addAttribute("book", book);
+        fillModelWithCatalogData(model);
         return "singleBook";
     }
 
     @PostMapping("/book/{id}")
     public String updateBook(@Valid @ModelAttribute("book") BookDtoRequest book,
-                             BindingResult bindingResult, RedirectAttributes redirectAttributes) {
+                             BindingResult bindingResult, Model model) {
         if (bindingResult.hasErrors()) {
-            redirectRequestWithError(book, bindingResult, redirectAttributes);
-            return "redirect:/book/" + book.getId();
+            fillModelWithCatalogData(model);
+            return "singleBook";
         }
         bookService.update(book.getId(), book.getTitle(), book.getAuthorId(), book.getGenreId());
         return "redirect:/book";
@@ -72,22 +60,17 @@ public class BookController {
 
     @GetMapping("/book/new")
     public String addBook(Model model) {
-        if (!model.containsAttribute("book")) {
-            model.addAttribute("book", new BookDtoRequest());
-        }
-        var authors = authorService.findAll();
-        var genres = genreService.findAll();
-        model.addAttribute("authors", authors);
-        model.addAttribute("genres", genres);
+        fillModelWithCatalogData(model);
+        model.addAttribute("book", new BookDtoRequest());
         return "addBook";
     }
 
     @PostMapping("/book/new")
     public String addBook(@Valid @ModelAttribute("book") BookDtoRequest book,
-                          BindingResult bindingResult, RedirectAttributes redirectAttributes) {
+                          BindingResult bindingResult, Model model) {
         if (bindingResult.hasErrors()) {
-            redirectRequestWithError(book, bindingResult, redirectAttributes);
-            return "redirect:/book/new";
+            fillModelWithCatalogData(model);
+            return "addBook";
         }
         bookService.insert(book.getTitle(), book.getAuthorId(), book.getGenreId());
         return "redirect:/book";
@@ -114,11 +97,8 @@ public class BookController {
         return modelAndView;
     }
 
-    private void redirectRequestWithError(BookDtoRequest bookDtoRequest,
-                                          BindingResult bindingResult,
-                                          RedirectAttributes redirectAttributes) {
-        redirectAttributes.getFlashAttributes().clear();
-        redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.book", bindingResult);
-        redirectAttributes.addFlashAttribute("book", bookDtoRequest);
+    private void fillModelWithCatalogData(Model model) {
+        model.addAttribute("authors", authorService.findAll());
+        model.addAttribute("genres", genreService.findAll());
     }
 }

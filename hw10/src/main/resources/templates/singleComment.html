@@ -62,13 +62,13 @@
     <div class="row">
         <button type="submit" th:text="#{save-button-caption}">Save</button>
 
-        <a href="deleteComment.html" th:href="@{/comment/{id}/del(id=${id})}">
+        <a href="deleteComment.html" th:href="@{/comment/{id}/del(id=*{id})}">
             <button type="button" th:text="#{delete-button-caption}">Delete</button>
         </a>
     </div>
 
     <div class="row">
-        <a href="commentsList.html" th:href="@{/comment(bookId=*{bookId})}">
+        <a href="allCommentsByBook.html" th:href="@{/comment(bookId=${bookId})}">
             <button type="button" th:text="#{cancel-button-caption}">Cancel</button>
         </a>
     </div>
