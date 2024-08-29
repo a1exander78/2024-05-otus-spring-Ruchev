@@ -3,70 +3,31 @@
 <head>
     <meta charset="UTF-8"/>
     <title>List of all comments on the book</title>
-    <style type="text/css">
-        body {
-            padding: 50px;
-        }
-
-        .comment {
-            border: 1px solid steelblue;
-            width: 300px;
-            border-collapse: collapse;
-        }
-
-        .comment tr td, th {
-            padding: 5px;
-            border: 1px solid steelblue;
-        }
-
-        .comment td:last-child, td:first-child {
-            width: 50px;
-        }
-
-        h3 {
-            background-image: url("../static/listmark.png");
-            background-repeat: no-repeat;
-            padding: 2px;
-            padding-left: 30px;
-        }
-
-    </style>
-
-    <style type="text/css" th:inline="text">
-        [[h3]] {
-            background-image: url([[@{/listmark.png}]]);
-            background-repeat: no-repeat;
-            padding: 2px;
-            padding-left: 30px;
-        }
-
-    </style>
+    <link rel="stylesheet" href="../static/css/style.css" th:href="@{/css/style.css}" type="text/css">
 </head>
 <body>
-
-<h3 th:text="#{comment-table-header(${book.title})}">All comments on the book</h3>
-
-<table class="comment">
-    <thead>
-    <tr>
-        <th th:text="#{comment-field-id}">ID</th>
-        <th th:text="#{comment-field-description}">Description</th>
-        <th th:text="#{table-column-action}">Action</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr th:each="comment : ${comments}" th:object="${comment}">
-        <td th:text="*{id}">1</td>
-        <td th:text="*{description}">Relevant</td>
-        <td>
-            <a href="singleComment.html" th:href="@{/comment/__*{id}__}" th:text="#{edit-button-caption}">Edit</a>
-        </td>
-    </tr>
-    </tbody>
-</table>
-<p/>
-<div>
-    <a href="allBooks.html" th:href="@{/book}" th:text="#{back-button-caption}">Back</a>
-</div>
+    <h3 th:text="#{comment-table-header(${book.title})}">All comments on the book</h3>
+    <table class="element">
+        <thead>
+            <tr>
+                <th th:text="#{comment-field-id}">ID</th>
+                <th th:text="#{comment-field-description}">Description</th>
+                <th th:text="#{table-column-action}">Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="comment : ${comments}" th:object="${comment}">
+                <td th:text="*{id}">1</td>
+                <td th:text="*{description}">Relevant</td>
+                <td>
+                    <a href="singleComment.html" th:href="@{/comment/__*{id}__}" th:text="#{edit-button-caption}">Edit</a>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <p/>
+    <div>
+        <a href="allBooks.html" th:href="@{/book}" th:text="#{back-to-allBooks-button-caption}">Back to books</a>
+    </div>
 </body>
 </html>

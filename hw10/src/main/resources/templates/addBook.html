@@ -3,48 +3,9 @@
 <head>
     <meta charset="UTF-8"/>
     <title>Add book</title>
-    <style type="text/css">
-        body {
-            padding: 50px;
-        }
-
-        label {
-            display: inline-block;
-            width: 100px;
-        }
-
-        input:read-only {
-            background: lightgray;
-        }
-
-        .row {
-            margin-top: 10px;
-        }
-
-        h3 {
-            background-image: url("../static/listmark.png");
-            background-repeat: no-repeat;
-            padding: 2px;
-            padding-left: 30px;
-        }
-
-        .errors {
-            color: red;
-        }
-    </style>
-
-    <style type="text/css" th:inline="text">
-        [[h3]] {
-            background-image: url([[@{/listmark.png}]]);
-            background-repeat: no-repeat;
-            padding: 2px;
-            padding-left: 30px;
-        }
-
-    </style>
+    <link rel="stylesheet" href="../static/css/style.css" th:href="@{/css/style.css}" type="text/css">
 </head>
 <body>
-
 <form id="add-form" action="addBook.html" th:action="@{/book/new}" th:method="post" th:object="${book}">
     <h3 th:text = "#{book-form-header}">Book Info:</h3>
 
