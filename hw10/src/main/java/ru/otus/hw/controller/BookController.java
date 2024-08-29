@@ -26,19 +26,19 @@ public class BookController {
 
     private final GenreService genreService;
 
-    @GetMapping("/")
+    @GetMapping({"/", "/api/v1/main"})
     public String startPage() {
         return "start";
     }
 
-    @GetMapping("/book")
+    @GetMapping("/api/v1/book")
     public String readAllBooks(Model model) {
         var books = bookService.findAll();
         model.addAttribute("books", books);
         return "allBooks";
     }
 
-    @GetMapping("/book/{id}")
+    @GetMapping("/api/v1/book/{id}")
     public String readBook(@PathVariable("id") long id, Model model) {
         var book = bookService.findById(id).orElseThrow(
                 () -> new EntityNotFoundException("Book with id %d not found".formatted(id)));
@@ -47,7 +47,7 @@ public class BookController {
         return "singleBook";
     }
 
-    @PostMapping("/book/{id}")
+    @PostMapping("/api/v1/book/{id}")
     public String updateBook(@Valid @ModelAttribute("book") BookDtoRequest book,
                              BindingResult bindingResult, Model model) {
         if (bindingResult.hasErrors()) {
@@ -55,17 +55,17 @@ public class BookController {
             return "singleBook";
         }
         bookService.update(book.getId(), book.getTitle(), book.getAuthorId(), book.getGenreId());
-        return "redirect:/book";
+        return "redirect:/api/v1/book";
     }
 
-    @GetMapping("/book/new")
+    @GetMapping("/api/v1/book/new")
     public String addBook(Model model) {
         fillModelWithCatalogData(model);
         model.addAttribute("book", new BookDtoRequest());
         return "addBook";
     }
 
-    @PostMapping("/book/new")
+    @PostMapping("/api/v1/book/new")
     public String addBook(@Valid @ModelAttribute("book") BookDtoRequest book,
                           BindingResult bindingResult, Model model) {
         if (bindingResult.hasErrors()) {
@@ -73,10 +73,10 @@ public class BookController {
             return "addBook";
         }
         bookService.insert(book.getTitle(), book.getAuthorId(), book.getGenreId());
-        return "redirect:/book";
+        return "redirect:/api/v1/book";
     }
 
-    @GetMapping("/book/{id}/del")
+    @GetMapping("/api/v1/book/{id}/del")
     public String deleteBook(@PathVariable("id") long id, Model model) {
         var book = bookService.findById(id).orElseThrow(
                 () -> new EntityNotFoundException("Book with id %d not found".formatted(id)));
@@ -84,10 +84,10 @@ public class BookController {
         return "deleteBook";
     }
 
-    @PostMapping("/book/{id}/del")
+    @PostMapping("/api/v1/book/{id}/del")
     public String deleteBook(@PathVariable("id") long id) {
         bookService.deleteById(id);
-        return "redirect:/book";
+        return "redirect:/api/v1/book";
     }
 
     @ExceptionHandler(EntityNotFoundException.class)

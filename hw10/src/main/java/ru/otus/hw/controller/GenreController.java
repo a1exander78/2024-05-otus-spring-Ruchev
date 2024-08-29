@@ -11,7 +11,7 @@ import ru.otus.hw.service.GenreService;
 public class GenreController {
     private final GenreService genreService;
 
-    @GetMapping("/genre")
+    @GetMapping("/api/v1/genre")
     public String readAllGenres(Model model) {
         var genres = genreService.findAll();
         model.addAttribute("genres", genres);

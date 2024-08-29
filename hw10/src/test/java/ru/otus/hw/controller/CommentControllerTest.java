@@ -65,7 +65,7 @@ class CommentControllerTest {
         given(commentService.findAllCommentsByBookId(ID_1)).willReturn(comments);
         given(bookService.findById(ID_1)).willReturn(Optional.of(BOOK_1));
 
-        mvc.perform(get("/comment?bookId=1"))
+        mvc.perform(get("/api/v1/comment?bookId=1"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType("text/html;charset=UTF-8"))
                 .andExpect(model().attribute("comments", comments))
@@ -77,7 +77,7 @@ class CommentControllerTest {
     void shouldReturnCommentById() throws Exception {
         given(commentService.findById(ID_1)).willReturn(Optional.of(COMMENT_1));
 
-        mvc.perform(get("/comment/1"))
+        mvc.perform(get("/api/v1/comment/1"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType("text/html;charset=UTF-8"))
                 .andExpect(model().attribute("comment", COMMENT_1));
@@ -95,9 +95,9 @@ class CommentControllerTest {
         requestParams.add("description", NEW_COMMENT);
         requestParams.add("bookId", String.valueOf(ID_1));
 
-        mvc.perform(post("/comment/new").params(requestParams))
+        mvc.perform(post("/api/v1/comment/new").params(requestParams))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/comment?bookId=1"));
+                .andExpect(redirectedUrl("/api/v1/comment?bookId=1"));
 
         verify(commentService, times(1)).insert(NEW_COMMENT, ID_1);
     }
@@ -114,9 +114,9 @@ class CommentControllerTest {
         requestParams.add("id", String.valueOf(ID_1));
         requestParams.add("description", UPDATING_COMMENT);
 
-        mvc.perform(post("/comment/1").params(requestParams))
+        mvc.perform(post("/api/v1/comment/1").params(requestParams))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/comment?bookId=1"));
+                .andExpect(redirectedUrl("/api/v1/comment?bookId=1"));
 
         verify(commentService, times(1)).update(ID_1, UPDATING_COMMENT);
     }
@@ -124,9 +124,9 @@ class CommentControllerTest {
     @DisplayName("должен удалять комментарий")
     @Test
     void shouldDeleteComment() throws Exception {
-        mvc.perform(post("/comment/1/del"))
+        mvc.perform(post("/api/v1/comment/1/del"))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/book"));
+                .andExpect(redirectedUrl("/api/v1/book"));
 
         verify(commentService, times(1)).deleteById(ID_1);
     }
@@ -139,7 +139,7 @@ class CommentControllerTest {
         requestParams.add("description", SHORT_COMMENT);
         requestParams.add("bookId", String.valueOf(ID_1));
 
-        mvc.perform(post("/comment/new").params(requestParams))
+        mvc.perform(post("/api/v1/comment/new").params(requestParams))
                 .andExpect(status().isOk());
 
         verify(commentService, times(0)).insert(SHORT_COMMENT, ID_1);
@@ -155,7 +155,7 @@ class CommentControllerTest {
 
         given(commentService.findById(ID_1)).willReturn(Optional.of(COMMENT_1));
 
-        mvc.perform(post("/comment/1").params(requestParams))
+        mvc.perform(post("/api/v1/comment/1").params(requestParams))
                 .andExpect(status().isOk());
 
         verify(commentService, times(0)).update(ID_1, SHORT_COMMENT);

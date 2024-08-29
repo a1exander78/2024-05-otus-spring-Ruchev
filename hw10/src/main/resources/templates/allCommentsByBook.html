@@ -20,14 +20,14 @@
                 <td th:text="*{id}">1</td>
                 <td th:text="*{description}">Relevant</td>
                 <td>
-                    <a href="singleComment.html" th:href="@{/comment/__*{id}__}" th:text="#{edit-button-caption}">Edit</a>
+                    <a href="singleComment.html" th:href="@{/api/v1/comment/__*{id}__}" th:text="#{edit-button-caption}">Edit</a>
                 </td>
             </tr>
         </tbody>
     </table>
     <p/>
     <div>
-        <a href="allBooks.html" th:href="@{/book}" th:text="#{back-to-allBooks-button-caption}">Back to books</a>
+        <a href="allBooks.html" th:href="@{/api/v1/book}" th:text="#{back-to-allBooks-button-caption}">Back to books</a>
     </div>
 </body>
 </html>

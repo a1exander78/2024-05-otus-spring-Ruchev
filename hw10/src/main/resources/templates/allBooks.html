@@ -25,24 +25,24 @@
                 <td th:text="*{author.fullName}">George Orwell</td>
                 <td th:text="*{genre.name}">Dystopian novel</td>
                 <td>
-                    <a href="allCommentsByBook.html" th:href="@{/comment(bookId=*{id})}" th:text="#{comment-button-caption}">Get comments</a>
+                    <a href="allCommentsByBook.html" th:href="@{/api/v1/comment(bookId=*{id})}" th:text="#{comment-button-caption}">Get comments</a>
                 </td>
                 <td>
-                    <a href="addComment.html" th:href="@{/comment/new(bookId=*{id})}" th:text="#{add-button-caption}">Add</a>
+                    <a href="addComment.html" th:href="@{/api/v1/comment/new(bookId=*{id})}" th:text="#{add-button-caption}">Add</a>
                 </td>
                 <td>
-                    <a href="singleBook.html" th:href="@{/book/__*{id}__}" th:text="#{edit-button-caption}">Edit</a>
+                    <a href="singleBook.html" th:href="@{/api/v1/book/__*{id}__}" th:text="#{edit-button-caption}">Edit</a>
                 </td>
             </tr>
         </tbody>
     </table>
     <p/>
     <div>
-        <a href="addBook.html" th:href="@{/book/new}" th:text="#{add-button-caption}">Add</a>
+        <a href="addBook.html" th:href="@{/api/v1/book/new}" th:text="#{add-button-caption}">Add</a>
     </div>
     <p/>
     <div>
-        <a href="start.html" th:href="@{/}" th:text="#{main-page-button-caption}">Main page</a>
+        <a href="start.html" th:href="@{/api/v1/main}" th:text="#{main-page-button-caption}">Main page</a>
     </div>
 </body>
 </html>

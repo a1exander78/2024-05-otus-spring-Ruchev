@@ -24,7 +24,7 @@ public class CommentController {
 
     private final BookService bookService;
 
-    @GetMapping("/comment")
+    @GetMapping("/api/v1/comment")
     public String readAllCommentsByBookId(@RequestParam("bookId") long bookId, Model model) {
         var comments = commentService.findAllCommentsByBookId(bookId);
         var book = bookService.findById(bookId).get();
@@ -33,7 +33,7 @@ public class CommentController {
         return "allCommentsByBook";
     }
 
-    @GetMapping("/comment/{id}")
+    @GetMapping("/api/v1/comment/{id}")
     public String readComment(@PathVariable("id") long id, Model model) {
         var comment = commentService.findById(id).orElseThrow(
                 () -> new EntityNotFoundException("Comment with id %d not found".formatted(id)));
@@ -42,7 +42,7 @@ public class CommentController {
         return "singleComment";
     }
 
-    @PostMapping("/comment/{id}")
+    @PostMapping("/api/v1/comment/{id}")
     public String updateComment(@Valid @ModelAttribute("comment") CommentDtoRequest comment,
                                 BindingResult bindingResult, Model model) {
         if (bindingResult.hasErrors()) {
@@ -50,32 +50,33 @@ public class CommentController {
             return "singleComment";
         }
         var updatedComment = commentService.update(comment.getId(), comment.getDescription());
-        String path = "redirect:/comment?bookId=" + updatedComment.getBookId();
+        String path = "redirect:/api/v1/comment?bookId=" + updatedComment.getBookId();
         return path;
     }
 
-    @GetMapping("/comment/new")
+    @GetMapping("/api/v1/comment/new")
     public String addComment(@RequestParam("bookId") long bookId, Model model) {
         model.addAttribute("comment", new CommentDtoRequest());
+        model.addAttribute("bookId", bookId);
         return "addComment";
     }
 
-    @PostMapping("/comment/new")
+    @PostMapping("/api/v1/comment/new")
     public String addComment(@Valid @ModelAttribute("comment") CommentDtoRequest comment,
-                             BindingResult bindingResult) {
-        if (bindingResult.hasErrors()) {
-            return "addComment";
-        }
+                             BindingResult bindingResult, Model model) {
         var description = comment.getDescription();
         var bookId = comment.getBookId();
-
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("bookId", bookId);
+            return "addComment";
+        }
         commentService.insert(description, bookId);
         System.out.println(comment);
-        String path = "redirect:/comment?bookId=" + bookId;
+        String path = "redirect:/api/v1/comment?bookId=" + bookId;
         return path;
     }
 
-    @GetMapping("/comment/{id}/del")
+    @GetMapping("/api/v1/comment/{id}/del")
     public String deleteComment(@PathVariable("id") long id, Model model) {
         var comment = commentService.findById(id).orElseThrow(
                 () -> new EntityNotFoundException("Comment with id %d not found".formatted(id)));
@@ -83,10 +84,10 @@ public class CommentController {
         return "deleteComment";
     }
 
-    @PostMapping("/comment/{id}/del")
+    @PostMapping("/api/v1/comment/{id}/del")
     public String deleteComment(@PathVariable("id") long id) {
         commentService.deleteById(id);
-        return "redirect:/book";
+        return "redirect:/api/v1/book";
     }
 
     @ExceptionHandler(EntityNotFoundException.class)

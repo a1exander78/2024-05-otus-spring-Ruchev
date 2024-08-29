@@ -6,11 +6,11 @@
     <link rel="stylesheet" href="../static/css/style.css" th:href="@{/css/style.css}" type="text/css">
 </head>
 <body>
-    <form id="delete-form" action="deleteBook.html" th:action="@{/book/{id}/del(id=${id})}" th:method="post">
+    <form id="delete-form" action="deleteBook.html" th:action="@{/api/v1/book/{id}/del(id=${id})}" th:method="post">
         <h3 th:text = "#{confirm-header(${book.title})}">Are you sure?</h3>
         <div class="row">
             <button type="submit" th:text="#{confirm-button-caption}">Confirm</button>
-            <a href="singleBook.html" th:href="@{/book/__*{id}__}">
+            <a href="singleBook.html" th:href="@{/api/v1/book/__*{id}__}">
                 <button type="button" th:text="#{cancel-button-caption}">Cancel</button>
             </a>
         </div>

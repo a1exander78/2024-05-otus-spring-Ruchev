@@ -6,7 +6,7 @@
     <link rel="stylesheet" href="../static/css/style.css" th:href="@{/css/style.css}" type="text/css">
 </head>
 <body>
-<form id="add-form" action="addBook.html" th:action="@{/book/new}" th:method="post" th:object="${book}">
+<form id="add-form" action="addBook.html" th:action="@{/api/v1/book/new}" th:method="post" th:object="${book}">
     <h3 th:text = "#{book-form-header}">Book Info:</h3>
 
     <div class="row">
@@ -32,7 +32,7 @@
     <div class="row">
         <button type="submit" th:text="#{save-button-caption}">Save</button>
 
-        <a href="allBooks.html" th:href="@{/book}">
+        <a href="allBooks.html" th:href="@{/api/v1/book}">
             <button type="button" th:text="#{cancel-button-caption}">Cancel</button>
         </a>
     </div>

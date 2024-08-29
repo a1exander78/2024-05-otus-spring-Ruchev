@@ -11,7 +11,7 @@ import ru.otus.hw.service.AuthorService;
 public class AuthorController {
     private final AuthorService authorService;
 
-    @GetMapping("/author")
+    @GetMapping("/api/v1/author")
     public String readAllAuthors(Model model) {
         var authors = authorService.findAll();
         model.addAttribute("authors", authors);

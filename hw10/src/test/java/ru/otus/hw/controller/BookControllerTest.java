@@ -73,7 +73,7 @@ class BookControllerTest {
         var books = List.of(BOOK_1, BOOK_2, BOOK_3);
         given(bookService.findAll()).willReturn(books);
 
-        mvc.perform(get("/book"))
+        mvc.perform(get("/api/v1/book"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType("text/html;charset=UTF-8"))
                 .andExpect(model().attribute("books", books));
@@ -84,7 +84,7 @@ class BookControllerTest {
     void shouldReturnBookById() throws Exception {
         given(bookService.findById(ID_1)).willReturn(Optional.of(BOOK_1));
 
-        mvc.perform(get("/book/1"))
+        mvc.perform(get("/api/v1/book/1"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType("text/html;charset=UTF-8"))
                 .andExpect(model().attribute("book", BOOK_1));
@@ -103,9 +103,9 @@ class BookControllerTest {
         requestParams.add("authorId", String.valueOf(ID_1));
         requestParams.add("genreId", String.valueOf(ID_1));
 
-        mvc.perform(post("/book/new").params(requestParams))
+        mvc.perform(post("/api/v1/book/new").params(requestParams))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/book"));
+                .andExpect(redirectedUrl("/api/v1/book"));
 
         verify(bookService, times(1)).insert(NEW_TITLE, ID_1, ID_1);
     }
@@ -124,9 +124,9 @@ class BookControllerTest {
         requestParams.add("authorId", String.valueOf(ID_2));
         requestParams.add("genreId", String.valueOf(ID_3));
 
-        mvc.perform(post("/book/" + ID_1).params(requestParams))
+        mvc.perform(post("/api/v1/book/" + ID_1).params(requestParams))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/book"));
+                .andExpect(redirectedUrl("/api/v1/book"));
 
         verify(bookService, times(1)).update(ID_1, UPDATING_TITLE, ID_2, ID_3);
     }
@@ -134,9 +134,9 @@ class BookControllerTest {
     @DisplayName("должен удалять книгу")
     @Test
     void shouldDeleteBook() throws Exception {
-        mvc.perform(post("/book/1/del"))
+        mvc.perform(post("/api/v1/book/1/del"))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/book"));
+                .andExpect(redirectedUrl("/api/v1/book"));
 
         verify(bookService, times(1)).deleteById(ID_1);
     }
@@ -150,14 +150,14 @@ class BookControllerTest {
         requestParams.add("authorId", String.valueOf(ID_1));
         requestParams.add("genreId", String.valueOf(ID_1));
 
-        mvc.perform(post("/book/new").params(requestParams))
+        mvc.perform(post("/api/v1/book/new").params(requestParams))
                 .andExpect(status().isOk());
 
         verify(bookService, times(0)).insert(SHORT_TITLE, ID_1, ID_1);
 
         requestParams.add("title", LONG_TITLE);
 
-        mvc.perform(post("/book/new").params(requestParams))
+        mvc.perform(post("/api/v1/book/new").params(requestParams))
                 .andExpect(status().isOk());
 
         verify(bookService, times(0)).insert(LONG_TITLE, ID_1, ID_1);
@@ -173,14 +173,14 @@ class BookControllerTest {
         requestParams.add("authorId", String.valueOf(ID_2));
         requestParams.add("genreId", String.valueOf(ID_3));
 
-        mvc.perform(post("/book/" + ID_1).params(requestParams))
+        mvc.perform(post("/api/v1/book/" + ID_1).params(requestParams))
                 .andExpect(status().isOk());
 
         verify(bookService, times(0)).update(ID_1, SHORT_TITLE, ID_2, ID_3);
 
         requestParams.add("title", LONG_TITLE);
 
-        mvc.perform(post("/book/" + ID_1).params(requestParams))
+        mvc.perform(post("/api/v1/book/" + ID_1).params(requestParams))
                 .andExpect(status().isOk());
 
         verify(bookService, times(0)).update(ID_1, SHORT_TITLE, ID_2, ID_3);

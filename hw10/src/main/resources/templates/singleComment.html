@@ -6,7 +6,7 @@
     <link rel="stylesheet" href="../static/css/style.css" th:href="@{/css/style.css}" type="text/css">
 </head>
 <body th:object="${comment}">
-<form id="edit-form" action="singleComment.html" th:action="@{/comment/__*{id}__}" th:method="post" th:object="${comment}">
+<form id="edit-form" action="singleComment.html" th:action="@{/api/v1/comment/__*{id}__}" th:method="post" th:object="${comment}">
     <h3 th:text = "#{comment-update-form-header}">Comment Info:</h3>
     <div class="row">
         <label for="id-input" th:text="#{comment-field-id} + ':'">ID:</label>
@@ -19,12 +19,12 @@
     </div>
     <div class="row">
         <button type="submit" th:text="#{save-button-caption}">Save</button>
-        <a href="deleteComment.html" th:href="@{/comment/{id}/del(id=*{id})}">
+        <a href="deleteComment.html" th:href="@{/api/v1/comment/{id}/del(id=*{id})}">
             <button type="button" th:text="#{delete-button-caption}">Delete</button>
         </a>
     </div>
     <div class="row">
-        <a href="allCommentsByBook.html" th:href="@{/comment(bookId=${bookId})}">
+        <a href="allCommentsByBook.html" th:href="@{/api/v1/comment(bookId=${bookId})}">
             <button type="button" th:text="#{cancel-button-caption}">Cancel</button>
         </a>
     </div>
