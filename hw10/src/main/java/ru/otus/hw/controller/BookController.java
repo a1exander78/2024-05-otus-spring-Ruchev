@@ -65,16 +65,16 @@ public class BookController {
         return "addBook";
     }
 
-    @PostMapping("/api/v1/book/new")
-    public String addBook(@Valid @ModelAttribute("book") BookDtoRequest book,
-                          BindingResult bindingResult, Model model) {
-        if (bindingResult.hasErrors()) {
-            fillModelWithCatalogData(model);
-            return "addBook";
-        }
-        bookService.insert(book.getTitle(), book.getAuthorId(), book.getGenreId());
-        return "redirect:/api/v1/book";
-    }
+//    @PostMapping("/api/v1/book/new")
+//    public String addBook(@Valid @ModelAttribute("book") BookDtoRequest book,
+//                          BindingResult bindingResult, Model model) {
+//        if (bindingResult.hasErrors()) {
+//            fillModelWithCatalogData(model);
+//            return "addBook";
+//        }
+//        bookService.insert(book.getTitle(), book.getAuthorId(), book.getGenreId());
+//        return "redirect:/api/v1/book";
+//    }
 
     @GetMapping("/api/v1/book/{id}/del")
     public String deleteBook(@PathVariable("id") long id, Model model) {

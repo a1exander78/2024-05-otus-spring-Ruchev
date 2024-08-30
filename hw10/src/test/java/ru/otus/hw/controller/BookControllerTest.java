@@ -90,25 +90,25 @@ class BookControllerTest {
                 .andExpect(model().attribute("book", BOOK_1));
     }
 
-    @DisplayName("должен сохранять новую книгу")
-    @Test
-    void shouldSaveNewBook() throws Exception {
-        var newBook = new BookDto(ID_4,NEW_TITLE, AUTHOR_1, GENRE_1);
-
-        given(bookService.insert(NEW_TITLE, ID_1, ID_1)).willReturn(newBook);
-
-        var requestParams = new LinkedMultiValueMap<String, String>();
-
-        requestParams.add("title", NEW_TITLE);
-        requestParams.add("authorId", String.valueOf(ID_1));
-        requestParams.add("genreId", String.valueOf(ID_1));
-
-        mvc.perform(post("/api/v1/book/new").params(requestParams))
-                .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/api/v1/book"));
-
-        verify(bookService, times(1)).insert(NEW_TITLE, ID_1, ID_1);
-    }
+//    @DisplayName("должен сохранять новую книгу")
+//    @Test
+//    void shouldSaveNewBook() throws Exception {
+//        var newBook = new BookDto(ID_4,NEW_TITLE, AUTHOR_1, GENRE_1);
+//
+//        given(bookService.insert(NEW_TITLE, ID_1, ID_1)).willReturn(newBook);
+//
+//        var requestParams = new LinkedMultiValueMap<String, String>();
+//
+//        requestParams.add("title", NEW_TITLE);
+//        requestParams.add("authorId", String.valueOf(ID_1));
+//        requestParams.add("genreId", String.valueOf(ID_1));
+//
+//        mvc.perform(post("/api/v1/book/new").params(requestParams))
+//                .andExpect(status().is3xxRedirection())
+//                .andExpect(redirectedUrl("/api/v1/book"));
+//
+//        verify(bookService, times(1)).insert(NEW_TITLE, ID_1, ID_1);
+//    }
 
     @DisplayName("должен обновлять книгу")
     @Test
@@ -141,27 +141,27 @@ class BookControllerTest {
         verify(bookService, times(1)).deleteById(ID_1);
     }
 
-    @DisplayName("не должен сохранять новую книгу, если наименование пустое или больше 30 символов")
-    @Test
-    void shouldNotSaveShortOrTooLongTitleBook() throws Exception {
-        var requestParams = new LinkedMultiValueMap<String, String>();
-
-        requestParams.add("title", SHORT_TITLE);
-        requestParams.add("authorId", String.valueOf(ID_1));
-        requestParams.add("genreId", String.valueOf(ID_1));
-
-        mvc.perform(post("/api/v1/book/new").params(requestParams))
-                .andExpect(status().isOk());
-
-        verify(bookService, times(0)).insert(SHORT_TITLE, ID_1, ID_1);
-
-        requestParams.add("title", LONG_TITLE);
-
-        mvc.perform(post("/api/v1/book/new").params(requestParams))
-                .andExpect(status().isOk());
-
-        verify(bookService, times(0)).insert(LONG_TITLE, ID_1, ID_1);
-    }
+//    @DisplayName("не должен сохранять новую книгу, если наименование пустое или больше 30 символов")
+//    @Test
+//    void shouldNotSaveShortOrTooLongTitleBook() throws Exception {
+//        var requestParams = new LinkedMultiValueMap<String, String>();
+//
+//        requestParams.add("title", SHORT_TITLE);
+//        requestParams.add("authorId", String.valueOf(ID_1));
+//        requestParams.add("genreId", String.valueOf(ID_1));
+//
+//        mvc.perform(post("/api/v1/book/new").params(requestParams))
+//                .andExpect(status().isOk());
+//
+//        verify(bookService, times(0)).insert(SHORT_TITLE, ID_1, ID_1);
+//
+//        requestParams.add("title", LONG_TITLE);
+//
+//        mvc.perform(post("/api/v1/book/new").params(requestParams))
+//                .andExpect(status().isOk());
+//
+//        verify(bookService, times(0)).insert(LONG_TITLE, ID_1, ID_1);
+//    }
 
     @DisplayName("не должен обновлять книгу, если наименование пустое или больше 30 символов")
     @Test
