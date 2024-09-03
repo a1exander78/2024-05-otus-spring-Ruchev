@@ -4,8 +4,9 @@
     <meta charset="UTF-8"/>
     <title>List of all books</title>
     <link rel="stylesheet" href="../static/css/style.css" th:href="@{/css/style.css}" type="text/css">
+    <script th:src="@{/js/scripts.js}" type="text/javascript"></script>
 </head>
-<body>
+<body onload="showAllBooks()">
     <h3 th:text="#{book-table-header}">Books:</h3>
     <table class="element">
         <thead>
@@ -18,19 +19,19 @@
                 <th th:text="#{table-column-action}">Action</th>
             </tr>
         </thead>
-        <tbody>
+        <tbody id="book-table">
             <tr th:each="book : ${books}" th:object="${book}">
                 <td th:text="*{id}">1</td>
                 <td th:text="*{title}">1984</td>
                 <td th:text="*{author.fullName}">George Orwell</td>
                 <td th:text="*{genre.name}">Dystopian novel</td>
-                <td>
+                <td id="comment-get-all">
                     <a href="allCommentsByBook.html" th:href="@{/api/v1/comment(bookId=*{id})}" th:text="#{comment-button-caption}">Get comments</a>
                 </td>
-                <td>
+                <td id="comment-add">
                     <a href="addComment.html" th:href="@{/api/v1/comment/new(bookId=*{id})}" th:text="#{add-button-caption}">Add</a>
                 </td>
-                <td>
+                <td id ="book-update">
                     <a href="singleBook.html" th:href="@{/api/v1/book/__*{id}__}" th:text="#{edit-button-caption}">Edit</a>
                 </td>
             </tr>
