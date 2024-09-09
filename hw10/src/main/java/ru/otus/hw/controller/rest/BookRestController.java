@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import ru.otus.hw.dto.BookDto;
 import ru.otus.hw.dto.BookDtoRequest;
-import ru.otus.hw.dto.BookWithAllAuthorsAndAllGenresDto;
 import ru.otus.hw.exception.EntityNotFoundException;
 import ru.otus.hw.service.AuthorService;
 import ru.otus.hw.service.BookService;
@@ -31,19 +30,19 @@ public class BookRestController {
 
     private final GenreService genreService;
 
-    @GetMapping("/book")
+    @GetMapping("/api/v1/book/")
     public List<BookDto> readAllBooks() {
         return bookService.findAll();
     }
 
-    @GetMapping("/book/{id}")
-    public BookWithAllAuthorsAndAllGenresDto readBook(@PathVariable("id") long id) {
+    @GetMapping("/api/v1/book/{id}")
+    public BookDto readBook(@PathVariable("id") long id) {
         var book = bookService.findById(id).orElseThrow(
                 () -> new EntityNotFoundException("Book with id %d not found".formatted(id)));
-        return fillModelWithCatalogData(book);
+        return book;
     }
 
-    @PutMapping("/book/{id}")
+    @PutMapping("/api/v1/book/{id}")
     public void updateBook(@Valid @RequestBody BookDtoRequest book,
                              BindingResult bindingResult) {
         if (!bindingResult.hasErrors()) {
@@ -51,12 +50,7 @@ public class BookRestController {
         }
     }
 
-    @GetMapping("/book/new")
-    public BookWithAllAuthorsAndAllGenresDto addBook() {
-        return fillModelWithCatalogData(new BookDto());
-    }
-
-    @PostMapping("/book/new")
+    @PostMapping("/api/v1/book")
     public void addBook(@Valid @RequestBody BookDtoRequest book,
                            BindingResult bindingResult) {
         if (!bindingResult.hasErrors()) {
@@ -64,7 +58,7 @@ public class BookRestController {
         }
     }
 
-    @DeleteMapping("/book/{id}")
+    @DeleteMapping("/api/v1/book/{id}")
     public void deleteBook(@PathVariable("id") long id) {
         bookService.deleteById(id);
     }
@@ -72,9 +66,5 @@ public class BookRestController {
     @ExceptionHandler(EntityNotFoundException.class)
     public ResponseEntity<String> handleNotFound(EntityNotFoundException ex) {
         return ResponseEntity.badRequest().body("error");
-    }
-
-    private BookWithAllAuthorsAndAllGenresDto fillModelWithCatalogData(BookDto book) {
-       return new BookWithAllAuthorsAndAllGenresDto(book, authorService.findAll(), genreService.findAll());
     }
 }

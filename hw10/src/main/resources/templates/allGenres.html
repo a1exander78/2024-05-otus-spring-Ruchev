@@ -2,10 +2,11 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8"/>
-    <title>List of all genres</title>
+    <title th:text="#{all-genres-page}">List of all genres</title>
     <link rel="stylesheet" href="../static/css/style.css" th:href="@{/css/style.css}" type="text/css">
+    <script th:src="@{/js/scripts.js}" type="text/javascript"></script>
 </head>
-<body>
+<body onload="showAllGenres()">
     <h3 th:text="#{genre-table-header}">Genres:</h3>
     <table class="element">
         <thead>
@@ -14,7 +15,7 @@
                 <th th:text="#{genre-field-name}">Name</th>
             </tr>
         </thead>
-        <tbody>
+        <tbody id="genre-table">
             <tr th:each="genre : ${genres}" th:object ="${genre}">
                 <td th:text="*{id}">1</td>
                 <td th:text="*{name}">Dystopian novel</td>
@@ -22,8 +23,8 @@
         </tbody>
     </table>
     <p/>
-    <div>
-        <a href="start.html" th:href="@{/api/v1/main}" th:text="#{main-page-button-caption}">Main page</a>
+    <div class="row">
+        <a href="start.html" th:href="@{/main}" th:text="#{main-page-button-caption}">Main page</a>
     </div>
 </body>
 </html>

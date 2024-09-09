@@ -12,7 +12,6 @@ import ru.otus.hw.dto.AuthorDto;
 import ru.otus.hw.dto.GenreDto;
 import ru.otus.hw.dto.BookDto;
 import ru.otus.hw.dto.BookDtoRequest;
-import ru.otus.hw.dto.BookWithAllAuthorsAndAllGenresDto;
 import ru.otus.hw.service.AuthorService;
 import ru.otus.hw.service.BookService;
 import ru.otus.hw.service.GenreService;
@@ -55,10 +54,6 @@ class BookRestControllerTest {
 
     private static final List<GenreDto> GENRES = List.of(GENRE_1, GENRE_2, GENRE_3);
 
-    private static final BookWithAllAuthorsAndAllGenresDto BOOKDTO_0 = new BookWithAllAuthorsAndAllGenresDto(new BookDto(), AUTHORS, GENRES);
-
-    private static final BookWithAllAuthorsAndAllGenresDto BOOKDTO_1 = new BookWithAllAuthorsAndAllGenresDto(BOOK_1, AUTHORS, GENRES);
-
     private static final String NEW_TITLE = "New_Book";
 
     private static final String UPDATING_TITLE = "Updating_Title";
@@ -84,7 +79,7 @@ class BookRestControllerTest {
         var books = List.of(BOOK_1, BOOK_2, BOOK_3);
         given(bookService.findAll()).willReturn(books);
 
-        mvc.perform(get("/book"))
+        mvc.perform(get("/api/v1/book/"))
                 .andExpect(status().isOk())
                 .andExpect(content().json(mapper.writeValueAsString(books)));
     }
@@ -96,33 +91,22 @@ class BookRestControllerTest {
         given(authorService.findAll()).willReturn(AUTHORS);
         given(genreService.findAll()).willReturn(GENRES);
 
-        mvc.perform(get("/book/1"))
+        mvc.perform(get("/api/v1/book/1"))
                 .andExpect(status().isOk())
-                .andExpect(content().json(mapper.writeValueAsString(BOOKDTO_1)));
+                .andExpect(content().json(mapper.writeValueAsString(BOOK_1)));
     }
 
     @DisplayName("должен обновлять книгу")
     @Test
     void shouldUpdateBook() throws Exception {
-        var updatedBook = new BookDtoRequest(ID_1, UPDATING_TITLE, ID_2, ID_3);
+        var updatedBook = new BookDtoRequest(ID_1, UPDATING_TITLE, ID_1, ID_1);
         var expectedResult = mapper.writeValueAsString(updatedBook);
 
-        mvc.perform(put("/book/" + ID_1).contentType(APPLICATION_JSON)
+        mvc.perform(put("/api/v1/book/" + ID_1).contentType(APPLICATION_JSON)
                 .content(expectedResult))
                 .andExpect(status().isOk());
 
-        verify(bookService, times(1)).update(ID_1, UPDATING_TITLE, ID_2, ID_3);
-    }
-
-    @DisplayName("должен предоставить возможность сохранения новой книги")
-    @Test
-    void shouldProvideSaveNewBook() throws Exception {
-        given(authorService.findAll()).willReturn(AUTHORS);
-        given(genreService.findAll()).willReturn(GENRES);
-
-        mvc.perform(get("/book/new"))
-                .andExpect(status().isOk())
-                .andExpect(content().json(mapper.writeValueAsString(BOOKDTO_0)));
+        verify(bookService, times(1)).update(ID_1, UPDATING_TITLE, ID_1, ID_1);
     }
 
     @DisplayName("должен сохранять новую книгу")
@@ -131,7 +115,7 @@ class BookRestControllerTest {
         var newBook = new BookDtoRequest(ID_4,NEW_TITLE, ID_1, ID_1);
         var expectedResult = mapper.writeValueAsString(newBook);
 
-        mvc.perform(post("/book/new").contentType(APPLICATION_JSON)
+        mvc.perform(post("/api/v1/book").contentType(APPLICATION_JSON)
                 .content(expectedResult))
                 .andExpect(status().isOk());
 
@@ -141,7 +125,7 @@ class BookRestControllerTest {
     @DisplayName("должен удалять книгу")
     @Test
     void shouldDeleteBook() throws Exception {
-        mvc.perform(delete("/book/1"))
+        mvc.perform(delete("/api/v1/book/1"))
                 .andExpect(status().isOk());
 
         verify(bookService, times(1)).deleteById(ID_1);

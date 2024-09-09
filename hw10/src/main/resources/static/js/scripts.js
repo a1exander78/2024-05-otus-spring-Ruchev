@@ -1,124 +1,167 @@
+//Book AJAX scripts
+
 function showAllBooks() {
-    fetch("/book")
+    fetch("/api/v1/book/")
         .then(response => response.json())
         .then(books => fillBookTable(books))
 }
 
 function showBook(bookId) {
-    fetch("/book/" + bookId)
+    fetch("/api/v1/book/" + bookId)
         .then(response => response.json())
-        .then(book => outputBook(book))
+        .then(book => {
+            console.log(book);
+            document.getElementById("id-input").value = book.id;
+            document.getElementById("book-title-input").value = book.title;
+            getCatalogs(book);
+        })
 }
 
 function updateBook(bookId) {
     const book = {
         id: document.getElementById("id-input").value,
         title: document.getElementById("book-title-input").value,
-        authorId: document.getElementById("book-authorId-select").value,
-        genreId: document.getElementById("book-genreId-select").value
+        authorId: document.getElementById("authorId-select").value,
+        genreId: document.getElementById("genreId-select").value
     }
-    fetch("/book/" + bookId, {
+    fetch("/api/v1/book/" + bookId, {
         method: 'PUT',
-        redirect: "follow",
         headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json'
         },
         body: JSON.stringify(book)})
     .then(response => response.json())
-    .then(window.location.href = "/api/v1/book")
-}
-
-function tryAddBook() {
-    fetch("/book/new")
-        .then(response => response.json())
-        .then(options => fillOptions(options))
+    .then(window.location.href = "/book/")
 }
 
 function addBook() {
     const book = {
         title: document.getElementById("book-title-input").value,
-        authorId: document.getElementById("book-authorId-select").value,
-        genreId: document.getElementById("book-genreId-select").value
+        authorId: document.getElementById("authorId-select").value,
+        genreId: document.getElementById("genreId-select").value
     }
-    fetch("/book/new", {
+    fetch("/api/v1/book", {
         method: 'POST',
-        redirect: "follow",
         headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json'
         },
         body: JSON.stringify(book)})
     .then(response => response.json())
-    .then(window.location.href = "/api/v1/book")
+    .then(window.location.href = "/book/")
 }
 
 function deleteBook(bookId) {
-    fetch("/book/" + bookId, {
+    fetch("/api/v1/book/" + bookId, {
         method: 'DELETE',
-        redirect: "follow",
         headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json'
         }
     })
     .then(response => response.json())
-    .then(window.location.href = "/api/v1/book")
+    .then(window.location.href = "/book/")
 }
 
+//Book utility scripts
+
 function fillBookTable(books) {
+    const table = document.getElementById("book-table");
+    table.innerHTML = '';
     books.forEach(book => {
         console.log(book);
-        const table = document.getElementById("book-table");
         let row = table.insertRow();
         row.insertCell().innerHTML = book.id;
-        row.insertCell().innerHTML = book.title;
+        row.insertCell().innerHTML = '<a href="/book/' + book.id + '">' + book.title + '</a>';
         row.insertCell().innerHTML = book.author.fullName;
         row.insertCell().innerHTML = book.genre.name;
-        row.insertCell().innerHTML = '<a href="/api/v1/comment?bookId=' + book.id + '">Show</a>';
-        row.insertCell().innerHTML = '<a href="/api/v1/comment/new?bookId=' + book.id + '">Add</a>';
-        row.insertCell().innerHTML = '<a href="/api/v1/book/' + book.id + '">Edit book</a>'
     })
 }
 
-function outputBook(bookWithOptions) {
-    console.log(bookWithOptions);
-    document.getElementById("id-input").value = bookWithOptions.book.id;
-    document.getElementById("book-title-input").value = bookWithOptions.book.title;
-    const authorsSelect = document.getElementById("book-authorId-select");
-    const genresSelect = document.getElementById("book-genreId-select");
-    fillOptions(bookWithOptions);
+//Author AJAX scripts
+
+function showAllAuthors() {
+    fetch("/api/v1/author/")
+        .then(response => response.json())
+        .then(authors => fillAuthorTable(authors))
 }
 
-function fillOptions(options) {
-    fillOptionsForSelectedAuthors(options);
-    fillOptionsForSelectedGenres(options);
+function getAuthorsForSelect(book) {
+    fetch("/api/v1/author/")
+        .then(response => response.json())
+        .then(authors => fillOptionsForAuthorSelect(book, authors))
 }
 
-function fillOptionsForSelectedAuthors(authorOptions) {
-    const authorsSelect = document.getElementById("book-authorId-select");
+//Author utility scripts
 
-    for (const author of authorOptions.authors) {
+function fillAuthorTable(authors) {
+    authors.forEach(author => {
+        console.log(author);
+        const table = document.getElementById("author-table");
+        let row = table.insertRow();
+        row.insertCell().innerHTML = author.id;
+        row.insertCell().innerHTML = author.fullName;
+    })
+}
+
+function fillOptionsForAuthorSelect(book, authors) {
+    const authorSelect = document.getElementById("authorId-select");
+    for (const author of authors) {
+        console.log(author);
         var option = new Option(author.fullName, author.id);
-        if (authorOptions.book.author != null) {
-            if (author.id == authorOptions.book.author.id) {
+        if (book != null) {
+            if (book.author.id == author.id) {
                 option.setAttribute("selected", "selected");
             }
         }
-        authorsSelect.add(option);
+        authorSelect.add(option);
     }
 }
 
-function fillOptionsForSelectedGenres(genreOptions) {
-    const genresSelect = document.getElementById("book-genreId-select");
+//Genre AJAX scripts
 
-    for (const genre of genreOptions.genres) {
+function showAllGenres() {
+    fetch("/api/v1/genre/")
+        .then(response => response.json())
+        .then(genres => fillGenreTable(genres))
+}
+
+function getGenresForSelect(book) {
+    fetch("/api/v1/genre/")
+        .then(response => response.json())
+        .then(genres => fillOptionsForGenreSelect(book, genres))
+}
+
+//Genre utility scripts
+
+function fillGenreTable(genres) {
+    genres.forEach(genre => {
+        console.log(genre);
+        const table = document.getElementById("genre-table");
+        let row = table.insertRow();
+        row.insertCell().innerHTML = genre.id;
+        row.insertCell().innerHTML = genre.name;
+    })
+}
+
+function fillOptionsForGenreSelect(book, genres) {
+    const genreSelect = document.getElementById("genreId-select");
+    for (const genre of genres) {
+        console.log(genre);
         var option = new Option(genre.name, genre.id);
-        if (genreOptions.book.genre != null) {
-            if (genre.id == genreOptions.book.genre.id) {
+        if (book != null) {
+            if (book.genre.id == genre.id) {
                 option.setAttribute("selected", "selected");
             }
         }
-        genresSelect.add(option);
+        genreSelect.add(option);
     }
+}
+
+//Common utility scripts
+
+function getCatalogs(book) {
+    getAuthorsForSelect(book);
+    getGenresForSelect(book);
 }
