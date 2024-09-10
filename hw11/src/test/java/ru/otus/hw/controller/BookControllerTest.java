@@ -73,7 +73,7 @@ class BookControllerTest {
         var books = List.of(BOOK_1, BOOK_2, BOOK_3);
         given(bookService.findAll()).willReturn(books);
 
-        mvc.perform(get("/book"))
+        mvc.perform(get("/book/"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType("text/html;charset=UTF-8"))
                 .andExpect(model().attribute("books", books));
@@ -105,7 +105,7 @@ class BookControllerTest {
 
         mvc.perform(post("/book/new").params(requestParams))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/book"));
+                .andExpect(redirectedUrl("/book/"));
 
         verify(bookService, times(1)).insert(NEW_TITLE, ID_1, ID_1);
     }
@@ -126,7 +126,7 @@ class BookControllerTest {
 
         mvc.perform(post("/book/" + ID_1).params(requestParams))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/book"));
+                .andExpect(redirectedUrl("/book/"));
 
         verify(bookService, times(1)).update(ID_1, UPDATING_TITLE, ID_2, ID_3);
     }
@@ -136,7 +136,7 @@ class BookControllerTest {
     void shouldDeleteBook() throws Exception {
         mvc.perform(post("/book/1/del"))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/book"));
+                .andExpect(redirectedUrl("/book/"));
 
         verify(bookService, times(1)).deleteById(ID_1);
     }
@@ -151,14 +151,14 @@ class BookControllerTest {
         requestParams.add("genreId", String.valueOf(ID_1));
 
         mvc.perform(post("/book/new").params(requestParams))
-                .andExpect(status().is3xxRedirection());
+                .andExpect(status().isOk());
 
         verify(bookService, times(0)).insert(SHORT_TITLE, ID_1, ID_1);
 
         requestParams.add("title", LONG_TITLE);
 
         mvc.perform(post("/book/new").params(requestParams))
-                .andExpect(status().is3xxRedirection());
+                .andExpect(status().isOk());
 
         verify(bookService, times(0)).insert(LONG_TITLE, ID_1, ID_1);
     }
@@ -174,14 +174,14 @@ class BookControllerTest {
         requestParams.add("genreId", String.valueOf(ID_3));
 
         mvc.perform(post("/book/" + ID_1).params(requestParams))
-                .andExpect(status().is3xxRedirection());
+                .andExpect(status().isOk());
 
         verify(bookService, times(0)).update(ID_1, SHORT_TITLE, ID_2, ID_3);
 
         requestParams.add("title", LONG_TITLE);
 
         mvc.perform(post("/book/" + ID_1).params(requestParams))
-                .andExpect(status().is3xxRedirection());
+                .andExpect(status().isOk());
 
         verify(bookService, times(0)).update(ID_1, SHORT_TITLE, ID_2, ID_3);
     }

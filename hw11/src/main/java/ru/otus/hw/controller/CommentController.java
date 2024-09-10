@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import ru.otus.hw.dto.CommentDtoRequest;
 import ru.otus.hw.exception.EntityNotFoundException;
 import ru.otus.hw.service.BookService;
@@ -38,24 +37,17 @@ public class CommentController {
     public String readComment(@PathVariable("id") long id, Model model) {
         var comment = commentService.findById(id).orElseThrow(
                 () -> new EntityNotFoundException("Comment with id %d not found".formatted(id)));
-
-        if (!model.containsAttribute("comment")) {
-            model.addAttribute("comment", comment);
-        } else {
-            var commentWithError = (CommentDtoRequest) model.getAttribute("comment");
-            commentWithError.setDescription(comment.getDescription());
-            model.addAttribute("comment", commentWithError);
-        }
-
+        model.addAttribute("comment", comment);
+        model.addAttribute("bookId", comment.getBookId());
         return "singleComment";
     }
 
     @PostMapping("/comment/{id}")
     public String updateComment(@Valid @ModelAttribute("comment") CommentDtoRequest comment,
-                                BindingResult bindingResult, RedirectAttributes redirectAttributes) {
+                                BindingResult bindingResult, Model model) {
         if (bindingResult.hasErrors()) {
-            redirectRequestWithError(comment, bindingResult, redirectAttributes);
-            return "redirect:/comment/" + comment.getId();
+            model.addAttribute("bookId", commentService.findById(comment.getId()).get().getBookId());
+            return "singleComment";
         }
         var updatedComment = commentService.update(comment.getId(), comment.getDescription());
         String path = "redirect:/comment?bookId=" + updatedComment.getBookId();
@@ -64,19 +56,15 @@ public class CommentController {
 
     @GetMapping("/comment/new")
     public String addComment(@RequestParam("bookId") long bookId, Model model) {
-        if (!model.containsAttribute("comment")) {
-            model.addAttribute("comment", new CommentDtoRequest());
-        }
-        model.addAttribute("bookId", bookId);
+        model.addAttribute("comment", new CommentDtoRequest());
         return "addComment";
     }
 
     @PostMapping("/comment/new")
     public String addComment(@Valid @ModelAttribute("comment") CommentDtoRequest comment,
-                             BindingResult bindingResult, RedirectAttributes redirectAttributes) {
+                             BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
-            redirectRequestWithError(comment, bindingResult, redirectAttributes);
-            return "redirect:/comment/new?bookId=" + comment.getBookId();
+            return "addComment";
         }
         var description = comment.getDescription();
         var bookId = comment.getBookId();
@@ -98,7 +86,7 @@ public class CommentController {
     @PostMapping("/comment/{id}/del")
     public String deleteComment(@PathVariable("id") long id) {
         commentService.deleteById(id);
-        return "redirect:/book";
+        return "redirect:/book/";
     }
 
     @ExceptionHandler(EntityNotFoundException.class)
@@ -106,13 +94,5 @@ public class CommentController {
         ModelAndView modelAndView = new ModelAndView("error");
         modelAndView.addObject("message", ex.getMessage());
         return modelAndView;
-    }
-
-    private void redirectRequestWithError(CommentDtoRequest commentDtoRequest,
-                                          BindingResult bindingResult,
-                                          RedirectAttributes redirectAttributes) {
-        redirectAttributes.getFlashAttributes().clear();
-        redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.comment", bindingResult);
-        redirectAttributes.addFlashAttribute("comment", commentDtoRequest);
     }
 }

@@ -126,7 +126,7 @@ class CommentControllerTest {
     void shouldDeleteComment() throws Exception {
         mvc.perform(post("/comment/1/del"))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/book"));
+                .andExpect(redirectedUrl("/book/"));
 
         verify(commentService, times(1)).deleteById(ID_1);
     }
@@ -140,7 +140,7 @@ class CommentControllerTest {
         requestParams.add("bookId", String.valueOf(ID_1));
 
         mvc.perform(post("/comment/new").params(requestParams))
-                .andExpect(status().is3xxRedirection());
+                .andExpect(status().isOk());
 
         verify(commentService, times(0)).insert(SHORT_COMMENT, ID_1);
     }
@@ -153,8 +153,10 @@ class CommentControllerTest {
         requestParams.add("id", String.valueOf(ID_1));
         requestParams.add("description", SHORT_COMMENT);
 
+        given(commentService.findById(ID_1)).willReturn(Optional.of(COMMENT_1));
+
         mvc.perform(post("/comment/1").params(requestParams))
-                .andExpect(status().is3xxRedirection());
+                .andExpect(status().isOk());
 
         verify(commentService, times(0)).update(ID_1, SHORT_COMMENT);
     }

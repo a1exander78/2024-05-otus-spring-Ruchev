@@ -1,14 +1,15 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8"/>
-    <title>Error page</title>
-</head>
-<body>
-<h3 th:text="#{error-page(${message})}">Error page</h3>
-<p/>
-<div>
-    <a href="start.html" th:href="@{/}" th:text="#{main-page-button-caption}">Main page</a>
-</div>
-</body>
+    <head>
+        <meta charset="UTF-8"/>
+        <title th:text="#{error-page}">Error page</title>
+        <link rel="stylesheet" href="../static/css/style.css" th:href="@{/css/style.css}" type="text/css">
+    </head>
+    <body>
+        <h2 class="errors" th:text="#{error-message(${message})}">Error page</h2>
+        <p/>
+        <div class="row">
+            <a href="start.html" th:href="@{/main}" th:text="#{main-page-button-caption}">Main page</a>
+        </div>
+    </body>
 </html>
