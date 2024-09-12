@@ -87,7 +87,7 @@ public class CommentPageController {
     @PostMapping("/comment/{id}/del")
     public String deleteComment(@PathVariable("id") long id) {
         commentService.deleteById(id);
-        return "redirect:/book";
+        return "redirect:/book/";
     }
 
     @ExceptionHandler(EntityNotFoundException.class)

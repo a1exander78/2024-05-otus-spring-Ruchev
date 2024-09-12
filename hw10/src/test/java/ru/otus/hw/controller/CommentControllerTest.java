@@ -127,7 +127,7 @@ class CommentControllerTest {
     void shouldDeleteComment() throws Exception {
         mvc.perform(post("/comment/1/del"))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/book"));
+                .andExpect(redirectedUrl("/book/"));
 
         verify(commentService, times(1)).deleteById(ID_1);
     }
