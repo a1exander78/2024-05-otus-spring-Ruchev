@@ -40,7 +40,6 @@ public class JobConfig {
 
     @Bean
     public JpaPagingItemReader<Author> authorReader() {
-        System.out.println("hello");
         return new JpaPagingItemReaderBuilder<Author>()
                 .name("authorReader")
                 .entityManagerFactory(entityManagerFactory)

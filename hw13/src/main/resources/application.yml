@@ -11,25 +11,26 @@ spring:
       enabled: true
     noninteractive:
       enabled: false
-
     command:
       version:
         enabled: false
+
+  datasource:
+    url: jdbc:h2:mem:maindb
+    driverClassName: org.h2.Driver
+    username: sa
+    password:
+
+  jpa:
+    generate-ddl: false
+    hibernate:
+      ddl-auto: none
 
   sql:
     init:
       mode: always
       data-locations: data.sql
       schema-locations: schema.sql
-
-  datasource:
-    url: jdbc:h2:mem:testdb
-    driverClassName: org.h2.Driver
-
-  h2:
-    console:
-      enabled: true
-      path: /h2-console
 
   data:
     mongodb:
@@ -55,4 +56,4 @@ de:
 
 logging:
   level:
-    ROOT: ERROR
+    ROOT: WARN
