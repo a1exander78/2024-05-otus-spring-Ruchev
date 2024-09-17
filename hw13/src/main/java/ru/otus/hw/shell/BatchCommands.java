@@ -11,14 +11,14 @@ import org.springframework.shell.standard.ShellMethod;
 @RequiredArgsConstructor
 @ShellComponent
 public class BatchCommands {
-    private final Job authorMigrationJob;
+    private final Job libraryMigrationJob;
 
     private final JobLauncher jobLauncher;
 
     @SuppressWarnings("unused")
     @ShellMethod(value = "startMigrationJob", key = "sm")
-    public void startMigrationJobWithJobLauncher() throws Exception {
-        JobExecution execution = jobLauncher.run(authorMigrationJob, new JobParameters());
+    public void startMigrationJob() throws Exception {
+        JobExecution execution = jobLauncher.run(libraryMigrationJob, new JobParameters());
         System.out.println(execution);
     }
 }

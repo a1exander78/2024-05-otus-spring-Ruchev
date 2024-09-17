@@ -56,4 +56,4 @@ de:
 
 logging:
   level:
-    ROOT: WARN
+    ROOT: ERROR
