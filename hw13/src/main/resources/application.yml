@@ -1,0 +1,59 @@
+spring:
+  main:
+    allow-circular-references: true
+
+  batch:
+    job:
+      enabled: false
+
+  shell:
+    interactive:
+      enabled: true
+    noninteractive:
+      enabled: false
+    command:
+      version:
+        enabled: false
+
+  datasource:
+    url: jdbc:h2:mem:maindb
+    driverClassName: org.h2.Driver
+    username: sa
+    password:
+
+  jpa:
+    generate-ddl: false
+    hibernate:
+      ddl-auto: none
+
+  sql:
+    init:
+      mode: always
+      data-locations: data.sql
+      schema-locations: schema.sql
+
+  data:
+    mongodb:
+      port: 27017
+      database: migration
+      host: localhost
+
+mongock:
+#  runner-type: "ApplicationRunner" # default
+  runner-type: "InitializingBean"
+  change-logs-scan-package:
+    - ru.otus.hw.changelogs
+  mongo-db:
+    write-concern:
+      journal: false
+    read-concern: local
+
+de:
+  flapdoodle:
+    mongodb:
+      embedded:
+        version: 4.0.2
+
+logging:
+  level:
+    ROOT: ERROR
