@@ -27,6 +27,24 @@ spring:
       hibernate:
         format_sql: true
 
+  jmx:
+    enabled: true
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+      base-path: /monitor
+  health:
+    defaults:
+      enabled: true
+  endpoint:
+    health:
+      show-details: always
+
 logging:
   level:
-    ROOT: ERROR
+    ROOT: INFO
+  file:
+    name: .log
