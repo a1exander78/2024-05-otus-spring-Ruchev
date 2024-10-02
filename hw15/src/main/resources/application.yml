@@ -1,4 +1,8 @@
 spring:
+  data:
+    rest:
+      basePath: /rest
+
   messages:
     encoding: UTF-8
 
@@ -47,4 +51,4 @@ logging:
   level:
     ROOT: INFO
   file:
-    name: .log
+    name: init.log
