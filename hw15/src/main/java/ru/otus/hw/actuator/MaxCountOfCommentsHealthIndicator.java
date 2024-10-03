@@ -5,8 +5,7 @@ import org.springframework.boot.actuate.health.Health;
 import org.springframework.boot.actuate.health.HealthIndicator;
 import org.springframework.boot.actuate.health.Status;
 import org.springframework.stereotype.Component;
-import ru.otus.hw.service.BookService;
-import ru.otus.hw.service.CommentService;
+import ru.otus.hw.repository.CommentRepository;
 
 import java.util.HashMap;
 
@@ -14,25 +13,19 @@ import java.util.HashMap;
 @Component
 public class MaxCountOfCommentsHealthIndicator implements HealthIndicator {
 
-    private static final int MAX_COUNT_OF_COMMENTS = 5;
+    private static final int MAX_COUNT_OF_COMMENTS = 1;
 
-    private final BookService bookService;
-
-    private final CommentService commentService;
+    private final CommentRepository commentRepository;
 
     @Override
     public Health health() {
         var details = new HashMap<String, String>();
-        var books = bookService.findAll();
+        var books = commentRepository.findBooksWithCommentsExcess(MAX_COUNT_OF_COMMENTS);
 
-        for (int i = 0; i < books.size(); i++) {
-            long currentId = books.get(i).getId();
-            int countOfComments = commentService.findAllCommentsByBookId(currentId).size();
-            if (countOfComments > MAX_COUNT_OF_COMMENTS) {
-                if (details.isEmpty()) {
-                    details.put("cause", "Количество комментариев больше " + MAX_COUNT_OF_COMMENTS);
-                }
-                details.put("bookId_" + currentId, "Всего комментариев " + countOfComments);
+        if (!books.isEmpty()) {
+            for (int i = 0; i < books.size(); i++) {
+                long currentId = books.get(i);
+                details.put("bookId_" + currentId, "Количество комментариев больше " + MAX_COUNT_OF_COMMENTS);
             }
         }
 

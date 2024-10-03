@@ -38,7 +38,7 @@ management:
   endpoints:
     web:
       exposure:
-        include: "*"
+        include: metrics, health, logfile
       base-path: /monitor
   health:
     defaults:
