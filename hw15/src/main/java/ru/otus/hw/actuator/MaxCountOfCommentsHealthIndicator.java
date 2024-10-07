@@ -21,12 +21,11 @@ public class MaxCountOfCommentsHealthIndicator implements HealthIndicator {
     public Health health() {
         var details = new HashMap<String, String>();
         var books = commentRepository.findBooksWithCommentsExcess(MAX_COUNT_OF_COMMENTS);
+        int count = books.size();
 
         if (!books.isEmpty()) {
-            for (int i = 0; i < books.size(); i++) {
-                long currentId = books.get(i);
-                details.put("bookId_" + currentId, "Количество комментариев больше " + MAX_COUNT_OF_COMMENTS);
-            }
+            String message = "Превышено максимальное количество комментариев у " + books.size() + endOfMessage(count);
+            details.put("message", message);
         }
 
         if (!details.isEmpty()) {
@@ -36,5 +35,12 @@ public class MaxCountOfCommentsHealthIndicator implements HealthIndicator {
         return Health.up()
                 .withDetail("message", "Количество комментариев по каждой книге в пределах " + MAX_COUNT_OF_COMMENTS)
                 .build();
+    }
+
+    String endOfMessage(int count) {
+        if ((count - 1) % 10 == 0) {
+            return " книги";
+        }
+        return " книг";
     }
 }

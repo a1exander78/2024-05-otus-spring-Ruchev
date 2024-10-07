@@ -101,6 +101,6 @@ class CommentRepositoryTest {
     @DisplayName("должен найти книги с количеством комментариев, превышающим заданное значение ")
     @Test
     void shouldFindBooksWithCommentsExcess() {
-        assertThat(commentRepository.findBooksWithCommentsExcess(MAX_COUNT_OF_COMMENTS)).containsExactlyElementsOf(List.of(1L));
+        assertThat(commentRepository.findBooksWithCommentsExcess(MAX_COUNT_OF_COMMENTS)).containsExactlyElementsOf(List.of(1));
     }
 }

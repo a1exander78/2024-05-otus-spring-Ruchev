@@ -22,6 +22,6 @@ public interface CommentRepository extends JpaRepository<Comment, Long> {
 
     void deleteById(long id);
 
-    @Query("select c.book.id, count(*) from Comment c group by c.book.id having count(*) > :excess")
-    List<Long> findBooksWithCommentsExcess(@Param("excess") int excess);
+    @Query("select 1 from Comment c group by c.book.id having count(*) > :excess")
+    List<Integer> findBooksWithCommentsExcess(@Param("excess") int excess);
 }
