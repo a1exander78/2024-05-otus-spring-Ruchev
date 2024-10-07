@@ -24,8 +24,7 @@ public class MaxCountOfCommentsHealthIndicator implements HealthIndicator {
         int count = books.size();
 
         if (!books.isEmpty()) {
-            String message = "Превышено максимальное количество комментариев у " + books.size() + endOfMessage(count);
-            details.put("message", message);
+            details.put("message", "Превышено максимальное количество комментариев у " + endOfMessage(count));
         }
 
         if (!details.isEmpty()) {
@@ -39,8 +38,8 @@ public class MaxCountOfCommentsHealthIndicator implements HealthIndicator {
 
     String endOfMessage(int count) {
         if ((count - 1) % 10 == 0) {
-            return " книги";
+            return count + " книги";
         }
-        return " книг";
+        return count + " книг";
     }
 }
