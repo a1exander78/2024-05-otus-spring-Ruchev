@@ -63,4 +63,9 @@ public class BookServiceImpl implements BookService {
         var book = new Book(id, title, author, genre);
         return bookRepository.save(book);
     }
+
+    @Override
+    public int getCountOfBooksWithCommentsExcess(int excess) {
+        return bookRepository.getCountOfBooksWithCommentsExcess(excess);
+    }
 }

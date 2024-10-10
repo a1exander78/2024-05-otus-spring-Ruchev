@@ -5,7 +5,7 @@ import org.springframework.boot.actuate.health.Health;
 import org.springframework.boot.actuate.health.HealthIndicator;
 import org.springframework.boot.actuate.health.Status;
 import org.springframework.stereotype.Component;
-import ru.otus.hw.repository.CommentRepository;
+import ru.otus.hw.service.BookService;
 
 import java.util.HashMap;
 
@@ -15,15 +15,14 @@ public class MaxCountOfCommentsHealthIndicator implements HealthIndicator {
 
     private static final int MAX_COUNT_OF_COMMENTS = 1;
 
-    private final CommentRepository commentRepository;
+    private final BookService bookService;
 
     @Override
     public Health health() {
         var details = new HashMap<String, String>();
-        var books = commentRepository.findBooksWithCommentsExcess(MAX_COUNT_OF_COMMENTS);
-        int count = books.size();
+        int count = bookService.getCountOfBooksWithCommentsExcess(MAX_COUNT_OF_COMMENTS);
 
-        if (!books.isEmpty()) {
+        if (count != 0) {
             details.put("message", "Превышено максимальное количество комментариев у " + endOfMessage(count));
         }
 

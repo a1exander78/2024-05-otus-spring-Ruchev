@@ -15,4 +15,6 @@ public interface BookService {
     BookDto update(long id, String title, long authorId, long genreId);
 
     void deleteById(long id);
+
+    int getCountOfBooksWithCommentsExcess(int excess);
 }

@@ -22,6 +22,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @DataJpaTest
 @Import({BookServiceImpl.class, BookDtoConverterImpl.class})
 public class BookServiceTest {
+    private static final int MAX_COUNT_OF_COMMENTS = 1;
     private static final long ID_1 = 1L;
     private static final long ID_2 = 2L;
     private static final long ID_3 = 3L;
@@ -84,5 +85,11 @@ public class BookServiceTest {
         assertThat(bookService.findById(ID_1)).contains(BOOK_1);
         bookService.deleteById(ID_1);
         assertThat(bookService.findById(ID_1)).isEmpty();
+    }
+
+    @DisplayName("должен найти у скольки книг количество комментариев, превышает заданное значение ")
+    @Test
+    void shouldGetCountOfBooksWithCommentsExcess() {
+        assertThat(bookService.getCountOfBooksWithCommentsExcess(MAX_COUNT_OF_COMMENTS)).isEqualTo(1);
     }
 }

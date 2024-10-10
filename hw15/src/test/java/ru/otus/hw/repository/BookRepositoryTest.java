@@ -16,6 +16,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @DisplayName("Репозиторий на основе Jpa для работы с книгами ")
 @DataJpaTest
 class BookRepositoryTest {
+    private static final int MAX_COUNT_OF_COMMENTS = 1;
 
     @Autowired
     private BookRepository bookRepository;
@@ -94,5 +95,11 @@ class BookRepositoryTest {
         assertThat(bookRepository.findById(1L)).isPresent();
         bookRepository.deleteById(1L);
         assertThat(bookRepository.findById(1L)).isEmpty();
+    }
+
+    @DisplayName("должен найти у скольки книг количество комментариев, превышает заданное значение ")
+    @Test
+    void shouldGetCountOfBooksWithCommentsExcess() {
+        assertThat(bookRepository.getCountOfBooksWithCommentsExcess(MAX_COUNT_OF_COMMENTS)).isEqualTo(1);
     }
 }
