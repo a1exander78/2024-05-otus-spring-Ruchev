@@ -1,0 +1,54 @@
+spring:
+  data:
+    rest:
+      basePath: /rest
+
+  messages:
+    encoding: UTF-8
+
+  datasource:
+    url: jdbc:h2:mem:maindb
+
+  sql:
+    init:
+      mode: never
+      data-locations: data.sql
+      schema-locations: schema.sql
+
+  liquibase:
+    enabled: true
+    change-log: classpath:db/changelog/db.changelog-master.yml
+    contexts: hw05
+
+  jpa:
+    open-in-view: false
+    generate-ddl: false
+    hibernate:
+      ddl-auto: none
+
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+
+  jmx:
+    enabled: true
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: metrics, health, logfile
+      base-path: /monitor
+  health:
+    defaults:
+      enabled: true
+  endpoint:
+    health:
+      show-details: always
+
+logging:
+  level:
+    ROOT: INFO
+  file:
+    name: init.log
