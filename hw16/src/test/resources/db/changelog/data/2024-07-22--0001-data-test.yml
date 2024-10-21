@@ -1,0 +1,82 @@
+databaseChangeLog:
+- changeSet:
+    id: 2024-07-22--0001-author
+    author: ruchev
+    context: test
+    runOnChange: true
+    loadData:
+      columns:
+        - column:
+            name: id
+            generationType: always
+        - column:
+            name: full_name
+      file: data/2024-07-22--0001-author-test.csv
+      relativeToChangelogFile: true
+      separator: ;
+      quotChar: '"'
+      encoding: UTF-8
+      tableName: author
+
+- changeSet:
+    id: 2024-07-22--0002-genre
+    author: ruchev
+    context: test
+    runOnChange: true
+    loadData:
+      columns:
+        - column:
+              name: id
+              generationType: always
+        - column:
+            name: name
+      file: data/2024-07-22--0002-genre-test.csv
+      relativeToChangelogFile: true
+      separator: ;
+      quotChar: '"'
+      encoding: UTF-8
+      tableName: genre
+
+- changeSet:
+    id: 2024-07-22--0003-book
+    author: ruchev
+    context: test
+    runOnChange: true
+    loadData:
+      columns:
+        - column:
+              name: id
+              generationType: always
+        - column:
+            name: title
+        - column:
+            name: author_id
+        - column:
+            name: genre_id
+      file: data/2024-07-22--0003-book-test.csv
+      relativeToChangelogFile: true
+      separator: ;
+      quotChar: '"'
+      encoding: UTF-8
+      tableName: book
+
+- changeSet:
+    id: 2024-07-22--0004-comment
+    author: ruchev
+    context: test
+    runOnChange: true
+    loadData:
+      columns:
+        - column:
+            name: id
+            generationType: always
+        - column:
+            name: description
+        - column:
+            name: book_id
+      file: data/2024-07-22--0004-comment-test.csv
+      relativeToChangelogFile: true
+      separator: ;
+      quotChar: '"'
+      encoding: UTF-8
+      tableName: comment

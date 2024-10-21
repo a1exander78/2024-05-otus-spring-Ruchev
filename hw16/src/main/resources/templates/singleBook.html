@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title th:text="#{edit-page}">Edit book</title>
+    <link rel="stylesheet" href="../static/css/style.css" th:href="@{/css/style.css}" type="text/css">
+    <script th:src="@{/js/scripts.js}" type="text/javascript"></script>
+</head>
+<body th:attr="onload='showBook(' + ${id} +')'">
+<form id="edit-form" action="singleBook.html" th:action="@{/api/v1/book/__${id}__}" th:method="put">
+    <h3 th:text = "#{book-form-header}">Book Info:</h3>
+    <div class="row">
+        <label for="id-input" th:text="#{book-field-id} + ':'">ID:</label>
+        <input id="id-input" type="text" readonly="readonly" name="id" value="1" th:value="${id}"/>
+    </div>
+    <div class="row">
+        <label for="book-title-input" th:text="#{book-field-title} + ':'">Title:</label>
+        <input id="book-title-input" name="title" type="text"/>
+    </div>
+    <div class="row">
+        <label for="authorId-select" th:text="#{book-field-author} + ':'">Author:</label>
+        <select id="authorId-select" name="authorId"></select>
+    </div>
+    <div class="row">
+        <label for="genreId-select" th:text="#{book-field-genre} + ':'">Genre:</label>
+        <select id="genreId-select" name="genreId"></select>
+    </div>
+    <div class="row">
+        <a href="allCommentsByBook.html" th:href="@{/comment(bookId=*{id})}" th:text="#{comment-get-button-caption}">Get comments</a>
+    </div>
+    <div class="row">
+        <a href="addComment.html" th:href="@{/comment/new(bookId=*{id})}" th:text="#{comment-add-button-caption}">Add comment</a>
+    </div>
+    <div class="row">
+        <a href="deleteBook.html" th:href="@{/book/{id}/del(id=${id})}">
+            <button type="button" th:text="#{delete-button-caption}">Delete</button>
+        </a>
+    </div>
+    <div class="row">
+        <button type="button" onclick="updateBook()" th:text="#{save-button-caption}">Save</button>
+        <a href="allBooks.html" th:href="@{/book/}">
+            <button type="button" th:text="#{cancel-button-caption}">Cancel</button>
+        </a>
+    </div>
+</form>
+</body>
+</html>
