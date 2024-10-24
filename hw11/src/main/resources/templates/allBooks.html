@@ -14,8 +14,8 @@
                     <th th:text="#{book-field-title}">Title</th>
                     <th th:text="#{book-field-author}">Author</th>
                     <th th:text="#{book-field-genre}">Genre</th>
-                    <th th:text="#{comment-field-header}" colspan="2">Action</th>
-                    <th th:text="#{table-column-action}">Action</th>
+                    <th th:text="#{comment-field-header}" th:attr="colspan=${role == 'ROLE_ADMIN'} ? 1 : 2">Comments</th>
+                    <th th:text="#{table-column-action}" th:if="${role == 'ROLE_ADMIN'}">Action</th>
                 </tr>
             </thead>
             <tbody>
@@ -27,10 +27,10 @@
                     <td>
                         <a href="allCommentsByBook.html" th:href="@{/comment(bookId=*{id})}" th:text="#{comment-button-caption}">Get comments</a>
                     </td>
-                    <td>
+                    <td th:if="${role == 'ROLE_USER'}">
                         <a href="addComment.html" th:href="@{/comment/new(bookId=*{id})}" th:text="#{add-button-caption}">Add</a>
                     </td>
-                    <td>
+                    <td th:if="${role == 'ROLE_ADMIN'}">
                         <a href="singleBook.html" th:href="@{/book/__*{id}__}" th:text="#{edit-button-caption}">Edit</a>
                     </td>
                 </tr>

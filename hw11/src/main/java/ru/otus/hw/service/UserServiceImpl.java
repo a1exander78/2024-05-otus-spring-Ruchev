@@ -33,7 +33,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         return User.builder()
                 .username(user.getLogin())
                 .password(user.getPassword())
-                .roles(user.getRole().getAuthority())
+                .authorities(user.getRole().getAuthority())
                 .build();
     }
 }

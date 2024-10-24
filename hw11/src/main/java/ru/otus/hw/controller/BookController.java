@@ -26,10 +26,13 @@ public class BookController {
 
     private final GenreService genreService;
 
+    private final MainController mainController;
+
     @GetMapping("/book/")
     public String readAllBooks(Model model) {
         var books = bookService.findAll();
         model.addAttribute("books", books);
+        mainController.setRoleAttribute(model);
         return "allBooks";
     }
 
