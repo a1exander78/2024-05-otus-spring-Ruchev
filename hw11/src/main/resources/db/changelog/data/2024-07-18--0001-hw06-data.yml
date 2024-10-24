@@ -1,7 +1,7 @@
 databaseChangeLog:
   - changeSet:
       id: 2024-07-18--0001-author
-      author: ruchev
+      author: a1exander78
       context: hw05
       runOnChange: true
       loadData:
@@ -20,7 +20,7 @@ databaseChangeLog:
 
   - changeSet:
       id: 2024-07-18--0002-genre
-      author: ruchev
+      author: a1exander78
       context: hw05
       runOnChange: true
       loadData:
@@ -39,7 +39,7 @@ databaseChangeLog:
 
   - changeSet:
       id: 2024-07-18--0003-book
-      author: ruchev
+      author: a1exander78
       context: hw05
       runOnChange: true
       loadData:

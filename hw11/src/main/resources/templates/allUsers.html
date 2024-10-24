@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="UTF-8"/>
+        <title th:text="#{all-users-page}">List of all users</title>
+        <link rel="stylesheet" href="../static/css/style.css" th:href="@{/css/style.css}" type="text/css">
+    </head>
+    <body>
+        <h3 th:text="#{user-table-header}">Users:</h3>
+        <table class="element">
+            <thead>
+                <tr>
+                    <th th:text="#{user-field-id}">ID</th>
+                    <th th:text="#{user-field-login}">Login</th>
+                    <th th:text="#{user-field-password}">Password</th>
+                    <th th:text="#{user-field-role}">Role</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="user : ${users}" th:object="${user}">
+                    <td th:text="*{id}">0</td>
+                    <td th:text="*{login}">Login</td>
+                    <td th:text="*{password}">Password</td>
+                    <td th:text="*{role}">Role</td>
+                </tr>
+            </tbody>
+        </table>
+        <p/>
+        <div>
+            <a href="start.html" th:href="@{/main}" th:text="#{main-page-button-caption}">Main page</a>
+        </div>
+    </body>
+</html>

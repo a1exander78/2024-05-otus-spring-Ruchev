@@ -1,8 +1,8 @@
 databaseChangeLog:
   - changeSet:
       id: 2024-07-19--0001-comment
-      author: ruchev
-      context: hw05 or test
+      author: a1exander78
+      context: hw06 or test
       createTable:
         tableName: comment
         columns:

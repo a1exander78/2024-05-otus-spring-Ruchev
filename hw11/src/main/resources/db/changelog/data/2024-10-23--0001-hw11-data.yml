@@ -1,21 +1,22 @@
 databaseChangeLog:
   - changeSet:
-      id: 2024-07-19--0001-comment
+      id: 2024-10-23--0001-users
       author: a1exander78
-      context: hw06
+      context: hw11
       runOnChange: true
       loadData:
         columns:
           - column:
               name: id
-              generationType: always
           - column:
-              name: description
+              name: login
           - column:
-              name: book_id
-        file: data/2024-07-19--0001-comment.csv
+              name: password
+          - column:
+              name: role
+        file: data/2024-10-23--0001-user.csv
         relativeToChangelogFile: true
         separator: ;
         quotChar: '"'
         encoding: UTF-8
-        tableName: comment
+        tableName: client
