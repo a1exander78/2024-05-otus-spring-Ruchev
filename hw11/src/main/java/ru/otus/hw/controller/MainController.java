@@ -30,10 +30,8 @@ public class MainController {
 
             if (user.getAuthorities().containsAll(authorities)) {
                 model.addAttribute("role", Role.ADMIN.getAuthority());
-                System.out.println("ADMIN");
             } else {
                 model.addAttribute("role", Role.USER.getAuthority());
-                System.out.println("USER");
             }
         }
     }
