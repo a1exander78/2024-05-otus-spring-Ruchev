@@ -1,4 +1,4 @@
-package ru.otus.hw.config;
+package ru.otus.hw.security;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -12,29 +12,33 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.util.matcher.RegexRequestMatcher;
-import ru.otus.hw.model.Role;
 
 @RequiredArgsConstructor
 @EnableWebSecurity
 @Configuration
 public class SecurityConfig {
+    private final SecurityProps props;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+
+        var authorities = props.getAuthorities();
+        var patternToBookAccess = RegexRequestMatcher.regexMatcher("/book/[0-9]+");
+
         http
                 .csrf(AbstractHttpConfigurer::disable)
                 .sessionManagement((session) -> session
                         .sessionCreationPolicy(SessionCreationPolicy.ALWAYS))
                 .authorizeHttpRequests((authorize) -> authorize
-                        .requestMatchers("/user/**").hasRole(Role.ADMIN.name())
-                        .requestMatchers("/comment/new**").hasRole(Role.USER.name())
-                        .requestMatchers(RegexRequestMatcher.regexMatcher("/book/[0-9]+")).hasRole(Role.ADMIN.name())
+                        .requestMatchers("/user/**").hasAuthority(authorities.get(0)) //"ADMIN"
+                        .requestMatchers("/comment/new**").hasAuthority(authorities.get(1)) //"USER"
+                        .requestMatchers(patternToBookAccess).hasAuthority(authorities.get(0)) //"ADMIN"
                         .requestMatchers("/book/**").authenticated()
                         .requestMatchers("/**").authenticated()
                         .anyRequest().permitAll()
                 )
                 .formLogin(Customizer.withDefaults())
-                .rememberMe(rm -> rm.key("AnyKey")
+                .rememberMe(rm -> rm.key(props.getKey())
                         .tokenValiditySeconds(60))
         ;
         return http.build();

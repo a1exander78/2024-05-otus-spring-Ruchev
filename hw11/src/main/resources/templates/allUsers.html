@@ -12,7 +12,6 @@
                 <tr>
                     <th th:text="#{user-field-id}">ID</th>
                     <th th:text="#{user-field-login}">Login</th>
-                    <th th:text="#{user-field-password}">Password</th>
                     <th th:text="#{user-field-role}">Role</th>
                 </tr>
             </thead>
@@ -20,8 +19,11 @@
                 <tr th:each="user : ${users}" th:object="${user}">
                     <td th:text="*{id}">0</td>
                     <td th:text="*{login}">Login</td>
-                    <td th:text="*{password}">Password</td>
-                    <td th:text="*{role}">Role</td>
+                    <td>
+                        <ul>
+                            <li th:each="role : *{roles}" th:text="${role.role}">Role</li>
+                        </ul>
+                    </td>
                 </tr>
             </tbody>
         </table>

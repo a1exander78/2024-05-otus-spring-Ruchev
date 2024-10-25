@@ -57,20 +57,20 @@ public class CommentController {
     @GetMapping("/comment/new")
     public String addComment(@RequestParam("bookId") long bookId, Model model) {
         model.addAttribute("comment", new CommentDtoRequest());
+        model.addAttribute("bookId", bookId);
         return "addComment";
     }
 
     @PostMapping("/comment/new")
     public String addComment(@Valid @ModelAttribute("comment") CommentDtoRequest comment,
-                             BindingResult bindingResult) {
-        if (bindingResult.hasErrors()) {
-            return "addComment";
-        }
+                             BindingResult bindingResult, Model model) {
         var description = comment.getDescription();
         var bookId = comment.getBookId();
-
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("bookId", bookId);
+            return "addComment";
+        }
         commentService.insert(description, bookId);
-        System.out.println(comment);
         String path = "redirect:/comment?bookId=" + bookId;
         return path;
     }

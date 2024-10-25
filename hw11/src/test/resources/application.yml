@@ -27,3 +27,9 @@ spring:
 logging:
   level:
     ROOT: ERROR
+
+security:
+  key: key
+  authorities:
+    - ROLE_ADMIN
+    - ROLE_USER

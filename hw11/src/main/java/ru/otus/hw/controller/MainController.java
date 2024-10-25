@@ -2,7 +2,7 @@ package ru.otus.hw.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.authority.AuthorityUtils;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -10,11 +10,16 @@ import org.springframework.stereotype.Controller;
 
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import ru.otus.hw.model.Role;
+import ru.otus.hw.security.SecurityProps;
+
+import java.util.ArrayList;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Controller
 public class MainController {
+    private final SecurityProps props;
+
     @GetMapping({"/", "/main"})
     public String startPage(Model model) {
         setRoleAttribute(model);
@@ -26,12 +31,18 @@ public class MainController {
         Authentication authentication = securityContext.getAuthentication();
         if (authentication.isAuthenticated()) {
             var user = (UserDetails) authentication.getPrincipal();
-            var authorities = AuthorityUtils.createAuthorityList(Role.ADMIN.getAuthority());
 
-            if (user.getAuthorities().containsAll(authorities)) {
-                model.addAttribute("role", Role.ADMIN.getAuthority());
+            var currentUserAuthorities = user.getAuthorities()
+                    .stream()
+                    .map(GrantedAuthority::getAuthority)
+                    .collect(Collectors.toCollection(ArrayList::new));
+
+            var permittedAuthorities = props.getAuthorities();
+
+            if (currentUserAuthorities.containsAll(permittedAuthorities)) {
+                model.addAttribute("role", "ADMIN");
             } else {
-                model.addAttribute("role", Role.USER.getAuthority());
+                model.addAttribute("role", "USER");
             }
         }
     }

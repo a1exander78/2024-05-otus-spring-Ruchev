@@ -19,6 +19,16 @@ body {
     width: 50px;
 }
 
+.element li {
+    text-align: left;
+    list-style-type: none;
+}
+
+.element ul {
+    margin-left: 0;
+    padding-left: 0;
+   }
+
 label {
     display: inline-block;
     width: 100px;

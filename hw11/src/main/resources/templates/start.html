@@ -16,7 +16,7 @@
             <div class="row"><a href="allBooks.html" th:href="@{/book/}" th:text="#{book-switch-button-caption}">Books</a></div>
             <div class="row"><a href="allAuthors.html" th:href="@{/author/}" th:text="#{author-switch-button-caption}">Authors</a></div>
             <div class="row"><a href="allGenres.html" th:href="@{/genre/}" th:text="#{genre-switch-button-caption}">Genres</a></div>
-            <div class="row"><a href="allUsers.html" th:href="@{/user/}" th:text="#{user-switch-button-caption}" th:if="${role == 'ROLE_ADMIN'}">Users</a></div>
+            <div class="row"><a href="allUsers.html" th:href="@{/user/}" th:text="#{user-switch-button-caption}" th:if="${role == 'ADMIN'}">Users</a></div>
         </div>
     </body>
 </html>

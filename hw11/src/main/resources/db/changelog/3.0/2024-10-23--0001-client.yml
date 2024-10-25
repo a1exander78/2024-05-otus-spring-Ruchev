@@ -23,8 +23,3 @@ databaseChangeLog:
               type: varchar(128)
               constraints:
                 nullable: false
-          - column:
-              name: role
-              type: varchar(32)
-              constraints:
-                nullable: false
