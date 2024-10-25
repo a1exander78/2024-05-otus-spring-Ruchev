@@ -3,13 +3,11 @@ package ru.otus.hw.controller;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.context.annotation.Import;
-import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.util.LinkedMultiValueMap;
-import ru.otus.hw.security.SecurityConfig;
 import ru.otus.hw.dto.AuthorDto;
 import ru.otus.hw.dto.BookDto;
 import ru.otus.hw.dto.CommentDto;
@@ -31,8 +29,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
 
 @DisplayName("Контроллер комментариев")
-@Import(SecurityConfig.class)
-@WebMvcTest(CommentController.class)
+@WebMvcTest(controllers = CommentController.class,
+        excludeAutoConfiguration = SecurityAutoConfiguration.class)
 class CommentControllerTest {
     private static final long ID_1 = 1L;
     private static final long ID_4 = 4L;
@@ -63,7 +61,6 @@ class CommentControllerTest {
     private BookService bookService;
 
     @DisplayName("должен возвращать корректный список комментариев по айди книги")
-    @WithMockUser()
     @Test
     void shouldReturnCorrectCommentsListByBookId() throws Exception {
         var comments = List.of(COMMENT_1, COMMENT_4);
@@ -78,7 +75,6 @@ class CommentControllerTest {
     }
 
     @DisplayName("должен возвращать комментарий по айди")
-    @WithMockUser()
     @Test
     void shouldReturnCommentById() throws Exception {
         given(commentService.findById(ID_1)).willReturn(Optional.of(COMMENT_1));
@@ -90,10 +86,6 @@ class CommentControllerTest {
     }
 
     @DisplayName("должен сохранять новый комментарий")
-    @WithMockUser(
-            username = "user",
-            roles = {"USER"}
-    )
     @Test
     void shouldSaveNewComment() throws Exception {
         var newComment = new CommentDto(ID_5, NEW_COMMENT, ID_1);
@@ -113,7 +105,6 @@ class CommentControllerTest {
     }
 
     @DisplayName("должен обновлять комментарий")
-    @WithMockUser()
     @Test
     void shouldUpdateComment() throws Exception {
         var updatedComment = new CommentDto(ID_1, UPDATING_COMMENT, ID_1);
@@ -133,7 +124,6 @@ class CommentControllerTest {
     }
 
     @DisplayName("должен удалять комментарий")
-    @WithMockUser()
     @Test
     void shouldDeleteComment() throws Exception {
         mvc.perform(post("/comment/1/del"))
@@ -144,10 +134,6 @@ class CommentControllerTest {
     }
 
     @DisplayName("не должен добавлять комментарий, длиной меньше 5 символов")
-    @WithMockUser(
-            username = "user",
-            roles = {"USER"}
-    )
     @Test
     void shouldNotSaveShortComment() throws Exception {
         var requestParams = new LinkedMultiValueMap<String, String>();
@@ -162,10 +148,6 @@ class CommentControllerTest {
     }
 
     @DisplayName("не должен обновлять комментарий длиной меньше 5 символов")
-    @WithMockUser(
-            username = "user",
-            roles = {"USER"}
-    )
     @Test
     void shouldNotUpdateShortComment() throws Exception {
         var requestParams = new LinkedMultiValueMap<String, String>();

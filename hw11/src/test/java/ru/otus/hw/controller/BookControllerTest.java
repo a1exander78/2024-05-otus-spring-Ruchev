@@ -3,13 +3,11 @@ package ru.otus.hw.controller;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.context.annotation.Import;
-import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.util.LinkedMultiValueMap;
-import ru.otus.hw.security.SecurityConfig;
 import ru.otus.hw.dto.AuthorDto;
 import ru.otus.hw.dto.BookDto;
 import ru.otus.hw.dto.GenreDto;
@@ -31,8 +29,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
 
 @DisplayName("Контроллер книг")
-@Import(SecurityConfig.class)
-@WebMvcTest(BookController.class)
+@WebMvcTest(controllers = BookController.class,
+        excludeAutoConfiguration = SecurityAutoConfiguration.class)
 class BookControllerTest {
     private static final long ID_1 = 1L;
     private static final long ID_2 = 2L;
@@ -75,7 +73,6 @@ class BookControllerTest {
     private MainController mainController;
 
     @DisplayName("должен возвращать корректный список книг")
-    @WithMockUser()
     @Test
     void shouldReturnCorrectBooksList() throws Exception {
         var books = List.of(BOOK_1, BOOK_2, BOOK_3);
@@ -88,10 +85,6 @@ class BookControllerTest {
     }
 
     @DisplayName("должен возвращать книгу по айди")
-    @WithMockUser(
-            username = "admin",
-            roles = {"ADMIN"}
-    )
     @Test
     void shouldReturnBookById() throws Exception {
         given(bookService.findById(ID_1)).willReturn(Optional.of(BOOK_1));
@@ -103,7 +96,6 @@ class BookControllerTest {
     }
 
     @DisplayName("должен сохранять новую книгу")
-    @WithMockUser()
     @Test
     void shouldSaveNewBook() throws Exception {
         var newBook = new BookDto(ID_4,NEW_TITLE, AUTHOR_1, GENRE_1);
@@ -124,10 +116,6 @@ class BookControllerTest {
     }
 
     @DisplayName("должен обновлять книгу")
-    @WithMockUser(
-            username = "admin",
-            roles = {"ADMIN"}
-    )
     @Test
     void shouldUpdateBook() throws Exception {
         var updatedBook = new BookDto(ID_1, UPDATING_TITLE, AUTHOR_2, GENRE_3);
@@ -149,7 +137,6 @@ class BookControllerTest {
     }
 
     @DisplayName("должен удалять книгу")
-    @WithMockUser()
     @Test
     void shouldDeleteBook() throws Exception {
         mvc.perform(post("/book/1/del"))
@@ -160,7 +147,6 @@ class BookControllerTest {
     }
 
     @DisplayName("не должен сохранять новую книгу, если наименование пустое или больше 30 символов")
-    @WithMockUser()
     @Test
     void shouldNotSaveShortOrTooLongTitleBook() throws Exception {
         var requestParams = new LinkedMultiValueMap<String, String>();
@@ -183,10 +169,6 @@ class BookControllerTest {
     }
 
     @DisplayName("не должен обновлять книгу, если наименование пустое или больше 30 символов")
-    @WithMockUser(
-            username = "admin",
-            roles = {"ADMIN"}
-    )
     @Test
     void shouldNotUpdateShortOrTooLongTitleBook() throws Exception {
         var requestParams = new LinkedMultiValueMap<String, String>();
