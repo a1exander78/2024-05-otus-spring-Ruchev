@@ -1,0 +1,26 @@
+databaseChangeLog:
+  - changeSet:
+      id: 2024-07-19--0001-comment
+      author: a1exander78
+      context: hw06 or test
+      createTable:
+        tableName: comment
+        columns:
+          - column:
+              name: id
+              type: bigint
+              autoIncrement: true
+              constraints:
+                primaryKey: true
+                nullable: false
+          - column:
+              name: description
+              type: varchar(255)
+          - column:
+              name: book_id
+              type: bigint
+              constraints:
+                foreignKeyName: fk_comment_book
+                references: book(id)
+                deleteCascade: true
+

@@ -1,0 +1,20 @@
+databaseChangeLog:
+  - changeSet:
+      id: 2024-10-25--0001-role
+      author: a1exander78
+      context: hw11 or test
+      createTable:
+        tableName: role
+        columns:
+          - column:
+              name: id
+              type: bigint
+              autoIncrement: true
+              constraints:
+                primaryKey: true
+                nullable: false
+          - column:
+              name: role
+              type: varchar(32)
+              constraints:
+                nullable: false
