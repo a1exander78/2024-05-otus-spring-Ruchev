@@ -10,8 +10,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.servlet.ModelAndView;
 import ru.otus.hw.dto.CommentDtoRequest;
 import ru.otus.hw.exception.EntityNotFoundException;
 import ru.otus.hw.service.BookService;
@@ -87,12 +85,5 @@ public class CommentController {
     public String deleteComment(@PathVariable("id") long id) {
         commentService.deleteById(id);
         return "redirect:/book/";
-    }
-
-    @ExceptionHandler(EntityNotFoundException.class)
-    public ModelAndView handleNotFound(EntityNotFoundException ex) {
-        ModelAndView modelAndView = new ModelAndView("error");
-        modelAndView.addObject("message", ex.getMessage());
-        return modelAndView;
     }
 }

@@ -1,6 +1,7 @@
 package ru.otus.hw.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import ru.otus.hw.model.User;
 import ru.otus.hw.repository.UserRepository;
@@ -17,6 +18,7 @@ public class UserServiceImpl implements UserService {
         return findByLogin(login);
     }
 
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     @Override
     public List<User> findAll() {
         return userRepository.findAll();

@@ -9,8 +9,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.servlet.ModelAndView;
 import ru.otus.hw.dto.BookDtoRequest;
 import ru.otus.hw.exception.EntityNotFoundException;
 import ru.otus.hw.service.AuthorService;
@@ -87,13 +85,6 @@ public class BookController {
     public String deleteBook(@PathVariable("id") long id) {
         bookService.deleteById(id);
         return "redirect:/book/";
-    }
-
-    @ExceptionHandler(EntityNotFoundException.class)
-    public ModelAndView handleNotFound(EntityNotFoundException ex) {
-        ModelAndView modelAndView = new ModelAndView("error");
-        modelAndView.addObject("message", ex.getMessage());
-        return modelAndView;
     }
 
     private void fillModelWithCatalogData(Model model) {

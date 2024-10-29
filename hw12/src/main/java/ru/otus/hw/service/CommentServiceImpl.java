@@ -1,6 +1,7 @@
 package ru.otus.hw.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.otus.hw.converter.dto.CommentDtoConverter;
@@ -36,6 +37,7 @@ public class CommentServiceImpl implements CommentService {
         return commentRepository.findById(id).map(converter::toDto);
     }
 
+    @PreAuthorize("hasAuthority('ROLE_ADMIN') == false")
     @Transactional
     @Override
     public CommentDto insert(String description, long bookId) {
