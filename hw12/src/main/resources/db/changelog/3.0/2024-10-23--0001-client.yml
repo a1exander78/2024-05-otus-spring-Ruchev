@@ -1,0 +1,25 @@
+databaseChangeLog:
+  - changeSet:
+      id: 2024-10-23--0001-user
+      author: a1exander78
+      context: hw11 or test
+      createTable:
+        tableName: client
+        columns:
+          - column:
+              name: id
+              type: bigint
+              autoIncrement: true
+              constraints:
+                primaryKey: true
+                nullable: false
+          - column:
+              name: login
+              type: varchar(32)
+              constraints:
+                nullable: false
+          - column:
+              name: password
+              type: varchar(128)
+              constraints:
+                nullable: false

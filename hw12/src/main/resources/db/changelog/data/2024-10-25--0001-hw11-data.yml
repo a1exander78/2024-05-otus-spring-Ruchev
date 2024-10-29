@@ -1,0 +1,36 @@
+databaseChangeLog:
+  - changeSet:
+      id: 2024-10-25--0001-role
+      author: a1exander78
+      context: hw11
+      runOnChange: true
+      loadData:
+        columns:
+          - column:
+              name: id
+          - column:
+              name: role
+        file: data/2024-10-25--0001-role.csv
+        relativeToChangelogFile: true
+        separator: ;
+        quotChar: '"'
+        encoding: UTF-8
+        tableName: role
+
+  - changeSet:
+      id: 2024-10-25--0002-client_role
+      author: a1exander78
+      context: hw11
+      runOnChange: true
+      loadData:
+        columns:
+          - column:
+              name: client_id
+          - column:
+              name: role_id
+        file: data/2024-10-25--0002-client_role.csv
+        relativeToChangelogFile: true
+        separator: ;
+        quotChar: '"'
+        encoding: UTF-8
+        tableName: client_role
