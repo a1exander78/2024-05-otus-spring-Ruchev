@@ -24,14 +24,14 @@ import java.util.List;
 
 
 @Getter
-@EqualsAndHashCode(exclude = "roles")
-@ToString(exclude = "roles")
+@EqualsAndHashCode(exclude = "authorities")
+@ToString(exclude = "authorities")
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
 @Table(name = "client")
-@NamedEntityGraph(name = "client-role-genre-entity-graph",
-        attributeNodes = @NamedAttributeNode("roles"))
+@NamedEntityGraph(name = "client-authority-entity-graph",
+        attributeNodes = @NamedAttributeNode("authorities"))
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -45,7 +45,7 @@ public class User {
     private String password;
 
     @ManyToMany(fetch = FetchType.LAZY , cascade = CascadeType.ALL)
-    @JoinTable(name = "client_role", joinColumns = @JoinColumn(name = "client_id"),
-            inverseJoinColumns = @JoinColumn(name = "role_id"))
-    private List<Role> roles;
+    @JoinTable(name = "client_authority", joinColumns = @JoinColumn(name = "client_id"),
+            inverseJoinColumns = @JoinColumn(name = "authority_id"))
+    private List<Authority> authorities;
 }

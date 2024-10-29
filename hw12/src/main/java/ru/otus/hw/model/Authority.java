@@ -16,16 +16,11 @@ import org.springframework.security.core.GrantedAuthority;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "role")
-public class Role implements GrantedAuthority {
+@Table(name = "authority")
+public class Authority implements GrantedAuthority {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    private String role;
-
-    @Override
-    public String getAuthority() {
-        return "ROLE_" + role;
-    }
+    private String authority;
 }

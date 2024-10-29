@@ -1,6 +1,6 @@
 databaseChangeLog:
   - changeSet:
-      id: 2024-10-25--0001-role
+      id: 2024-10-25--0001-authority
       author: a1exander78
       context: hw11
       runOnChange: true
@@ -9,16 +9,16 @@ databaseChangeLog:
           - column:
               name: id
           - column:
-              name: role
-        file: data/2024-10-25--0001-role.csv
+              name: authority
+        file: data/2024-10-25--0001-authority.csv
         relativeToChangelogFile: true
         separator: ;
         quotChar: '"'
         encoding: UTF-8
-        tableName: role
+        tableName: authority
 
   - changeSet:
-      id: 2024-10-25--0002-client_role
+      id: 2024-10-25--0002-client_authority
       author: a1exander78
       context: hw11
       runOnChange: true
@@ -27,10 +27,10 @@ databaseChangeLog:
           - column:
               name: client_id
           - column:
-              name: role_id
-        file: data/2024-10-25--0002-client_role.csv
+              name: authority_id
+        file: data/2024-10-25--0002-client_authority.csv
         relativeToChangelogFile: true
         separator: ;
         quotChar: '"'
         encoding: UTF-8
-        tableName: client_role
+        tableName: client_authority

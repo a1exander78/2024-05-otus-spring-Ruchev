@@ -8,12 +8,15 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.web.servlet.MockMvc;
+import ru.otus.hw.model.Authority;
 import ru.otus.hw.security.SecurityConfig;
 import ru.otus.hw.service.AuthorService;
 import ru.otus.hw.service.BookService;
 import ru.otus.hw.service.GenreService;
 import ru.otus.hw.utils.SecurityTestUtils;
 
+
+import java.util.List;
 
 import static java.util.Objects.nonNull;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
@@ -42,10 +45,10 @@ class BookControllerSecurityTest extends SecurityTestUtils {
     @DisplayName("с учетом наличия/отсутствия авторизации должен вернуть")
     @MethodSource("generateData4BookController")
     @ParameterizedTest(name = "при {0} запросе на \"{1}\" для пользователя {2} статус {4}")
-    void shouldReturnCorrectStatus(String method, String url, String userName, String[] roles, int status, boolean checkLoginRedirection) throws Exception {
+    void shouldReturnCorrectStatus(String method, String url, String userName, List<Authority> authorities, int status, boolean checkLoginRedirection) throws Exception {
         var request = method2RequestBuilder(method, url);
         if (nonNull(userName)) {
-            request = request.with(user(userName).roles(roles));
+            request = request.with(user(userName).authorities(authorities));
         }
         var resultActions = mvc.perform(request).andExpect(status().is(status));
         if (checkLoginRedirection) {

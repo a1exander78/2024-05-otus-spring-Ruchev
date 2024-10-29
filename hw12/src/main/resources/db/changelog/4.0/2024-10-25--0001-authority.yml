@@ -1,10 +1,10 @@
 databaseChangeLog:
   - changeSet:
-      id: 2024-10-25--0001-role
+      id: 2024-10-25--0001-authority
       author: a1exander78
       context: hw11 or test
       createTable:
-        tableName: role
+        tableName: authority
         columns:
           - column:
               name: id
@@ -14,7 +14,7 @@ databaseChangeLog:
                 primaryKey: true
                 nullable: false
           - column:
-              name: role
+              name: authority
               type: varchar(32)
               constraints:
                 nullable: false

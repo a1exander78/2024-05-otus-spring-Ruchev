@@ -12,7 +12,7 @@
                 <tr>
                     <th th:text="#{user-field-id}">ID</th>
                     <th th:text="#{user-field-login}">Login</th>
-                    <th th:text="#{user-field-role}">Role</th>
+                    <th th:text="#{user-field-authority}">Authority</th>
                 </tr>
             </thead>
             <tbody>
@@ -21,7 +21,7 @@
                     <td th:text="*{login}">Login</td>
                     <td>
                         <ul>
-                            <li th:each="role : *{roles}" th:text="${role.role}">Role</li>
+                            <li th:each="authority : *{authorities}" th:text="${authority.authority}">Authority</li>
                         </ul>
                     </td>
                 </tr>

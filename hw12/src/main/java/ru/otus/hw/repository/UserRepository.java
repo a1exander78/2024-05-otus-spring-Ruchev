@@ -8,9 +8,9 @@ import java.util.List;
 import java.util.Optional;
 
 public interface UserRepository extends JpaRepository<User, Long> {
-    @EntityGraph(attributePaths = "roles")
+    @EntityGraph(attributePaths = "authorities")
     List<User> findAll();
 
-    @EntityGraph(attributePaths = "roles")
+    @EntityGraph(attributePaths = "authorities")
     Optional<User> findByLogin(String login);
 }
