@@ -11,8 +11,8 @@ import java.util.function.Function;
 import java.util.stream.Stream;
 
 public abstract class SecurityTestUtils {
-    private static final Authority ADMIN = new Authority(1L,"ROLE_ADMIN");
-    private static final Authority USER = new Authority(1L,"ROLE_USER");
+    public static final Authority ADMIN = new Authority(1L,"ROLE_ADMIN");
+    public static final Authority USER = new Authority(1L,"ROLE_USER");
 
     protected static MockHttpServletRequestBuilder method2RequestBuilder(String method, String url) {
         Map<String, Function<String, MockHttpServletRequestBuilder>> methodMap = Map
@@ -26,6 +26,14 @@ public abstract class SecurityTestUtils {
                 Arguments.of("get", "/", null, null, 302, true),
                 Arguments.of("get", "/", "user", List.of(USER), 200, false),
                 Arguments.of("get", "/", "admin", List.of(ADMIN, USER), 200, false)
+        );
+    }
+
+    protected static Stream<Arguments> generateData4UserController() {
+        return Stream.of(
+                Arguments.of("get", "/user/", null, null, 302, true),
+                Arguments.of("get", "/user/", "user", List.of(USER), 200, false),
+                Arguments.of("get", "/user/", "admin", List.of(ADMIN, USER), 200, false)
         );
     }
 
