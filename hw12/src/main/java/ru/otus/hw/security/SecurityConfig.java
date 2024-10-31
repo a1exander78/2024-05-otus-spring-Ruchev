@@ -8,6 +8,7 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -28,11 +29,14 @@ public class SecurityConfig {
         var patternToBookAccess = RegexRequestMatcher.regexMatcher("/book/[0-9]+");
 
         http
+                .headers(headers -> headers
+                        .frameOptions(HeadersConfigurer.FrameOptionsConfig::disable)) // For H2-console access
                 .csrf(AbstractHttpConfigurer::disable)
                 .sessionManagement((session) -> session
                         .sessionCreationPolicy(SessionCreationPolicy.ALWAYS))
                 .authorizeHttpRequests((authorize) -> authorize
-                        .requestMatchers(patternToBookAccess).hasAuthority(authorities.get(0)) //"ADMIN"
+                        .requestMatchers("/h2-console/**").permitAll() // For H2-console access
+                        .requestMatchers(patternToBookAccess).hasAuthority(authorities.get(0)) //"ROLE_ADMIN"
                         .requestMatchers("/**").authenticated()
                         .anyRequest().denyAll()
                 )

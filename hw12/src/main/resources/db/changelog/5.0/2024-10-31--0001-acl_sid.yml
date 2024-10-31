@@ -1,0 +1,29 @@
+databaseChangeLog:
+  - changeSet:
+      id: 2024-10-31--0001-acl_sid
+      author: a1exander78
+      context: hw12 or test
+      createTable:
+        tableName: acl_sid
+        columns:
+          - column:
+              name: id
+              type: bigint(20)
+              autoIncrement: true
+              constraints:
+                primaryKey: true
+                nullable: false
+          - column:
+              name: principal
+              type: tinyint(1)
+              constraints:
+                nullable: false
+          - column:
+              name: sid
+              type: varchar(100)
+              constraints:
+                nullable: false
+      addUniqueConstraint:
+        tableName: acl_sid
+        columnNames: sid, principal
+        constraintName: unique_uk_1

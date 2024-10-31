@@ -1,0 +1,94 @@
+databaseChangeLog:
+  - changeSet:
+      id: 2024-10-31--0001-acl_sid
+      author: a1exander78
+      context: hw12
+      runOnChange: true
+      loadData:
+        columns:
+          - column:
+              name: id
+          - column:
+              name: principal
+          - column:
+              name: sid
+        file: data/2024-10-31--0001-acl_sid.csv
+        relativeToChangelogFile: true
+        separator: ;
+        quotChar: '"'
+        encoding: UTF-8
+        tableName: acl_sid
+
+  - changeSet:
+      id: 2024-10-31--0002-acl_class
+      author: a1exander78
+      context: hw12
+      runOnChange: true
+      loadData:
+        columns:
+          - column:
+              name: id
+          - column:
+              name: class
+        file: data/2024-10-31--0002-acl_class.csv
+        relativeToChangelogFile: true
+        separator: ;
+        quotChar: '"'
+        encoding: UTF-8
+        tableName: acl_class
+
+  - changeSet:
+      id: 2024-10-31--0003-acl_object_identity
+      author: a1exander78
+      context: hw12
+      runOnChange: true
+      loadData:
+        columns:
+          - column:
+              name: id
+          - column:
+              name: object_id_class
+          - column:
+              name: object_id_identity
+          - column:
+              name: parent_object
+          - column:
+              name: owner_sid
+          - column:
+              name: entries_inheriting
+        file: data/2024-10-31--0003-acl_object_identity.csv
+        relativeToChangelogFile: true
+        separator: ;
+        quotChar: '"'
+        encoding: UTF-8
+        tableName: acl_object_identity
+
+  - changeSet:
+      id: 2024-10-31--0004-acl_entry
+      author: a1exander78
+      context: hw12
+      runOnChange: true
+      loadData:
+        columns:
+          - column:
+              name: id
+          - column:
+              name: acl_object_identity
+          - column:
+              name: ace_order
+          - column:
+              name: sid
+          - column:
+              name: mask
+          - column:
+              name: granting
+          - column:
+              name: audit_success
+          - column:
+              name: audit_failure
+        file: data/2024-10-31--0004-acl_entry.csv
+        relativeToChangelogFile: true
+        separator: ;
+        quotChar: '"'
+        encoding: UTF-8
+        tableName: acl_entry

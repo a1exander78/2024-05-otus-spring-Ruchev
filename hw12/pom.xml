@@ -10,8 +10,8 @@
     </parent>
 
     <groupId>ru.otus.hw</groupId>
-    <artifactId>hw11-spring-security</artifactId>
-    <name>spring-security-authentication</name>
+    <artifactId>hw12-spring-security</artifactId>
+    <name>spring-security-authorization</name>
     <version>0.0.1-SNAPSHOT</version>
 
     <properties>

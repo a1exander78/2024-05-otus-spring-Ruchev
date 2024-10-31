@@ -2,8 +2,13 @@ spring:
   messages:
     encoding: UTF-8
 
+  h2:
+    console.enabled: true
+
   datasource:
     url: jdbc:h2:mem:maindb
+    username: sa
+    password:
 
   sql:
     init:
@@ -14,7 +19,7 @@ spring:
   liquibase:
     enabled: true
     change-log: classpath:db/changelog/db.changelog-master.yml
-    contexts: hw05, hw06, hw11
+    contexts: hw05, hw06, hw11, hw12
 
   jpa:
     open-in-view: false
@@ -30,6 +35,7 @@ spring:
 logging:
   level:
     ROOT: ERROR
+    org.springframework.security: DEBUG
 
 security:
   key: key
