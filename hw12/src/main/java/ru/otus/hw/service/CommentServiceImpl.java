@@ -32,6 +32,7 @@ public class CommentServiceImpl implements CommentService {
         return commentsList.stream().map(converter::toDto).toList();
     }
 
+    @PreAuthorize("hasPermission(#id, 'ru.otus.hw.dto.CommentDto', 'READ')")
     @Override
     public Optional<CommentDto> findById(long id) {
         return commentRepository.findById(id).map(converter::toDto);

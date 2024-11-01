@@ -20,6 +20,7 @@
         </checkstyle.config.url>
         <checkstyle.version>10.15.0</checkstyle.version>
         <checkstyle-plugin.version>3.3.1</checkstyle-plugin.version>
+        <ehcache-core.version>2.6.11</ehcache-core.version>
         <h2.version>2.2.220</h2.version>
         <java.version>17</java.version>
         <liquibase.version>4.28.0</liquibase.version>
@@ -68,6 +69,27 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-security</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-acl</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-cache</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.ehcache</groupId>
+            <artifactId>ehcache</artifactId>
+            <classifier>jakarta</classifier>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-context-support</artifactId>
         </dependency>
 
         <dependency>
