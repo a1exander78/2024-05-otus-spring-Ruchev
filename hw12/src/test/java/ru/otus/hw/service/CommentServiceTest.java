@@ -21,10 +21,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 @DataJpaTest
 public class CommentServiceTest {
     private static final long ID_1 = 1L;
-    private static final long ID_4 = 4L;
+    private static final long ID_2 = 2L;
 
-    private static final CommentDto COMMENT_1 = new CommentDto(ID_1, "Comment_Test_1", ID_1);
-    private static final CommentDto COMMENT_4 = new CommentDto(ID_4, "Comment_Test_4", ID_1);
+    private static final CommentDto COMMENT_1 = new CommentDto(ID_1, "Comment_Test_1", ID_2, ID_2);
+    private static final CommentDto COMMENT_2 = new CommentDto(ID_2, "Comment_Test_2", ID_2, ID_2);
 
     private static final String NEW_COMMENT = "New_Comment";;
 
@@ -37,7 +37,7 @@ public class CommentServiceTest {
     @DisplayName("должен загружать список всех комментариев по id книги")
     @Test
     void shouldReturnCorrectCommentsList() {
-        assertThat(commentService.findAllCommentsByBookId(ID_1)).containsExactlyElementsOf(List.of(COMMENT_1, COMMENT_4));
+        assertThat(commentService.findAllCommentsByBookId(ID_2)).containsExactlyElementsOf(List.of(COMMENT_1, COMMENT_2));
     }
 
     @DirtiesContext(methodMode = DirtiesContext.MethodMode.BEFORE_METHOD)
@@ -50,9 +50,9 @@ public class CommentServiceTest {
     @DisplayName("должен сохранять новый комментарий")
     @Test
     void shouldSaveNewComment() {
-        assertThat(commentService.findAllCommentsByBookId(ID_1).size()).isEqualTo(2);
-        commentService.insert(NEW_COMMENT, ID_1);
-        var comments = commentService.findAllCommentsByBookId(ID_1);
+        assertThat(commentService.findAllCommentsByBookId(ID_2).size()).isEqualTo(2);
+        commentService.insert(NEW_COMMENT, ID_2, ID_2);
+        var comments = commentService.findAllCommentsByBookId(ID_2);
         int size = comments.size();
         assertThat(size).isEqualTo(3);
         var newComment = comments.get(size - 1);

@@ -7,6 +7,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import ru.otus.hw.model.Book;
 import ru.otus.hw.model.Comment;
+import ru.otus.hw.model.User;
 
 import java.util.List;
 
@@ -25,9 +26,9 @@ class CommentRepositoryTest {
     @DisplayName("должен загружать список всех комментариев по книге")
     @Test
     void shouldReturnCorrectCommentsList() {
-        var actualComments = commentRepository.findAllCommentsByBookId(1L);
+        var actualComments = commentRepository.findAllCommentsByBookId(2L);
         var expectedComment1 = em.find(Comment.class, 1L);
-        var expectedComment2 = em.find(Comment.class, 4L);
+        var expectedComment2 = em.find(Comment.class, 2L);
 
         assertThat(actualComments).containsExactlyElementsOf(List.of(expectedComment1, expectedComment2));
         actualComments.forEach(System.out::println);
@@ -50,7 +51,8 @@ class CommentRepositoryTest {
         String description = "newComment";
 
         var book = em.find(Book.class, 1L);
-        var newComment = new Comment(0, description, book);
+        var user = em.find(User.class, 1L);
+        var newComment = new Comment(0, description, book, user);
         var expectedComment = em.persist(newComment);
         var returnedComment = commentRepository.save(expectedComment);
 
@@ -70,7 +72,8 @@ class CommentRepositoryTest {
         String description = "editedComment";
 
         var book = em.find(Book.class, 1L);
-        var expectedComment = new Comment(1L, description, book);
+        var user = em.find(User.class, 1L);
+        var expectedComment = new Comment(1L, description, book, user);
 
         assertThat(commentRepository.findById(expectedComment.getId()))
                 .isPresent()
