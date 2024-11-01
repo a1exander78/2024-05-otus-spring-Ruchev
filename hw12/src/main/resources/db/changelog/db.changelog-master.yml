@@ -10,4 +10,6 @@ databaseChangeLog:
     - includeAll:
         path: db/changelog/5.0/
     - includeAll:
+          path: db/changelog/6.0/
+    - includeAll:
         path: db/changelog/data/

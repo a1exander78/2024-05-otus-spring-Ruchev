@@ -16,8 +16,8 @@ import lombok.ToString;
 import lombok.NoArgsConstructor;
 
 @Getter
-@EqualsAndHashCode(exclude = "book")
-@ToString(exclude = "book")
+@EqualsAndHashCode(exclude = {"book", "user"})
+@ToString(exclude = {"book", "user"})
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
@@ -34,4 +34,8 @@ public class Comment {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "book_id")
     private Book book;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "client_id")
+    private User user;
 }

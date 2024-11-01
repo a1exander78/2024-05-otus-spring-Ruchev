@@ -8,5 +8,6 @@ import ru.otus.hw.model.Comment;
 @Mapper(componentModel = "spring")
 public interface CommentDtoConverter {
     @Mapping(source = "book.id", target = "bookId")
+    @Mapping(source = "user.id", target = "userId")
     CommentDto toDto(Comment comment);
 }

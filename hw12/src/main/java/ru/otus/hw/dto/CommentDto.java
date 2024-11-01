@@ -13,4 +13,6 @@ public class CommentDto {
     private String description;
 
     private long bookId;
+
+    private long userId;
 }

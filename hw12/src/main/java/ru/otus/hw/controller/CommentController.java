@@ -2,6 +2,9 @@ package ru.otus.hw.controller;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -12,8 +15,10 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import ru.otus.hw.dto.CommentDtoRequest;
 import ru.otus.hw.exception.EntityNotFoundException;
+import ru.otus.hw.model.User;
 import ru.otus.hw.service.BookService;
 import ru.otus.hw.service.CommentService;
+import ru.otus.hw.service.UserService;
 
 @RequiredArgsConstructor
 @Controller
@@ -21,6 +26,8 @@ public class CommentController {
     private final CommentService commentService;
 
     private final BookService bookService;
+
+    private final UserService userService;
 
     @GetMapping("/comment")
     public String readAllCommentsByBookId(@RequestParam("bookId") long bookId, Model model) {
@@ -64,11 +71,16 @@ public class CommentController {
                              BindingResult bindingResult, Model model) {
         var description = comment.getDescription();
         var bookId = comment.getBookId();
+
+        var securityContext = SecurityContextHolder.getContext();
+
+        var userId = getCurrentUser(securityContext.getAuthentication()).getId();
         if (bindingResult.hasErrors()) {
             model.addAttribute("bookId", bookId);
+            model.addAttribute("userId", userId);
             return "addComment";
         }
-        commentService.insert(description, bookId);
+        commentService.insert(description, bookId, userId);
         String path = "redirect:/comment?bookId=" + bookId;
         return path;
     }
@@ -85,5 +97,10 @@ public class CommentController {
     public String deleteComment(@PathVariable("id") long id) {
         commentService.deleteById(id);
         return "redirect:/book/";
+    }
+
+    private User getCurrentUser(Authentication authentication) {
+        var user = (UserDetails) authentication.getPrincipal();
+        return userService.findByLogin(user.getUsername());
     }
 }

@@ -10,6 +10,7 @@ import ru.otus.hw.exception.EntityNotFoundException;
 import ru.otus.hw.model.Comment;
 import ru.otus.hw.repository.BookRepository;
 import ru.otus.hw.repository.CommentRepository;
+import ru.otus.hw.repository.UserRepository;
 
 import java.util.List;
 import java.util.Optional;
@@ -20,6 +21,8 @@ public class CommentServiceImpl implements CommentService {
     private final CommentRepository commentRepository;
 
     private final BookRepository bookRepository;
+
+    private final UserRepository userRepository;
 
     private final CommentDtoConverter converter;
 
@@ -41,8 +44,8 @@ public class CommentServiceImpl implements CommentService {
     @PreAuthorize("hasAuthority('ROLE_ADMIN') == false")
     @Transactional
     @Override
-    public CommentDto insert(String description, long bookId) {
-        var newComment = save(0, description, bookId);
+    public CommentDto insert(String description, long bookId, long userId) {
+        var newComment = save(0, description, bookId, userId);
         return converter.toDto(newComment);
     }
 
@@ -52,7 +55,8 @@ public class CommentServiceImpl implements CommentService {
         var comment = commentRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Comment with id %d not found".formatted(id)));
         var bookId = comment.getBook().getId();
-        var updatedComment = save(id, description, bookId);
+        var userId = comment.getUser().getId();
+        var updatedComment = save(id, description, bookId, userId);
         return converter.toDto(updatedComment);
     }
 
@@ -62,10 +66,12 @@ public class CommentServiceImpl implements CommentService {
         commentRepository.deleteById(id);
     }
 
-    private Comment save(long id, String description, long bookId) {
+    private Comment save(long id, String description, long bookId, long userId) {
         var book = bookRepository.findById(bookId)
                 .orElseThrow(() -> new EntityNotFoundException("Book with id %d not found".formatted(bookId)));
-        var comment = new Comment(id, description, book);
+        var user = userRepository.findById(userId)
+                .orElseThrow(() -> new EntityNotFoundException("User with id %d not found".formatted(userId)));
+        var comment = new Comment(id, description, book, user);
         return commentRepository.save(comment);
     }
 }

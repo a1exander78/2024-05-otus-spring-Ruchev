@@ -12,6 +12,7 @@
                 <tr>
                     <th th:text="#{comment-field-id}">ID</th>
                     <th th:text="#{comment-field-description}">Description</th>
+                    <th th:text="#{comment-field-userId}">UserID</th>
                     <th th:text="#{table-column-action}">Action</th>
                 </tr>
             </thead>
@@ -19,6 +20,7 @@
                 <tr th:each="comment : ${comments}" th:object="${comment}">
                     <td th:text="*{id}">1</td>
                     <td th:text="*{description}">Relevant</td>
+                    <td th:text="*{userId}">User1</td>
                     <td>
                         <a href="singleComment.html" th:href="@{/comment/__*{id}__}" th:text="#{edit-button-caption}">Edit</a>
                     </td>

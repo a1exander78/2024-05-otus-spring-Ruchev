@@ -15,4 +15,6 @@ public class CommentDtoRequest {
     private String description;
 
     private long bookId;
+
+    private long userId;
 }
