@@ -2,6 +2,7 @@ package ru.otus.hw.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.acls.domain.BasePermission;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.otus.hw.converter.dto.CommentDtoConverter;
@@ -26,6 +27,8 @@ public class CommentServiceImpl implements CommentService {
 
     private final CommentDtoConverter converter;
 
+    private final AclServiceWrapperService aclServiceWrapperService;
+
     @Override
     public List<CommentDto> findAllCommentsByBookId(long bookId) {
         var commentsList = commentRepository.findAllCommentsByBookId(bookId);
@@ -46,7 +49,9 @@ public class CommentServiceImpl implements CommentService {
     @Override
     public CommentDto insert(String description, long bookId, long userId) {
         var newComment = save(0, description, bookId, userId);
-        return converter.toDto(newComment);
+        var insertedComment = converter.toDto(newComment);
+        aclServiceWrapperService.createPermission(insertedComment, BasePermission.READ);
+        return insertedComment;
     }
 
     @Transactional
