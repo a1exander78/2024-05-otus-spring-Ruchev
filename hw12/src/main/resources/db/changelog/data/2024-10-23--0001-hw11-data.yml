@@ -1,0 +1,20 @@
+databaseChangeLog:
+  - changeSet:
+      id: 2024-10-23--0001-users
+      author: a1exander78
+      context: hw11
+      runOnChange: true
+      loadData:
+        columns:
+          - column:
+              name: id
+          - column:
+              name: login
+          - column:
+              name: password
+        file: data/2024-10-23--0001-client.csv
+        relativeToChangelogFile: true
+        separator: ;
+        quotChar: '"'
+        encoding: UTF-8
+        tableName: client

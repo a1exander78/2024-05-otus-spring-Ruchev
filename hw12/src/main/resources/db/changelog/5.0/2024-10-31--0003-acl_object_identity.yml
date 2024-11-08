@@ -1,0 +1,50 @@
+databaseChangeLog:
+  - changeSet:
+      id: 2024-10-31--0003-acl_object_identity
+      author: a1exander78
+      context: hw12 or test
+      createTable:
+        tableName: acl_object_identity
+        columns:
+          - column:
+              name: id
+              type: bigint(20)
+              autoIncrement: true
+              constraints:
+                primaryKey: true
+                nullable: false
+          - column:
+              name: object_id_class
+              type: bigint(20)
+              constraints:
+                nullable: false
+                foreignKeyName: object_id_class
+                references: acl_class(id)
+          - column:
+              name: object_id_identity
+              type: bigint(20)
+              constraints:
+                nullable: false
+          - column:
+              name: parent_object
+              type: bigint(20)
+              defaultValue: NULL
+              constraints:
+                foreignKeyName: parent_object
+                references: acl_object_identity(id)
+          - column:
+              name: owner_sid
+              type: bigint(20)
+              defaultValue: NULL
+              constraints:
+                foreignKeyName: owner_sid
+                references: acl_sid(id)
+          - column:
+              name: entries_inheriting
+              type: tinyint(1)
+              constraints:
+                nullable: false
+      addUniqueConstraint:
+        tableName: acl_object_identity
+        columnNames: object_id_class, object_id_identity
+        constraintName: unique_uk_3

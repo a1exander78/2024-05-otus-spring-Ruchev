@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="UTF-8"/>
+        <title th:text="#{all-comments-page}">List of all comments on the book</title>
+        <link rel="stylesheet" href="../static/css/style.css" th:href="@{/css/style.css}" type="text/css">
+    </head>
+    <body>
+        <h3 th:text="#{comment-table-header(${book.title})}">All comments on the book</h3>
+        <table class="element">
+            <thead>
+                <tr>
+                    <th th:text="#{comment-field-id}">ID</th>
+                    <th th:text="#{comment-field-description}">Description</th>
+                    <th th:text="#{comment-field-userId}">UserID</th>
+                    <th th:text="#{table-column-action}">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="comment : ${comments}" th:object="${comment}">
+                    <td th:text="*{id}">1</td>
+                    <td th:text="*{description}">Relevant</td>
+                    <td th:text="*{userId}">User1</td>
+                    <td>
+                        <a href="singleComment.html" th:href="@{/comment/__*{id}__}" th:text="#{edit-button-caption}">Edit</a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <p/>
+        <div>
+            <a href="allBooks.html" th:href="@{/book/}" th:text="#{back-button-caption}">Back to books</a>
+        </div>
+    </body>
+</html>

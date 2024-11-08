@@ -1,0 +1,18 @@
+databaseChangeLog:
+  - changeSet:
+      id: 2024-11-01--0001-comment
+      author: a1exander78
+      context: hw12
+      runOnChange: true
+      loadUpdateData:
+        columns:
+          - column:
+              name: client_id
+        file: data/2024-11-01--0001-comment.csv
+        relativeToChangelogFile: true
+        separator: ;
+        quotChar: '"'
+        encoding: UTF-8
+        tableName: comment
+        primaryKey: id
+        onlyUpdate: true

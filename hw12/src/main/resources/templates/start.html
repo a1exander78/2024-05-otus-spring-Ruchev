@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="UTF-8"/>
+        <title th:text="#{main-page}">Start page</title>
+        <link rel="stylesheet" href="../static/css/style.css" th:href="@{/css/style.css}" type="text/css">
+    </head>
+    <body>
+        <h3 th:text="#{lang-switcher-header}">Select language</h3>
+        <div class="row">
+            <div class="row"><a href="#" th:href="@{/main(lang=en)}" th:text="#{en-lang-switch-button-caption}">Language - EN</a></div>
+            <div class="row"><a href="#" th:href="@{/main(lang=ru)}" th:text="#{ru-lang-switch-button-caption}">Language - RU</a></div>
+        </div>
+        <h3 th:text="#{page-switcher-header}">Select page</h3>
+        <div class="row">
+            <div class="row"><a href="allBooks.html" th:href="@{/book/}" th:text="#{book-switch-button-caption}">Books</a></div>
+            <div class="row"><a href="allAuthors.html" th:href="@{/author/}" th:text="#{author-switch-button-caption}">Authors</a></div>
+            <div class="row"><a href="allGenres.html" th:href="@{/genre/}" th:text="#{genre-switch-button-caption}">Genres</a></div>
+            <div class="row"><a href="allUsers.html" th:href="@{/user/}" th:text="#{user-switch-button-caption}" th:if="${role == 'ADMIN'}">Users</a></div>
+        </div>
+    </body>
+</html>

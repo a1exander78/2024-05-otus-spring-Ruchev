@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="UTF-8"/>
+        <title th:text="#{all-genres-page}">List of all genres</title>
+        <link rel="stylesheet" href="../static/css/style.css" th:href="@{/css/style.css}" type="text/css">
+    </head>
+    <body>
+        <h3 th:text="#{genre-table-header}">Genres:</h3>
+        <table class="element">
+            <thead>
+                <tr>
+                    <th th:text="#{genre-field-id}">ID</th>
+                    <th th:text="#{genre-field-name}">Name</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="genre : ${genres}" th:object ="${genre}">
+                    <td th:text="*{id}">1</td>
+                    <td th:text="*{name}">Dystopian novel</td>
+                </tr>
+            </tbody>
+        </table>
+        <p/>
+        <div>
+            <a href="start.html" th:href="@{/main}" th:text="#{main-page-button-caption}">Main page</a>
+        </div>
+    </body>
+</html>

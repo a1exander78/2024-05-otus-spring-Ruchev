@@ -1,0 +1,58 @@
+databaseChangeLog:
+  - changeSet:
+      id: 2024-10-31--0004-acl_entry
+      author: a1exander78
+      context: hw12 or test
+      createTable:
+        tableName: acl_entry
+        columns:
+          - column:
+              name: id
+              type: bigint(20)
+              autoIncrement: true
+              constraints:
+                primaryKey: true
+                nullable: false
+          - column:
+              name: acl_object_identity
+              type: bigint(20)
+              constraints:
+                nullable: false
+                foreignKeyName: acl_object_identity
+                references: acl_object_identity(id)
+          - column:
+              name: ace_order
+              type: int(11)
+              constraints:
+                nullable: false
+          - column:
+              name: sid
+              type: bigint(20)
+              constraints:
+                nullable: false
+                foreignKeyName: sid
+                references: acl_sid(id)
+          - column:
+              name: mask
+              type: int(11)
+              constraints:
+                nullable: false
+          - column:
+              name: granting
+              type: tinyint(1)
+              constraints:
+                nullable: false
+          - column:
+              name: audit_success
+              type: tinyint(1)
+              constraints:
+                nullable: false
+          - column:
+              name: audit_failure
+              type: tinyint(1)
+              constraints:
+                nullable: false
+      addUniqueConstraint:
+        tableName: acl_entry
+        columnNames: acl_object_identity, ace_order
+        constraintName: unique_uk_4

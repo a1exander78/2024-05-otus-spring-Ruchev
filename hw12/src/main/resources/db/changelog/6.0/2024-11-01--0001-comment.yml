@@ -1,0 +1,17 @@
+databaseChangeLog:
+  - changeSet:
+      id: 2024-11-01--0001-comment
+      author: a1exander78
+      context: hw12 or test
+      changes:
+        - addColumn:
+            tableName: comment
+            columns:
+              - column:
+                  name: client_id
+                  type: bigint
+                  constraints:
+                    foreignKeyName: fk_comment_client
+                    references: client(id)
+                    deleteCascade: true
+

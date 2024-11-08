@@ -1,0 +1,15 @@
+databaseChangeLog:
+    - includeAll:
+        path: db/changelog/1.0/
+    - includeAll:
+        path: db/changelog/2.0/
+    - includeAll:
+          path: db/changelog/3.0/
+    - includeAll:
+          path: db/changelog/4.0/
+    - includeAll:
+        path: db/changelog/5.0/
+    - includeAll:
+          path: db/changelog/6.0/
+    - includeAll:
+        path: db/changelog/data/

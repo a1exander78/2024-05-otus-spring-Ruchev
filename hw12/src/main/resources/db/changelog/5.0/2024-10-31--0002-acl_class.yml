@@ -1,0 +1,24 @@
+databaseChangeLog:
+  - changeSet:
+      id: 2024-10-31--0002-acl_class
+      author: a1exander78
+      context: hw12 or test
+      createTable:
+        tableName: acl_class
+        columns:
+          - column:
+              name: id
+              type: bigint(20)
+              autoIncrement: true
+              constraints:
+                primaryKey: true
+                nullable: false
+          - column:
+              name: class
+              type: varchar(255)
+              constraints:
+                nullable: false
+      addUniqueConstraint:
+        tableName: acl_class
+        columnNames: class
+        constraintName: unique_uk_2

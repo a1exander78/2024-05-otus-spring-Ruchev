@@ -1,0 +1,140 @@
+databaseChangeLog:
+- changeSet:
+    id: 2024-07-22--0001-author
+    author: a1exander78
+    context: test
+    runOnChange: true
+    loadData:
+      columns:
+        - column:
+            name: id
+            generationType: always
+        - column:
+            name: full_name
+      file: data/2024-07-22--0001-author-test.csv
+      relativeToChangelogFile: true
+      separator: ;
+      quotChar: '"'
+      encoding: UTF-8
+      tableName: author
+
+- changeSet:
+    id: 2024-07-22--0002-genre
+    author: a1exander78
+    context: test
+    runOnChange: true
+    loadData:
+      columns:
+        - column:
+              name: id
+              generationType: always
+        - column:
+            name: name
+      file: data/2024-07-22--0002-genre-test.csv
+      relativeToChangelogFile: true
+      separator: ;
+      quotChar: '"'
+      encoding: UTF-8
+      tableName: genre
+
+- changeSet:
+    id: 2024-07-22--0003-book
+    author: a1exander78
+    context: test
+    runOnChange: true
+    loadData:
+      columns:
+        - column:
+              name: id
+              generationType: always
+        - column:
+            name: title
+        - column:
+            name: author_id
+        - column:
+            name: genre_id
+      file: data/2024-07-22--0003-book-test.csv
+      relativeToChangelogFile: true
+      separator: ;
+      quotChar: '"'
+      encoding: UTF-8
+      tableName: book
+
+- changeSet:
+    id: 2024-11-01--0001-users
+    author: a1exander78
+    context: test
+    runOnChange: true
+    loadData:
+      columns:
+        - column:
+            name: id
+        - column:
+            name: login
+        - column:
+            name: password
+      file: data/2024-11-01--0001-client-test.csv
+      relativeToChangelogFile: true
+      separator: ;
+      quotChar: '"'
+      encoding: UTF-8
+      tableName: client
+
+- changeSet:
+    id: 2024-11-01--0002-authority
+    author: a1exander78
+    context: test
+    runOnChange: true
+    loadData:
+      columns:
+        - column:
+            name: id
+        - column:
+            name: authority
+      file: data/2024-11-01--0002-authority-test.csv
+      relativeToChangelogFile: true
+      separator: ;
+      quotChar: '"'
+      encoding: UTF-8
+      tableName: authority
+
+- changeSet:
+    id: 22024-11-01--0003-client_authority
+    author: a1exander78
+    context: test
+    runOnChange: true
+    loadData:
+      columns:
+        - column:
+            name: client_id
+        - column:
+            name: authority_id
+      file: data/2024-11-01--0003-client_authority-test.csv
+      relativeToChangelogFile: true
+      separator: ;
+      quotChar: '"'
+      encoding: UTF-8
+      tableName: client_authority
+
+- changeSet:
+    id: 2024-11-01--0004-comment
+    author: a1exander78
+    context: test
+    runOnChange: true
+    loadData:
+      columns:
+        - column:
+            name: id
+            generationType: always
+        - column:
+            name: description
+        - column:
+            name: book_id
+        - column:
+            name: client_id
+      file: data/2024-11-01--0004-comment-test.csv
+      relativeToChangelogFile: true
+      separator: ;
+      quotChar: '"'
+      encoding: UTF-8
+      tableName: comment

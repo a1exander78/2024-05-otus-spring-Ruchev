@@ -1,0 +1,18 @@
+databaseChangeLog:
+  - changeSet:
+      id: 2024-10-25--0002-client_role
+      author: a1exander78
+      context: hw11 or test
+      createTable:
+        tableName: client_authority
+        columns:
+          - column:
+              name: client_id
+              type: bigint
+              constraints:
+                nullable: false
+          - column:
+              name: authority_id
+              type: bigint
+              constraints:
+                nullable: false

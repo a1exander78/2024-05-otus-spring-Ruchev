@@ -1,0 +1,54 @@
+@charset "UTF-8";
+
+body {
+    padding: 50px
+}
+
+.element {
+    border: 1px solid steelblue;
+    width: 300px;
+    border-collapse: collapse;
+}
+
+.element tr td, th {
+    padding: 5px;
+    border: 1px solid steelblue;
+}
+
+.element td:last-child, td:first-child {
+    width: 50px;
+}
+
+.element li {
+    text-align: left;
+    list-style-type: none;
+}
+
+.element ul {
+    margin-left: 0;
+    padding-left: 0;
+   }
+
+label {
+    display: inline-block;
+    width: 100px;
+}
+
+input:read-only {
+    background: lightgray;
+}
+
+.row {
+    margin-top: 10px;
+}
+
+h3 {
+    background-image: url("../pics/listmark.png");
+    background-repeat: no-repeat;
+    padding: 2px;
+    padding-left: 30px;
+}
+
+.errors {
+    color: red;
+}
