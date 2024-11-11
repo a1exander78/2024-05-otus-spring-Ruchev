@@ -21,9 +21,8 @@
         <maven.compiler.plugin.version>3.11.0</maven.compiler.plugin.version>
         <lombok.mapstruct.binding.version>0.2.0</lombok.mapstruct.binding.version>
         <mapstruct.version>1.5.5.Final</mapstruct.version>
-        <spring.shell.version>3.2.4</spring.shell.version>
-        <h2.version>2.2.220</h2.version>
-        <liquibase.version>4.28.0</liquibase.version>
+        <mongock.version>4.3.8</mongock.version>
+        <flapdoodle.version>4.7.0</flapdoodle.version>
         <snakeyaml.version>2.0</snakeyaml.version>
         <reflections.version>0.10.2</reflections.version>
         <checkstyle-plugin.version>3.3.1</checkstyle-plugin.version>
@@ -61,9 +60,33 @@
         </dependency>
 
         <dependency>
-            <groupId>com.h2database</groupId>
-            <artifactId>h2</artifactId>
-            <version>${h2.version}</version>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-mongodb</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>de.flapdoodle.embed</groupId>
+            <artifactId>de.flapdoodle.embed.mongo</artifactId>
+            <version>${flapdoodle.version}</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>de.flapdoodle.embed</groupId>
+            <artifactId>de.flapdoodle.embed.mongo.spring30x</artifactId>
+            <version>${flapdoodle.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.github.cloudyrock.mongock</groupId>
+            <artifactId>mongock-spring-v5</artifactId>
+            <version>${mongock.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.github.cloudyrock.mongock</groupId>
+            <artifactId>mongodb-springdata-v3-driver</artifactId>
+            <version>${mongock.version}</version>
         </dependency>
 
         <dependency>
@@ -78,11 +101,6 @@
             <optional>true</optional>
         </dependency>
 
-        <dependency>
-            <groupId>org.liquibase</groupId>
-            <artifactId>liquibase-core</artifactId>
-            <version>${liquibase.version}</version>
-        </dependency>
 
         <dependency>
             <groupId>org.yaml</groupId>

@@ -1,42 +1,29 @@
 package ru.otus.hw.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.NamedEntityGraph;
-import jakarta.persistence.NamedAttributeNode;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.FetchType;
 import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.ToString;
+import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.bson.types.ObjectId;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 
-@Getter
-@EqualsAndHashCode(exclude = {"author", "genre"})
-@ToString(exclude = {"author", "genre"})
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Entity
-@Table(name = "book")
-@NamedEntityGraph(name = "book-author-genre-entity-graph",
-        attributeNodes = {@NamedAttributeNode("author"), @NamedAttributeNode("genre")})
+@Document
 public class Book {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private ObjectId id;
 
     private String title;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "author_id")
     private Author author;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "genre_id")
     private Genre genre;
+
+    public Book(String title, Author author, Genre genre) {
+        this.title = title;
+        this.author = author;
+        this.genre = genre;
+    }
 }

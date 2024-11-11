@@ -1,6 +1,7 @@
 package ru.otus.hw.service;
 
 import lombok.RequiredArgsConstructor;
+import org.bson.types.ObjectId;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.otus.hw.converter.dto.BookDtoConverter;
@@ -31,35 +32,35 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public Optional<BookDto> findById(long id) {
+    public Optional<BookDto> findById(ObjectId id) {
         return bookRepository.findById(id).map(converter::toDto);
     }
 
     @Transactional
     @Override
-    public BookDto insert(String title, long authorId, long genreId) {
-        var newBook = save(0, title, authorId, genreId);
+    public BookDto insert(String title, ObjectId authorId, ObjectId genreId) {
+        var newBook = save(new ObjectId(), title, authorId, genreId);
         return converter.toDto(newBook);
     }
 
     @Transactional
     @Override
-    public BookDto update(long id, String title, long authorId, long genreId) {
+    public BookDto update(ObjectId id, String title, ObjectId authorId, ObjectId genreId) {
         var newBook = save(id, title, authorId, genreId);
         return converter.toDto(newBook);
     }
 
     @Transactional
     @Override
-    public void deleteById(long id) {
+    public void deleteById(ObjectId id) {
         bookRepository.deleteById(id);
     }
 
-    private Book save(long id, String title, long authorId, long genreId) {
+    private Book save(ObjectId id, String title, ObjectId authorId, ObjectId genreId) {
         var author = authorRepository.findById(authorId)
-                .orElseThrow(() -> new EntityNotFoundException("Author with id %d not found".formatted(authorId)));
+                .orElseThrow(() -> new EntityNotFoundException("Author with id %s not found".formatted(authorId)));
         var genre = genreRepository.findById(genreId)
-                .orElseThrow(() -> new EntityNotFoundException("Genre with id %d not found".formatted(genreId)));
+                .orElseThrow(() -> new EntityNotFoundException("Genre with id %s not found".formatted(genreId)));
         var book = new Book(id, title, author, genre);
         return bookRepository.save(book);
     }

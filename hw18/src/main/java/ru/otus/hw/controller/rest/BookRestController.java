@@ -2,6 +2,7 @@ package ru.otus.hw.controller.rest;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.bson.types.ObjectId;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RestController;
@@ -36,7 +37,7 @@ public class BookRestController {
     }
 
     @GetMapping("/api/v1/book/{id}")
-    public BookDto readBook(@PathVariable("id") long id) {
+    public BookDto readBook(@PathVariable("id") ObjectId id) {
         var book = bookService.findById(id).orElseThrow(
                 () -> new EntityNotFoundException("Book with id %d not found".formatted(id)));
         return book;
@@ -59,7 +60,7 @@ public class BookRestController {
     }
 
     @DeleteMapping("/api/v1/book/{id}")
-    public void deleteBook(@PathVariable("id") long id) {
+    public void deleteBook(@PathVariable("id") ObjectId id) {
         bookService.deleteById(id);
     }
 

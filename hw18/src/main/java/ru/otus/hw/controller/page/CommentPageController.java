@@ -2,6 +2,7 @@ package ru.otus.hw.controller.page;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.bson.types.ObjectId;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -25,7 +26,7 @@ public class CommentPageController {
     private final BookService bookService;
 
     @GetMapping("/comment")
-    public String readAllCommentsByBookId(@RequestParam("bookId") long bookId, Model model) {
+    public String readAllCommentsByBookId(@RequestParam("bookId") ObjectId bookId, Model model) {
         var comments = commentService.findAllCommentsByBookId(bookId);
         var book = bookService.findById(bookId).get();
         model.addAttribute("comments", comments);
@@ -34,9 +35,9 @@ public class CommentPageController {
     }
 
     @GetMapping("/comment/{id}")
-    public String readComment(@PathVariable("id") long id, Model model) {
+    public String readComment(@PathVariable("id") ObjectId id, Model model) {
         var comment = commentService.findById(id).orElseThrow(
-                () -> new EntityNotFoundException("Comment with id %d not found".formatted(id)));
+                () -> new EntityNotFoundException("Comment with id %s not found".formatted(id)));
         model.addAttribute("comment", comment);
         model.addAttribute("bookId", comment.getBookId());
         return "singleComment";
@@ -55,7 +56,7 @@ public class CommentPageController {
     }
 
     @GetMapping("/comment/new")
-    public String addComment(@RequestParam("bookId") long bookId, Model model) {
+    public String addComment(@RequestParam("bookId") ObjectId bookId, Model model) {
         model.addAttribute("comment", new CommentDtoRequest());
         model.addAttribute("bookId", bookId);
         return "addComment";
@@ -71,21 +72,20 @@ public class CommentPageController {
             return "addComment";
         }
         commentService.insert(description, bookId);
-        System.out.println(comment);
         String path = "redirect:/comment?bookId=" + bookId;
         return path;
     }
 
     @GetMapping("/comment/{id}/del")
-    public String deleteComment(@PathVariable("id") long id, Model model) {
+    public String deleteComment(@PathVariable("id") ObjectId id, Model model) {
         var comment = commentService.findById(id).orElseThrow(
-                () -> new EntityNotFoundException("Comment with id %d not found".formatted(id)));
+                () -> new EntityNotFoundException("Comment with id %s not found".formatted(id)));
         model.addAttribute("comment", comment);
         return "deleteComment";
     }
 
     @PostMapping("/comment/{id}/del")
-    public String deleteComment(@PathVariable("id") long id) {
+    public String deleteComment(@PathVariable("id") ObjectId id) {
         commentService.deleteById(id);
         return "redirect:/book/";
     }

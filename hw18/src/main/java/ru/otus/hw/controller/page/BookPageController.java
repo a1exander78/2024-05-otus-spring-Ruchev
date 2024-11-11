@@ -1,6 +1,7 @@
 package ru.otus.hw.controller.page;
 
 import lombok.RequiredArgsConstructor;
+import org.bson.types.ObjectId;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -14,7 +15,7 @@ public class BookPageController {
     }
 
     @GetMapping("/book/{id}")
-    public String readBook(@PathVariable("id") long id) {
+    public String readBook(@PathVariable("id") ObjectId id) {
         return "singleBook";
     }
 
@@ -24,7 +25,7 @@ public class BookPageController {
     }
 
     @GetMapping("/book/{id}/del")
-    public String deleteBook(@PathVariable("id") long id) {
+    public String deleteBook(@PathVariable("id") ObjectId id) {
         return "deleteBook";
     }
 }

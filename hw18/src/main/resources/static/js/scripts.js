@@ -11,7 +11,7 @@ function showBook(bookId) {
         .then(response => response.json())
         .then(book => {
             console.log(book);
-            document.getElementById("id-input").value = book.id;
+            document.getElementById("id-input").value = 1;
             document.getElementById("book-title-input").value = book.title;
             getCatalogs(book);
         })

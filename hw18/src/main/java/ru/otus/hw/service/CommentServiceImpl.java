@@ -1,6 +1,7 @@
 package ru.otus.hw.service;
 
 import lombok.RequiredArgsConstructor;
+import org.bson.types.ObjectId;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.otus.hw.converter.dto.CommentDtoConverter;
@@ -23,31 +24,31 @@ public class CommentServiceImpl implements CommentService {
     private final CommentDtoConverter converter;
 
     @Override
-    public List<CommentDto> findAllCommentsByBookId(long bookId) {
+    public List<CommentDto> findAllCommentsByBookId(ObjectId bookId) {
         var commentsList = commentRepository.findAllCommentsByBookId(bookId);
         if (commentsList.isEmpty()) {
-            throw new EntityNotFoundException("Book with id %d haven't got comments yet".formatted(bookId));
+            throw new EntityNotFoundException("Book with id %s haven't got comments yet".formatted(bookId));
         }
         return commentsList.stream().map(converter::toDto).toList();
     }
 
     @Override
-    public Optional<CommentDto> findById(long id) {
+    public Optional<CommentDto> findById(ObjectId id) {
         return commentRepository.findById(id).map(converter::toDto);
     }
 
     @Transactional
     @Override
-    public CommentDto insert(String description, long bookId) {
-        var newComment = save(0, description, bookId);
+    public CommentDto insert(String description, ObjectId bookId) {
+        var newComment = save(new ObjectId(), description, bookId);
         return converter.toDto(newComment);
     }
 
     @Transactional
     @Override
-    public CommentDto update(long id, String description) {
+    public CommentDto update(ObjectId id, String description) {
         var comment = commentRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Comment with id %d not found".formatted(id)));
+                .orElseThrow(() -> new EntityNotFoundException("Comment with id %s not found".formatted(id)));
         var bookId = comment.getBook().getId();
         var updatedComment = save(id, description, bookId);
         return converter.toDto(updatedComment);
@@ -55,13 +56,13 @@ public class CommentServiceImpl implements CommentService {
 
     @Transactional
     @Override
-    public void deleteById(long id) {
+    public void deleteById(ObjectId id) {
         commentRepository.deleteById(id);
     }
 
-    private Comment save(long id, String description, long bookId) {
+    private Comment save(ObjectId id, String description, ObjectId bookId) {
         var book = bookRepository.findById(bookId)
-                .orElseThrow(() -> new EntityNotFoundException("Book with id %d not found".formatted(bookId)));
+                .orElseThrow(() -> new EntityNotFoundException("Book with id %s not found".formatted(bookId)));
         var comment = new Comment(id, description, book);
         return commentRepository.save(comment);
     }

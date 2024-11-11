@@ -1,6 +1,7 @@
 package ru.otus.hw.service;
 
 import lombok.RequiredArgsConstructor;
+import org.bson.types.ObjectId;
 import org.springframework.stereotype.Service;
 import ru.otus.hw.converter.dto.AuthorDtoConverter;
 import ru.otus.hw.dto.AuthorDto;
@@ -22,7 +23,7 @@ public class AuthorServiceImpl implements AuthorService {
     }
 
     @Override
-    public Optional<AuthorDto> findById(long id) {
+    public Optional<AuthorDto> findById(ObjectId id) {
         return authorRepository.findById(id).map(converter::toDto);
     }
 }

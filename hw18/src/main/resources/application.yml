@@ -2,30 +2,23 @@ spring:
   messages:
     encoding: UTF-8
 
-  datasource:
-    url: jdbc:h2:mem:maindb
+  data:
+    mongodb:
+      port: 27017
+      database: library4hw18
+      host: localhost
+      #port: 0
+      #database: testLibrary
 
-  sql:
-    init:
-      mode: never
-      data-locations: data.sql
-      schema-locations: schema.sql
-
-  liquibase:
-    enabled: true
-    change-log: classpath:db/changelog/db.changelog-master.yml
-    contexts: hw05
-
-  jpa:
-    open-in-view: false
-    generate-ddl: false
-    hibernate:
-      ddl-auto: none
-
-    show-sql: true
-    properties:
-      hibernate:
-        format_sql: true
+mongock:
+  #runner-type: "ApplicationRunner" # default
+  runner-type: "InitializingBean"
+  change-logs-scan-package:
+    - ru.otus.hw.changelogs
+  mongo-db:
+    write-concern:
+      journal: false
+    read-concern: local
 
 logging:
   level:

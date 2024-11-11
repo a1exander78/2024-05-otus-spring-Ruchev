@@ -6,7 +6,7 @@
     <link rel="stylesheet" href="../static/css/style.css" th:href="@{/css/style.css}" type="text/css">
     <script th:src="@{/js/scripts.js}" type="text/javascript"></script>
 </head>
-<body th:attr="onload='showBook(' + ${id} +')'">
+<body th:attr="onload='showBook(\'' + ${id} +'\')'">
 <form id="edit-form" action="singleBook.html" th:action="@{/api/v1/book/__${id}__}" th:method="put">
     <h3 th:text = "#{book-form-header}">Book Info:</h3>
     <div class="row">

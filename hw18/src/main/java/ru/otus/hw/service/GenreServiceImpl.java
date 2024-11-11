@@ -1,6 +1,7 @@
 package ru.otus.hw.service;
 
 import lombok.RequiredArgsConstructor;
+import org.bson.types.ObjectId;
 import org.springframework.stereotype.Service;
 import ru.otus.hw.converter.dto.GenreDtoConverter;
 import ru.otus.hw.dto.GenreDto;
@@ -22,7 +23,7 @@ public class GenreServiceImpl implements GenreService {
     }
 
     @Override
-    public Optional<GenreDto> findById(long id) {
+    public Optional<GenreDto> findById(ObjectId id) {
         return genreRepository.findById(id).map(converter::toDto);
     }
 }

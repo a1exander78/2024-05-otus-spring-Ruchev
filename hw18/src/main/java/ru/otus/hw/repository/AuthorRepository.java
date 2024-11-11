@@ -1,10 +1,11 @@
 package ru.otus.hw.repository;
 
-import org.springframework.data.jpa.repository.JpaRepository;
+import org.bson.types.ObjectId;
+import org.springframework.data.mongodb.repository.MongoRepository;
 import ru.otus.hw.model.Author;
 
 import java.util.Optional;
 
-public interface AuthorRepository extends JpaRepository<Author, Long> {
-    Optional<Author> findById(long id);
+public interface AuthorRepository extends MongoRepository<Author, Long> {
+    Optional<Author> findById(ObjectId id);
 }
