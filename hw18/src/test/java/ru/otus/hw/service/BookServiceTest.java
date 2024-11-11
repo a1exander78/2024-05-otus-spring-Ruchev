@@ -3,12 +3,15 @@ package ru.otus.hw.service;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import ru.otus.hw.converter.dto.AuthorDtoConverterImpl;
 import ru.otus.hw.converter.dto.BookDtoConverterImpl;
+import ru.otus.hw.converter.dto.CommentDtoConverterImpl;
+import ru.otus.hw.converter.dto.GenreDtoConverterImpl;
 import ru.otus.hw.dto.AuthorDto;
 import ru.otus.hw.dto.BookDto;
 import ru.otus.hw.dto.GenreDto;
@@ -16,15 +19,16 @@ import ru.otus.hw.dto.GenreDto;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static ru.otus.hw.utils.TestUtils.ID_1;
+import static ru.otus.hw.utils.TestUtils.ID_2;
+import static ru.otus.hw.utils.TestUtils.ID_3;
 
 @Transactional(propagation = Propagation.NEVER)
+@Import({BookServiceImpl.class, AuthorServiceImpl.class, GenreServiceImpl.class, CommentServiceImpl.class,
+        BookDtoConverterImpl.class, AuthorDtoConverterImpl.class, GenreDtoConverterImpl.class, CommentDtoConverterImpl.class})
 @DisplayName("Сервис для работы с книгами")
-@DataJpaTest
-@Import({BookServiceImpl.class, BookDtoConverterImpl.class})
+@DataMongoTest
 public class BookServiceTest {
-    private static final long ID_1 = 1L;
-    private static final long ID_2 = 2L;
-    private static final long ID_3 = 3L;
 
     private static final AuthorDto AUTHOR_1 = new AuthorDto(ID_1, "Author_Test_1");
     private static final AuthorDto AUTHOR_2 = new AuthorDto(ID_2, "Author_Test_2");
@@ -44,6 +48,9 @@ public class BookServiceTest {
 
     @Autowired
     private BookService bookService;
+
+    @Autowired
+    private CommentService commentService;
 
     @DisplayName("должен загружать список всех книг")
     @Test
@@ -71,17 +78,15 @@ public class BookServiceTest {
     @DisplayName("должен сохранять измененную книгу")
     @Test
     void shouldSaveUpdatedBook() {
-        assertThat(bookService.findById(ID_1)).contains(BOOK_1);
-        bookService.update(ID_1, UPDATING_TITLE, ID_1, ID_1);
-        assertThat(bookService.findById(ID_1).orElseGet(() -> BOOK_1)).isNotEqualTo(BOOK_1);
+        commentService.deleteById(ID_2);
+        bookService.update(ID_2, UPDATING_TITLE, ID_1, ID_1);
+        assertThat(bookService.findById(ID_2).orElseGet(() -> BOOK_2)).isNotEqualTo(BOOK_2);
     }
 
-
     @DirtiesContext(methodMode = DirtiesContext.MethodMode.AFTER_METHOD)
-    @DisplayName("должен удалять книгу по id ")
+    @DisplayName("должен удалять книгу по id")
     @Test
     void shouldDeleteBook() {
-        assertThat(bookService.findById(ID_1)).contains(BOOK_1);
         bookService.deleteById(ID_1);
         assertThat(bookService.findById(ID_1)).isEmpty();
     }

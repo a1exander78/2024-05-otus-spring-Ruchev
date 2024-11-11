@@ -3,25 +3,37 @@ package ru.otus.hw.service;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import ru.otus.hw.converter.dto.AuthorDtoConverterImpl;
+import ru.otus.hw.converter.dto.BookDtoConverterImpl;
 import ru.otus.hw.converter.dto.CommentDtoConverterImpl;
+import ru.otus.hw.converter.dto.GenreDtoConverterImpl;
+import ru.otus.hw.dto.AuthorDto;
+import ru.otus.hw.dto.BookDto;
 import ru.otus.hw.dto.CommentDto;
+import ru.otus.hw.dto.GenreDto;
 
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static ru.otus.hw.utils.TestUtils.ID_1;
+import static ru.otus.hw.utils.TestUtils.ID_4;
 
 @Transactional(propagation = Propagation.NEVER)
+@Import({CommentServiceImpl.class, BookServiceImpl.class, AuthorServiceImpl.class, GenreServiceImpl.class,
+        CommentDtoConverterImpl.class, BookDtoConverterImpl.class, AuthorDtoConverterImpl.class, GenreDtoConverterImpl.class})
 @DisplayName("Сервис для работы с комментариями")
-@Import({CommentServiceImpl.class, CommentDtoConverterImpl.class})
-@DataJpaTest
+@DataMongoTest
 public class CommentServiceTest {
-    private static final long ID_1 = 1L;
-    private static final long ID_4 = 4L;
+    private static final AuthorDto AUTHOR_1 = new AuthorDto(ID_1, "Author_Test_1");
+
+    private static final GenreDto GENRE_1 = new GenreDto(ID_1, "Genre_Test_1");
+
+    private static final BookDto BOOK_1 = new BookDto(ID_1, "Book_Test_1", AUTHOR_1, GENRE_1);
 
     private static final CommentDto COMMENT_1 = new CommentDto(ID_1, "Comment_Test_1", ID_1);
     private static final CommentDto COMMENT_4 = new CommentDto(ID_4, "Comment_Test_4", ID_1);
@@ -32,6 +44,9 @@ public class CommentServiceTest {
 
     @Autowired
     private CommentService commentService;
+
+    @Autowired
+    private BookService bookService;
 
     @DirtiesContext(methodMode = DirtiesContext.MethodMode.BEFORE_METHOD)
     @DisplayName("должен загружать список всех комментариев по id книги")
@@ -67,7 +82,7 @@ public class CommentServiceTest {
         assertThat(commentService.findById(ID_1).orElseGet(() -> COMMENT_1)).isNotEqualTo(COMMENT_1);
     }
 
-    @DisplayName("должен удалять комментарий по id ")
+    @DisplayName("должен удалять комментарий по id")
     @Test
     void shouldDeleteComment() {
         assertThat(commentService.findById(ID_1)).contains(COMMENT_1);

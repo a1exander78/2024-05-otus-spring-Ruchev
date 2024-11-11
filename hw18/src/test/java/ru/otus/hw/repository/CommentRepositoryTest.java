@@ -1,33 +1,42 @@
 package ru.otus.hw.repository;
 
+import org.bson.types.ObjectId;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
+import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
+import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.test.annotation.DirtiesContext;
 import ru.otus.hw.model.Book;
 import ru.otus.hw.model.Comment;
 
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static ru.otus.hw.utils.TestUtils.ID_1;
+import static ru.otus.hw.utils.TestUtils.ID_3;
+import static ru.otus.hw.utils.TestUtils.ID_4;
 
-@DisplayName("Репозиторий на основе Jpa для работы с комментариями ")
-@DataJpaTest
+@DisplayName("Репозиторий на основе Spring Data для работы с комментариями ")
+@DataMongoTest
 class CommentRepositoryTest {
+    private static final String NEW_COMMENT = "New_Comment";
+    private static final String EDITED_COMMENT = "Edited_Comment";
 
     @Autowired
     private CommentRepository commentRepository;
 
     @Autowired
-    private TestEntityManager em;
+    private MongoTemplate mt;
 
+    @DirtiesContext(methodMode = DirtiesContext.MethodMode.BEFORE_METHOD)
     @DisplayName("должен загружать список всех комментариев по книге")
     @Test
     void shouldReturnCorrectCommentsList() {
-        var actualComments = commentRepository.findAllCommentsByBookId(1L);
-        var expectedComment1 = em.find(Comment.class, 1L);
-        var expectedComment2 = em.find(Comment.class, 4L);
+        var actualComments = commentRepository.findAllCommentsByBookId(ID_1);
+
+        var expectedComment1 = mt.findById(ID_1, Comment.class);
+        var expectedComment2 = mt.findById(ID_4, Comment.class);
 
         assertThat(actualComments).containsExactlyElementsOf(List.of(expectedComment1, expectedComment2));
         actualComments.forEach(System.out::println);
@@ -36,8 +45,8 @@ class CommentRepositoryTest {
     @DisplayName("должен загружать комментарий по id")
     @Test
     void shouldReturnCorrectCommentById() {
-        var actualComment = commentRepository.findById(1L);
-        var expectedComment = em.find(Comment.class, 1L);
+        var actualComment = commentRepository.findById(ID_1);
+        var expectedComment = mt.findById(ID_1, Comment.class);
 
         assertThat(actualComment).isPresent()
                 .get()
@@ -47,30 +56,26 @@ class CommentRepositoryTest {
     @DisplayName("должен сохранять новый коментарий")
     @Test
     void shouldSaveNewComment() {
-        String description = "newComment";
+        var book = mt.findById(ID_1, Book.class);
 
-        var book = em.find(Book.class, 1L);
-        var newComment = new Comment(0, description, book);
-        var expectedComment = em.persist(newComment);
-        var returnedComment = commentRepository.save(expectedComment);
+        var newComment = new Comment(new ObjectId(), NEW_COMMENT, book);
 
-        assertThat(returnedComment).isNotNull()
-                .matches(comment -> comment.getId() > 0)
-                .usingRecursiveComparison().ignoringExpectedNullFields().isEqualTo(expectedComment);
+        commentRepository.save(newComment);
 
-        assertThat(commentRepository.findById(returnedComment.getId()))
-                .isPresent()
-                .get()
-                .isEqualTo(returnedComment);
+        var comments = commentRepository.findAllCommentsByBookId(ID_1);
+        int size = comments.size();
+        assertThat(size).isEqualTo(3);
+
+        var savedComment = comments.get(size - 1);
+
+        assertThat(savedComment.getDescription()).isEqualTo(NEW_COMMENT);
     }
 
     @DisplayName("должен сохранять измененный комментарий")
     @Test
     void shouldSaveUpdatedComment() {
-        String description = "editedComment";
-
-        var book = em.find(Book.class, 1L);
-        var expectedComment = new Comment(1L, description, book);
+        var book = mt.findById(ID_1, Book.class);
+        var expectedComment = new Comment(ID_1, EDITED_COMMENT, book);
 
         assertThat(commentRepository.findById(expectedComment.getId()))
                 .isPresent()
@@ -79,7 +84,6 @@ class CommentRepositoryTest {
 
         var returnedComment = commentRepository.save(expectedComment);
         assertThat(returnedComment).isNotNull()
-                .matches(comment -> comment.getId() > 0)
                 .usingRecursiveComparison().ignoringExpectedNullFields().isEqualTo(expectedComment);
 
         assertThat(commentRepository.findById(returnedComment.getId()))
@@ -88,11 +92,11 @@ class CommentRepositoryTest {
                 .isEqualTo(returnedComment);
     }
 
-    @DisplayName("должен удалять комментарий по id ")
+    @DisplayName("должен удалять комментарий по id")
     @Test
     void shouldDeleteComment() {
-        assertThat(commentRepository.findById(1L)).isPresent();
-        commentRepository.deleteById(1L);
-        assertThat(commentRepository.findById(1L)).isEmpty();
+        assertThat(commentRepository.findById(ID_3)).isPresent();
+        commentRepository.deleteById(ID_3);
+        assertThat(commentRepository.findById(ID_3)).isEmpty();
     }
 }

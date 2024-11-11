@@ -101,7 +101,6 @@
             <optional>true</optional>
         </dependency>
 
-
         <dependency>
             <groupId>org.yaml</groupId>
             <artifactId>snakeyaml</artifactId>

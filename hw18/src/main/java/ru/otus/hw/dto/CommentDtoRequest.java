@@ -18,5 +18,6 @@ public class CommentDtoRequest {
     @Size(min = 5, max = 100, message = "{description-field-should-has-expected-size}")
     private String description;
 
+    @JsonSerialize(using = ToStringSerializer.class)
     private ObjectId bookId;
 }

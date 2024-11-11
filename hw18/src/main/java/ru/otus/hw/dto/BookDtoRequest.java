@@ -20,7 +20,9 @@ public class BookDtoRequest {
     @Size(max = 30, message = "{title-field-should-has-expected-size}")
     private String title;
 
+    @JsonSerialize(using = ToStringSerializer.class)
     private ObjectId authorId;
 
+    @JsonSerialize(using = ToStringSerializer.class)
     private ObjectId genreId;
 }

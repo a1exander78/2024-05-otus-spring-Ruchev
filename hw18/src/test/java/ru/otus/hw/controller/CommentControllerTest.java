@@ -1,8 +1,10 @@
 package ru.otus.hw.controller;
 
+import org.bson.types.ObjectId;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.data.mongo.AutoConfigureDataMongo;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
@@ -27,14 +29,13 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
+import static ru.otus.hw.utils.TestUtils.ID_1;
+import static ru.otus.hw.utils.TestUtils.ID_4;
 
 @DisplayName("Контроллер комментариев")
+@AutoConfigureDataMongo
 @WebMvcTest(CommentPageController.class)
 class CommentControllerTest {
-    private static final long ID_1 = 1L;
-    private static final long ID_4 = 4L;
-    private static final long ID_5 = 5L;
-
     private static final AuthorDto AUTHOR_1 = new AuthorDto(ID_1, "Author_Test_1");
 
     private static final GenreDto GENRE_1 = new GenreDto(ID_1, "Genre_Test_1");
@@ -66,7 +67,7 @@ class CommentControllerTest {
         given(commentService.findAllCommentsByBookId(ID_1)).willReturn(comments);
         given(bookService.findById(ID_1)).willReturn(Optional.of(BOOK_1));
 
-        mvc.perform(get("/comment?bookId=1"))
+        mvc.perform(get("/comment?bookId=" + ID_1))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType("text/html;charset=UTF-8"))
                 .andExpect(model().attribute("comments", comments))
@@ -78,16 +79,16 @@ class CommentControllerTest {
     void shouldReturnCommentById() throws Exception {
         given(commentService.findById(ID_1)).willReturn(Optional.of(COMMENT_1));
 
-        mvc.perform(get("/comment/1"))
+        mvc.perform(get("/comment/" + ID_1))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType("text/html;charset=UTF-8"))
                 .andExpect(model().attribute("comment", COMMENT_1));
     }
-
+//
     @DisplayName("должен сохранять новый комментарий")
     @Test
     void shouldSaveNewComment() throws Exception {
-        var newComment = new CommentDto(ID_5, NEW_COMMENT, ID_1);
+        var newComment = new CommentDto(new ObjectId(), NEW_COMMENT, ID_1);
 
         given(commentService.insert(NEW_COMMENT, ID_1)).willReturn(newComment);
 
@@ -98,7 +99,7 @@ class CommentControllerTest {
 
         mvc.perform(post("/comment/new").params(requestParams))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/comment?bookId=1"));
+                .andExpect(redirectedUrl("/comment?bookId=" + ID_1));
 
         verify(commentService, times(1)).insert(NEW_COMMENT, ID_1);
     }
@@ -115,9 +116,9 @@ class CommentControllerTest {
         requestParams.add("id", String.valueOf(ID_1));
         requestParams.add("description", UPDATING_COMMENT);
 
-        mvc.perform(post("/comment/1").params(requestParams))
+        mvc.perform(post("/comment/" + ID_1).params(requestParams))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/comment?bookId=1"));
+                .andExpect(redirectedUrl("/comment?bookId=" + ID_1));
 
         verify(commentService, times(1)).update(ID_1, UPDATING_COMMENT);
     }
@@ -125,7 +126,7 @@ class CommentControllerTest {
     @DisplayName("должен удалять комментарий")
     @Test
     void shouldDeleteComment() throws Exception {
-        mvc.perform(post("/comment/1/del"))
+        mvc.perform(post("/comment/"+ ID_1 + "/del"))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/book/"));
 
@@ -156,7 +157,7 @@ class CommentControllerTest {
 
         given(commentService.findById(ID_1)).willReturn(Optional.of(COMMENT_1));
 
-        mvc.perform(post("/comment/1").params(requestParams))
+        mvc.perform(post("/comment/"+ ID_1).params(requestParams))
                 .andExpect(status().isOk());
 
         verify(commentService, times(0)).update(ID_1, SHORT_COMMENT);

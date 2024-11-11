@@ -1,9 +1,11 @@
 package ru.otus.hw.controller.rest;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.bson.types.ObjectId;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.data.mongo.AutoConfigureDataMongo;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
@@ -29,15 +31,15 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static ru.otus.hw.utils.TestUtils.ID_1;
+import static ru.otus.hw.utils.TestUtils.ID_2;
+import static ru.otus.hw.utils.TestUtils.ID_3;
+
 
 @DisplayName("REST-контроллер книг")
+@AutoConfigureDataMongo
 @WebMvcTest(BookRestController.class)
 class BookRestControllerTest {
-    private static final long ID_1 = 1L;
-    private static final long ID_2 = 2L;
-    private static final long ID_3 = 3L;
-    private static final long ID_4 = 4L;
-
     private static final AuthorDto AUTHOR_1 = new AuthorDto(ID_1, "Author_Test_1");
     private static final AuthorDto AUTHOR_2 = new AuthorDto(ID_2, "Author_Test_2");
     private static final AuthorDto AUTHOR_3 = new AuthorDto(ID_3, "Author_Test_3");
@@ -91,7 +93,7 @@ class BookRestControllerTest {
         given(authorService.findAll()).willReturn(AUTHORS);
         given(genreService.findAll()).willReturn(GENRES);
 
-        mvc.perform(get("/api/v1/book/1"))
+        mvc.perform(get("/api/v1/book/" + ID_1))
                 .andExpect(status().isOk())
                 .andExpect(content().json(mapper.writeValueAsString(BOOK_1)));
     }
@@ -112,7 +114,7 @@ class BookRestControllerTest {
     @DisplayName("должен сохранять новую книгу")
     @Test
     void shouldSaveNewBook() throws Exception {
-        var newBook = new BookDtoRequest(ID_4,NEW_TITLE, ID_1, ID_1);
+        var newBook = new BookDtoRequest(new ObjectId(),NEW_TITLE, ID_1, ID_1);
         var expectedResult = mapper.writeValueAsString(newBook);
 
         mvc.perform(post("/api/v1/book").contentType(APPLICATION_JSON)
@@ -125,7 +127,7 @@ class BookRestControllerTest {
     @DisplayName("должен удалять книгу")
     @Test
     void shouldDeleteBook() throws Exception {
-        mvc.perform(delete("/api/v1/book/1"))
+        mvc.perform(delete("/api/v1/book/"  + ID_1))
                 .andExpect(status().isOk());
 
         verify(bookService, times(1)).deleteById(ID_1);
