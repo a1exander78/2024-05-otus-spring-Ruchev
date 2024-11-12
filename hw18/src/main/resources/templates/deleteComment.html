@@ -4,21 +4,21 @@
     <meta charset="UTF-8"/>
     <title th:text="#{delete-page}">Delete comment</title>
     <link rel="stylesheet" href="../static/css/style.css" th:href="@{/css/style.css}" type="text/css">
-
-    <style type="text/css" th:inline="text">
-        [[h3]] {
-            background-image: url([[@{/listmark.png}]]);
-            background-repeat: no-repeat;
-            padding: 2px;
-            padding-left: 30px;
-        }
-    </style>
+    <script th:src="@{/js/scripts.js}" type="text/javascript"></script>
+<!--    <style type="text/css" th:inline="text">-->
+<!--        [[h3]] {-->
+<!--            background-image: url([[@{/listmark.png}]]);-->
+<!--            background-repeat: no-repeat;-->
+<!--            padding: 2px;-->
+<!--            padding-left: 30px;-->
+<!--        }-->
+<!--    </style>-->
 </head>
 <body>
 <form id="delete-form" action="deleteComment.html" th:action="@{/comment/{id}/del(id=${id})}" th:method="post">
-    <h3 th:text = "#{confirm-header(${comment.description})}">Are you sure?</h3>
+    <h3 th:text = "#{confirm-header}">Are you sure?</h3>
     <div class="row">
-        <button type="submit" th:text="#{confirm-button-caption}">Confirm</button>
+        <button type="button" th:attr="onclick='deleteComment(\'' + ${id} + '\')'" th:text="#{confirm-button-caption}">Confirm</button>
         <a href="singleComment.html" th:href="@{/comment/__*{id}__}">
             <button type="button" th:text="#{cancel-button-caption}">Cancel</button>
         </a>

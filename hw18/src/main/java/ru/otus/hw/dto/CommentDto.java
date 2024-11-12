@@ -16,5 +16,6 @@ public class CommentDto {
 
     private String description;
 
+    @JsonSerialize(using = ToStringSerializer.class)
     private ObjectId bookId;
 }

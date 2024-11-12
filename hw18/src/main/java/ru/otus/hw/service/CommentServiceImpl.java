@@ -25,11 +25,7 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     public List<CommentDto> findAllCommentsByBookId(ObjectId bookId) {
-        var commentsList = commentRepository.findAllCommentsByBookId(bookId);
-        if (commentsList.isEmpty()) {
-            throw new EntityNotFoundException("Book with id %s haven't got comments yet".formatted(bookId));
-        }
-        return commentsList.stream().map(converter::toDto).toList();
+        return commentRepository.findAllCommentsByBookId(bookId).stream().map(converter::toDto).toList();
     }
 
     @Override

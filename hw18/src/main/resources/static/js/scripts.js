@@ -11,7 +11,6 @@ function showBook(bookId) {
         .then(response => response.json())
         .then(book => {
             console.log(book);
-            document.getElementById("id-input").value = 1;
             document.getElementById("book-title-input").value = book.title;
             getCatalogs(book);
         })
@@ -157,6 +156,80 @@ function fillOptionsForGenreSelect(book, genres) {
         }
         genreSelect.add(option);
     }
+}
+
+//Comment AJAX scripts
+
+function showAllCommentsByBook(bookId) {
+    fetch("/api/v1/comment?bookId=" + bookId)
+        .then(response => response.json())
+        .then(comments => fillCommentTable(comments))
+}
+
+function showComment(commentId) {
+    fetch("/api/v1/comment/" + commentId)
+        .then(response => response.json())
+        .then(comment => {
+            console.log(comment);
+            document.getElementById("comment-description-input").value = comment.description;
+        })
+}
+
+function updateComment(commentId) {
+    const comment = {
+        id: document.getElementById("id-input").value,
+        description: document.getElementById("comment-description-input").value,
+    }
+    fetch("/api/v1/comment/" + commentId, {
+        method: 'PUT',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(comment)})
+    .then(response => response.json())
+    .then(window.location.href = "/book/")
+}
+
+function addComment(bookId) {
+    const comment = {
+        bookId: bookId,
+        description: document.getElementById("comment-description-input").value,
+    }
+    fetch("/api/v1/comment", {
+        method: 'POST',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(comment)})
+    .then(response => response.json())
+    .then(window.location.href = "/book/")
+}
+
+function deleteComment(commentId) {
+    fetch("/api/v1/comment/" + commentId, {
+        method: 'DELETE',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        }
+    })
+    .then(response => response.json())
+    .then(window.location.href = "/book/")
+}
+
+//Comment utility scripts
+
+function fillCommentTable(comments) {
+    const table = document.getElementById("comment-table");
+    table.innerHTML = '';
+    comments.forEach(comment => {
+        console.log(comment);
+        let row = table.insertRow();
+        row.insertCell().innerHTML = comment.id;
+        row.insertCell().innerHTML = '<a href="/comment/' + comment.id + '">' + comment.description + '</a>';
+    })
 }
 
 //Common utility scripts
