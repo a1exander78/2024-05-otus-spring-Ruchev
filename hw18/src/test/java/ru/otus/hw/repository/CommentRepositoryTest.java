@@ -9,6 +9,7 @@ import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.test.annotation.DirtiesContext;
 import ru.otus.hw.model.Book;
 import ru.otus.hw.model.Comment;
+import ru.otus.hw.repository.classic.CommentInitDataRepository;
 
 import java.util.List;
 
@@ -24,7 +25,7 @@ class CommentRepositoryTest {
     private static final String EDITED_COMMENT = "Edited_Comment";
 
     @Autowired
-    private CommentRepository commentRepository;
+    private CommentInitDataRepository commentRepository;
 
     @Autowired
     private MongoTemplate mt;

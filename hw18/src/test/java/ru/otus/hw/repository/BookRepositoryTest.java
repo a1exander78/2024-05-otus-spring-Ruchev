@@ -10,6 +10,7 @@ import org.springframework.test.annotation.DirtiesContext;
 import ru.otus.hw.model.Author;
 import ru.otus.hw.model.Book;
 import ru.otus.hw.model.Genre;
+import ru.otus.hw.repository.classic.BookInitDataRepository;
 
 import java.util.List;
 
@@ -25,7 +26,7 @@ class BookRepositoryTest {
     private static final String EDITED_BOOK = "Edited_Book";
 
     @Autowired
-    private BookRepository bookRepository;
+    private BookInitDataRepository bookRepository;
 
     @Autowired
     private MongoTemplate mt;

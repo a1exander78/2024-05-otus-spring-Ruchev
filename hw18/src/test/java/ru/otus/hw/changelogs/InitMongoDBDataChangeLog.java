@@ -7,10 +7,10 @@ import ru.otus.hw.model.Author;
 import ru.otus.hw.model.Book;
 import ru.otus.hw.model.Comment;
 import ru.otus.hw.model.Genre;
-import ru.otus.hw.repository.AuthorRepository;
-import ru.otus.hw.repository.BookRepository;
-import ru.otus.hw.repository.CommentRepository;
-import ru.otus.hw.repository.GenreRepository;
+import ru.otus.hw.repository.classic.AuthorInitDataRepository;
+import ru.otus.hw.repository.classic.BookInitDataRepository;
+import ru.otus.hw.repository.classic.CommentInitDataRepository;
+import ru.otus.hw.repository.classic.GenreInitDataRepository;
 
 import java.util.List;
 
@@ -53,22 +53,22 @@ public class InitMongoDBDataChangeLog {
     }
 
     @ChangeSet(order = "001", id = "initAuthors", author = "a1exander78", runAlways = true)
-    public void initTestAuthors(AuthorRepository repository) {
+    public void initTestAuthors(AuthorInitDataRepository repository) {
         repository.saveAll(List.of(AUTHOR_1, AUTHOR_2, AUTHOR_3));
     }
 
     @ChangeSet(order = "002", id = "initGenres", author = "a1exander78", runAlways = true)
-    public void initTestGenres(GenreRepository repository) {
+    public void initTestGenres(GenreInitDataRepository repository) {
         repository.saveAll(List.of(GENRE_1, GENRE_2, GENRE_3));
     }
 
     @ChangeSet(order = "003", id = "initBooks", author = "a1exander78", runAlways = true)
-    public void initTestBooks(BookRepository repository) {
+    public void initTestBooks(BookInitDataRepository repository) {
         repository.saveAll(List.of(BOOK_1, BOOK_2, BOOK_3));
     }
 
     @ChangeSet(order = "004", id = "initComments", author = "a1exander78", runAlways = true)
-    public void initTestComments(CommentRepository repository) {
+    public void initTestComments(CommentInitDataRepository repository) {
         repository.saveAll(List.of(COMMENT_1, COMMENT_2, COMMENT_3, COMMENT_4));
     }
 }

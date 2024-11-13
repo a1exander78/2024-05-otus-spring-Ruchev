@@ -7,7 +7,7 @@ import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
 
 @EnableMongock
-@EnableMongoRepositories(basePackages = "ru.otus.hw.repository")
+@EnableMongoRepositories(basePackages = "ru.otus.hw.repository.classic")
 @SpringBootApplication(exclude = {DataSourceAutoConfiguration.class})
 public class Application {
 
