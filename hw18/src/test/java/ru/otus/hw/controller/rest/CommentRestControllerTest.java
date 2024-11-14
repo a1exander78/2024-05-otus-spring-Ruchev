@@ -1,118 +1,143 @@
 package ru.otus.hw.controller.rest;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.bson.types.ObjectId;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.data.mongo.AutoConfigureDataMongo;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.test.web.servlet.MockMvc;
-import ru.otus.hw.dto.AuthorDto;
-import ru.otus.hw.dto.BookDto;
+import org.springframework.boot.test.web.server.LocalServerPort;
+import org.springframework.http.MediaType;
+import org.springframework.test.web.reactive.server.WebTestClient;
+import org.springframework.web.reactive.function.BodyInserters;
+import org.springframework.web.reactive.function.client.WebClient;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
+import ru.otus.hw.converter.dto.CommentDtoConverter;
 import ru.otus.hw.dto.CommentDto;
-import ru.otus.hw.dto.GenreDto;
-import ru.otus.hw.service.BookService;
-import ru.otus.hw.service.CommentService;
+import ru.otus.hw.dto.CommentDtoRequest;
+import ru.otus.hw.model.Comment;
+import ru.otus.hw.repository.reactive.CommentRepository;
 
+import java.time.Duration;
 import java.util.List;
-import java.util.Optional;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
-import static org.springframework.http.MediaType.APPLICATION_JSON;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static ru.otus.hw.utils.TestUtils.ID_1;
-import static ru.otus.hw.utils.TestUtils.ID_4;
-
+import static ru.otus.hw.utils.TestUtils.*;
 
 @DisplayName("REST-контроллер комментариев")
-@AutoConfigureDataMongo
-@WebMvcTest(CommentRestController.class)
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class CommentRestControllerTest {
-    private static final AuthorDto AUTHOR_1 = new AuthorDto(ID_1, "Author_Test_1");
-
-    private static final GenreDto GENRE_1 = new GenreDto(ID_1, "Genre_Test_1");
-
-    private static final BookDto BOOK_1 = new BookDto(ID_1, "Book_Test_1", AUTHOR_1, GENRE_1);
-
-    private static final CommentDto COMMENT_1 = new CommentDto(ID_1, "Comment_Test_1", ID_1);
-    private static final CommentDto COMMENT_4 = new CommentDto(ID_4, "Comment_Test_4", ID_1);
-
-    private static final String NEW_COMMENT = "New_Comment";
-
-    private static final String UPDATING_COMMENT = "Updating_Comment";
+    @Autowired
+    private CommentDtoConverter converter;
 
     @Autowired
-    private MockMvc mvc;
+    private WebTestClient webTestClient;
 
-    @Autowired
-    private ObjectMapper mapper;
-
-    @MockBean
-    private CommentService commentService;
+    @LocalServerPort
+    private int port;
 
     @MockBean
-    private BookService bookService;
+    CommentRepository commentRepository;
 
     @DisplayName("должен возвращать корректный список комментариев по айди книги")
     @Test
-    void shouldReturnCorrectCommentsListByBookId() throws Exception {
-        var comments = List.of(COMMENT_1, COMMENT_4);
-        given(commentService.findAllCommentsByBookId(ID_1)).willReturn(comments);
-        given(bookService.findById(ID_1)).willReturn(Optional.of(BOOK_1));
+    void shouldReturnCorrectCommentsListByBookId() {
+        given(commentRepository.findAllCommentsByBookId(ID_1)).willReturn(Flux.just(COMMENT_1, COMMENT_4));
 
-        mvc.perform(get("/api/v1/comment?bookId=" + ID_1))
-                .andExpect(status().isOk())
-                .andExpect(content().json(mapper.writeValueAsString(comments)));
+        var client = WebClient.create(String.format("http://localhost:%d", port));
+        var result = client
+                .get().uri("/api/v1/comment?bookId=" + ID_1)
+                .accept(MediaType.APPLICATION_JSON)
+                .retrieve()
+                .bodyToFlux(CommentDto.class)
+                .timeout(Duration.ofSeconds(3))
+                .collectList()
+                .block();
+
+        verify(commentRepository, times(1)).findAllCommentsByBookId(ID_1);
+        assertThat(result).containsExactlyElementsOf(List.of(COMMENT_DTO_1, COMMENT_DTO_4));
     }
 
     @DisplayName("должен возвращать комментарий по айди")
     @Test
-    void shouldReturnCommentById() throws Exception {
-        given(commentService.findById(ID_1)).willReturn(Optional.of(COMMENT_1));
+    void shouldReturnCommentById() {
+        given(commentRepository.findById(ID_1)).willReturn(Mono.just(COMMENT_1));
 
-        mvc.perform(get("/api/v1/comment/" + ID_1))
-                .andExpect(status().isOk())
-                .andExpect(content().json(mapper.writeValueAsString(COMMENT_1)));
-    }
+        var client = WebClient.create(String.format("http://localhost:%d", port));
+        var result = client
+                .get().uri("/api/v1/comment/" + ID_1)
+                .accept(MediaType.APPLICATION_JSON)
+                .retrieve()
+                .bodyToMono(CommentDto.class)
+                .timeout(Duration.ofSeconds(3))
+                .block();
 
-    @DisplayName("должен сохранять новый комментарий")
-    @Test
-    void shouldSaveNewComment() throws Exception {
-        var newComment = new CommentDto(new ObjectId(), NEW_COMMENT, ID_1);
-        var expectedResult = mapper.writeValueAsString(newComment);
-
-        mvc.perform(post("/api/v1/comment").contentType(APPLICATION_JSON)
-                .content(expectedResult))
-                .andExpect(status().isOk());
-
-        verify(commentService, times(1)).insert(NEW_COMMENT, ID_1);
+        verify(commentRepository, times(1)).findById(ID_1);
+        assertThat(result).isEqualTo(COMMENT_DTO_1);
     }
 
     @DisplayName("должен обновлять комментарий")
     @Test
-    void shouldUpdateComment() throws Exception {
-        var updatedComment = new CommentDto(ID_1, UPDATING_COMMENT, ID_1);
-        var expectedResult = mapper.writeValueAsString(updatedComment);
+    void shouldUpdateComment() {
+        given(commentRepository.findById(ID_1)).willReturn(Mono.just(COMMENT_1));
+        given(commentRepository.save(any())).willReturn(Mono.just(UPDATING_COMMENT));
+        var comment = new CommentDtoRequest(ID_1, UPDATING_COMMENT_DESCRIPTION, ID_1);
 
-        mvc.perform(put("/api/v1/comment/" + ID_1).contentType(APPLICATION_JSON)
-                .content(expectedResult))
-                .andExpect(status().isOk());
+        var client = WebClient.create(String.format("http://localhost:%d", port));
+        var result = client
+                .put().uri("/api/v1/comment/" + ID_1)
+                .body(BodyInserters.fromValue(comment))
+                .accept(MediaType.APPLICATION_JSON)
+                .retrieve()
+                .bodyToMono(CommentDto.class)
+                .timeout(Duration.ofSeconds(6))
+                .block();
 
-        verify(commentService, times(1)).update(ID_1, UPDATING_COMMENT);
+        verify(commentRepository, times(1)).save(any());
+        assertThat(result.getDescription()).isEqualTo(UPDATING_COMMENT_DESCRIPTION);
+    }
+
+    @DisplayName("должен сохранять новый комментарий")
+    @Test
+    void shouldSaveNewComment() {
+        var comment = new Comment(new ObjectId(), NEW_COMMENT_DESCRIPTION, BOOK_1);
+        var commentDtoRequest = new CommentDtoRequest(comment.getId(), NEW_COMMENT_DESCRIPTION, ID_1);
+        given(commentRepository.save(any())).willReturn(Mono.just(comment));
+
+        var client = WebClient.create(String.format("http://localhost:%d", port));
+        var result = client
+                .post().uri("/api/v1/comment")
+                .accept(MediaType.APPLICATION_JSON)
+                .body(BodyInserters.fromValue(commentDtoRequest))
+                .retrieve()
+                .bodyToMono(CommentDto.class)
+                .timeout(Duration.ofSeconds(3))
+                .block();
+
+        verify(commentRepository, times(1)).save(any());
+        assertThat(result.getId()).isEqualTo(comment.getId());
     }
 
     @DisplayName("должен удалять комментарий")
     @Test
-    void shouldDeleteComment() throws Exception {
-        mvc.perform(delete("/api/v1/comment/"+ ID_1))
-                .andExpect(status().isOk());
+    void shouldDeleteComment() {
+        given(commentRepository.deleteById(ID_1)).willReturn(Mono.empty());
 
-        verify(commentService, times(1)).deleteById(ID_1);
+        var client = WebClient.create(String.format("http://localhost:%d", port));
+        var result = client
+                .delete().uri("/api/v1/comment/" + ID_1)
+                .accept(MediaType.APPLICATION_JSON)
+                .retrieve()
+                .bodyToMono(Void.class)
+                .timeout(Duration.ofSeconds(3))
+                .block();
+
+        verify(commentRepository, times(1)).deleteById(ID_1);
+        assertThat(result).isNull();
     }
 }

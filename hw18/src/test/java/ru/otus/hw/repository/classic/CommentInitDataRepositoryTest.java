@@ -1,4 +1,4 @@
-package ru.otus.hw.repository;
+package ru.otus.hw.repository.classic;
 
 import org.bson.types.ObjectId;
 import org.junit.jupiter.api.DisplayName;
@@ -9,21 +9,15 @@ import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.test.annotation.DirtiesContext;
 import ru.otus.hw.model.Book;
 import ru.otus.hw.model.Comment;
-import ru.otus.hw.repository.classic.CommentInitDataRepository;
 
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static ru.otus.hw.utils.TestUtils.ID_1;
-import static ru.otus.hw.utils.TestUtils.ID_3;
-import static ru.otus.hw.utils.TestUtils.ID_4;
+import static ru.otus.hw.utils.TestUtils.*;
 
 @DisplayName("Репозиторий на основе Spring Data для работы с комментариями ")
 @DataMongoTest
-class CommentRepositoryTest {
-    private static final String NEW_COMMENT = "New_Comment";
-    private static final String EDITED_COMMENT = "Edited_Comment";
-
+class CommentInitDataRepositoryTest {
     @Autowired
     private CommentInitDataRepository commentRepository;
 
@@ -59,7 +53,7 @@ class CommentRepositoryTest {
     void shouldSaveNewComment() {
         var book = mt.findById(ID_1, Book.class);
 
-        var newComment = new Comment(new ObjectId(), NEW_COMMENT, book);
+        var newComment = new Comment(new ObjectId(), NEW_COMMENT_DESCRIPTION, book);
 
         commentRepository.save(newComment);
 
@@ -69,14 +63,14 @@ class CommentRepositoryTest {
 
         var savedComment = comments.get(size - 1);
 
-        assertThat(savedComment.getDescription()).isEqualTo(NEW_COMMENT);
+        assertThat(savedComment.getDescription()).isEqualTo(NEW_COMMENT_DESCRIPTION);
     }
 
     @DisplayName("должен сохранять измененный комментарий")
     @Test
     void shouldSaveUpdatedComment() {
         var book = mt.findById(ID_1, Book.class);
-        var expectedComment = new Comment(ID_1, EDITED_COMMENT, book);
+        var expectedComment = new Comment(ID_1, UPDATING_COMMENT_DESCRIPTION, book);
 
         assertThat(commentRepository.findById(expectedComment.getId()))
                 .isPresent()
