@@ -19,7 +19,9 @@ import ru.otus.hw.converter.dto.BookDtoConverter;
 import ru.otus.hw.dto.BookDto;
 import ru.otus.hw.dto.BookDtoRequest;
 import ru.otus.hw.exception.EntityNotFoundException;
+import ru.otus.hw.model.Author;
 import ru.otus.hw.model.Book;
+import ru.otus.hw.model.Genre;
 import ru.otus.hw.repository.reactive.AuthorRepository;
 import ru.otus.hw.repository.reactive.BookRepository;
 import ru.otus.hw.repository.reactive.GenreRepository;
@@ -52,13 +54,11 @@ public class BookRestController {
     public Mono<BookDto> updateBook(@Valid @RequestBody BookDtoRequest book,
                              BindingResult bindingResult) {
         if (!bindingResult.hasErrors()) {
-            return bookRepository.save(Book.builder()
-                            .id(book.getId())
-                            .title(book.getTitle())
-                            .author(authorRepository.findById(book.getAuthorId()).block())
-                            .genre(genreRepository.findById(book.getGenreId()).block())
-                            .build())
-                    .map(converter::toDto);
+            var authorMono = authorRepository.findById(book.getAuthorId());
+            var genreMono = genreRepository.findById(book.getGenreId());
+            var bookMono = Mono.just(book);
+
+            return save(authorMono, genreMono, bookMono, true);
         }
         return Mono.empty();
     }
@@ -67,13 +67,11 @@ public class BookRestController {
     public Mono<BookDto> addBook(@Valid @RequestBody BookDtoRequest book,
                            BindingResult bindingResult) {
         if (!bindingResult.hasErrors()) {
-            return bookRepository.save(Book.builder()
-                    .id(new ObjectId())
-                    .title(book.getTitle())
-                    .author(authorRepository.findById(book.getAuthorId()).block())
-                    .genre(genreRepository.findById(book.getGenreId()).block())
-                    .build())
-                    .map(converter::toDto);
+            var authorMono = authorRepository.findById(book.getAuthorId());
+            var genreMono = genreRepository.findById(book.getGenreId());
+            var bookMono = Mono.just(book);
+
+            return save(authorMono, genreMono, bookMono, false);
         }
         return Mono.empty();
     }
@@ -86,5 +84,25 @@ public class BookRestController {
     @ExceptionHandler(EntityNotFoundException.class)
     public ResponseEntity<String> handleNotFound(EntityNotFoundException ex) {
         return ResponseEntity.badRequest().body(ex.getMessage());
+    }
+
+    private Mono<BookDto> save(Mono<Author> authorMono,
+                               Mono<Genre> genreMono,
+                               Mono<BookDtoRequest> bookMono,
+                               boolean isUpdate) {
+        return Mono.zip(authorMono, genreMono, bookMono)
+                .map(data -> {
+                    var id = new ObjectId();
+                    if (isUpdate) {
+                        id = data.getT3().getId();
+                    }
+                    return Book.builder().id(id)
+                            .title(data.getT3().getTitle())
+                            .author(data.getT1())
+                            .genre(data.getT2())
+                            .build();
+                })
+                .flatMap(bookRepository::save)
+                .map(converter:: toDto);
     }
 }

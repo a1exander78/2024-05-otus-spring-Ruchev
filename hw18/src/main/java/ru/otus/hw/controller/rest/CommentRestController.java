@@ -50,13 +50,16 @@ public class CommentRestController {
     public Mono<CommentDto> updateComment(@Valid @RequestBody CommentDtoRequest comment,
                              BindingResult bindingResult) {
         if (!bindingResult.hasErrors()) {
-            var oldComment = commentRepository.findById(comment.getId()).block();
-            return commentRepository.save(Comment.builder()
-                    .id(oldComment.getId())
-                    .description(comment.getDescription())
-                    .book(oldComment.getBook())
-                    .build())
-                    .map(converter::toDto);
+            var oldCommentMono = commentRepository.findById(comment.getId());
+            var newCommentMono = Mono.just(comment);
+
+            return Mono.zip(oldCommentMono, newCommentMono).map(t -> Comment.builder()
+                            .id(t.getT1().getId())
+                            .description(t.getT2().getDescription())
+                            .book(t.getT1().getBook())
+                            .build())
+                    .flatMap(commentRepository::save)
+                    .map(converter:: toDto);
         }
         return Mono.empty();
     }
@@ -65,12 +68,16 @@ public class CommentRestController {
     public Mono<CommentDto> addComment(@Valid @RequestBody CommentDtoRequest comment,
                                     BindingResult bindingResult) {
         if (!bindingResult.hasErrors()) {
-            return commentRepository.save(Comment.builder()
-                    .id(new ObjectId())
-                    .description(comment.getDescription())
-                    .book(bookRepository.findById(comment.getBookId()).block())
-                    .build())
-                    .map(converter::toDto);
+            var bookMono = bookRepository.findById(comment.getBookId());
+            var commentMono = Mono.just(comment);
+
+            return Mono.zip(commentMono, bookMono).map(t -> Comment.builder()
+                            .id(new ObjectId())
+                            .description(t.getT1().getDescription())
+                            .book(t.getT2())
+                            .build())
+                    .flatMap(commentRepository::save)
+                    .map(converter:: toDto);
         }
         return Mono.empty();
     }
