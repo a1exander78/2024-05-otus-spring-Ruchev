@@ -38,17 +38,30 @@ management:
   endpoints:
     web:
       exposure:
-        include: metrics, health, logfile
+        include: health
       base-path: /monitor
-  health:
-    defaults:
-      enabled: true
   endpoint:
     health:
       show-details: always
+  health:
+    circuitbreakers:
+      enabled: true
+
+resilience4j.circuitbreaker:
+  configs:
+    default:
+      registerHealthIndicator: true
+      slidingWindowSize: 10
+      minimumNumberOfCalls: 5
+      permittedNumberOfCallsInHalfOpenState: 3
+      automaticTransitionFromOpenToHalfOpenEnabled: true
+      waitDurationInOpenState: 5s
+      failureRateThreshold: 50
+      eventConsumerBufferSize: 50
+  instances:
+    myCircuitBreaker:
+      baseConfig: default
 
 logging:
   level:
-    ROOT: INFO
-  file:
-    name: init.log
+    ROOT: ERROR

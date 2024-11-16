@@ -1,5 +1,6 @@
 package ru.otus.hw.service;
 
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.otus.hw.converter.dto.AuthorDtoConverter;
@@ -10,6 +11,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RequiredArgsConstructor
+@CircuitBreaker(name = "myCircuitBreaker")
 @Service
 public class AuthorServiceImpl implements AuthorService {
     private final AuthorRepository authorRepository;

@@ -10,11 +10,12 @@
     </parent>
 
     <groupId>ru.otus.hw</groupId>
-    <artifactId>hw15-spring-boot-actuator</artifactId>
-    <name>spring-boot-actuator</name>
+    <artifactId>hw17-resilience4j</artifactId>
+    <name>resilience4j</name>
     <version>0.0.1-SNAPSHOT</version>
 
     <properties>
+        <circuitbreaker.version>2.2.0</circuitbreaker.version>
         <java.version>17</java.version>
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
@@ -68,6 +69,12 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-actuator</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>io.github.resilience4j</groupId>
+            <artifactId>resilience4j-spring-boot3</artifactId>
+            <version>${circuitbreaker.version}</version>
         </dependency>
 
         <dependency>
