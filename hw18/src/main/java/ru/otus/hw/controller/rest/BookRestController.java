@@ -24,6 +24,7 @@ import ru.otus.hw.model.Book;
 import ru.otus.hw.model.Genre;
 import ru.otus.hw.repository.reactive.AuthorRepository;
 import ru.otus.hw.repository.reactive.BookRepository;
+import ru.otus.hw.repository.reactive.CommentRepository;
 import ru.otus.hw.repository.reactive.GenreRepository;
 
 @RequiredArgsConstructor
@@ -34,6 +35,8 @@ public class BookRestController {
     private final AuthorRepository authorRepository;
 
     private final GenreRepository genreRepository;
+
+    private final CommentRepository commentRepository;
 
     private final BookDtoConverter converter;
 
@@ -78,7 +81,8 @@ public class BookRestController {
 
     @DeleteMapping("/api/v1/book/{id}")
     public Mono<Void> deleteBook(@PathVariable("id") ObjectId id) {
-        return bookRepository.deleteById(id);
+        return commentRepository.deleteAllCommentsByBookId(id)
+                .then(bookRepository.deleteById(id));
     }
 
     @ExceptionHandler(EntityNotFoundException.class)

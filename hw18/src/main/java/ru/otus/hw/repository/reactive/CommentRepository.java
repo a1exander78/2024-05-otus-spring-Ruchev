@@ -14,4 +14,6 @@ public interface CommentRepository extends ReactiveMongoRepository<Comment, Obje
     Mono<Comment> save(Comment comment);
 
     Mono<Void> deleteById(ObjectId id);
+
+    Flux<Void> deleteAllCommentsByBookId(ObjectId bookId);
 }
