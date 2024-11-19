@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title th:text="#{all-comments-page}">List of all comments on the book</title>
+    <link rel="stylesheet" href="../static/css/style.css" th:href="@{/css/style.css}" type="text/css">
+    <script th:src="@{/js/scripts.js}" type="text/javascript"></script>
+</head>
+<body th:attr="onload='showAllCommentsByBook(\'' + ${bookId} + '\')'">
+    <h3 th:text="#{comment-table-header(${bookId})}">All comments on the book</h3>
+    <table class="element">
+        <thead>
+            <tr>
+                <th th:text="#{comment-field-id}">ID</th>
+                <th th:text="#{comment-field-description}">Description</th>
+            </tr>
+        </thead>
+        <tbody id="comment-table">
+            <tr>
+                <td>1</td>
+                <td>Relevant</td>
+            </tr>
+        </tbody>
+    </table>
+    <p/>
+    <div class="row">
+        <a href="allBooks.html" th:href="@{/book/}" th:text="#{back-to-allBooks-button-caption}">Back to books</a>
+    </div>
+</body>
+</html>
