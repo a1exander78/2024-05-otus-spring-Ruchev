@@ -15,7 +15,6 @@ import java.util.List;
 import java.util.Optional;
 
 @RequiredArgsConstructor
-@CircuitBreaker(name = "myCircuitBreaker")
 @Service
 public class CommentServiceImpl implements CommentService {
     private final CommentRepository commentRepository;
@@ -24,6 +23,7 @@ public class CommentServiceImpl implements CommentService {
 
     private final CommentDtoConverter converter;
 
+    @CircuitBreaker(name = "serviceCircuitBreaker")
     @Override
     public List<CommentDto> findAllCommentsByBookId(long bookId) {
         var commentsList = commentRepository.findAllCommentsByBookId(bookId);
@@ -33,11 +33,13 @@ public class CommentServiceImpl implements CommentService {
         return commentsList.stream().map(converter::toDto).toList();
     }
 
+    @CircuitBreaker(name = "serviceCircuitBreaker")
     @Override
     public Optional<CommentDto> findById(long id) {
         return commentRepository.findById(id).map(converter::toDto);
     }
 
+    @CircuitBreaker(name = "serviceCircuitBreaker")
     @Transactional
     @Override
     public CommentDto insert(String description, long bookId) {
@@ -45,6 +47,7 @@ public class CommentServiceImpl implements CommentService {
         return converter.toDto(newComment);
     }
 
+    @CircuitBreaker(name = "serviceCircuitBreaker")
     @Transactional
     @Override
     public CommentDto update(long id, String description) {
@@ -55,6 +58,7 @@ public class CommentServiceImpl implements CommentService {
         return converter.toDto(updatedComment);
     }
 
+    @CircuitBreaker(name = "serviceCircuitBreaker")
     @Transactional
     @Override
     public void deleteById(long id) {

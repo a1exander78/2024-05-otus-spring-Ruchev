@@ -11,13 +11,13 @@ import java.util.List;
 import java.util.Optional;
 
 @RequiredArgsConstructor
-@CircuitBreaker(name = "myCircuitBreaker")
 @Service
 public class GenreServiceImpl implements GenreService {
     private final GenreRepository genreRepository;
 
     private final GenreDtoConverter converter;
 
+    @CircuitBreaker(name = "serviceCircuitBreaker")
     @Override
     public List<GenreDto> findAll() {
         return genreRepository.findAll().stream().map(converter::toDto).toList();

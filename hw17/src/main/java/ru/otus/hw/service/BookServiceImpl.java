@@ -16,7 +16,6 @@ import java.util.List;
 import java.util.Optional;
 
 @RequiredArgsConstructor
-@CircuitBreaker(name = "myCircuitBreaker")
 @Service
 public class BookServiceImpl implements BookService {
     private final AuthorRepository authorRepository;
@@ -27,16 +26,19 @@ public class BookServiceImpl implements BookService {
 
     private final BookDtoConverter converter;
 
+    @CircuitBreaker(name = "serviceCircuitBreaker")
     @Override
     public List<BookDto> findAll() {
         return bookRepository.findAll().stream().map(converter::toDto).toList();
     }
 
+    @CircuitBreaker(name = "serviceCircuitBreaker")
     @Override
     public Optional<BookDto> findById(long id) {
         return bookRepository.findById(id).map(converter::toDto);
     }
 
+    @CircuitBreaker(name = "serviceCircuitBreaker")
     @Transactional
     @Override
     public BookDto insert(String title, long authorId, long genreId) {
@@ -44,6 +46,7 @@ public class BookServiceImpl implements BookService {
         return converter.toDto(newBook);
     }
 
+    @CircuitBreaker(name = "serviceCircuitBreaker")
     @Transactional
     @Override
     public BookDto update(long id, String title, long authorId, long genreId) {
@@ -51,6 +54,7 @@ public class BookServiceImpl implements BookService {
         return converter.toDto(newBook);
     }
 
+    @CircuitBreaker(name = "serviceCircuitBreaker")
     @Transactional
     @Override
     public void deleteById(long id) {

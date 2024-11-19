@@ -11,13 +11,13 @@ import java.util.List;
 import java.util.Optional;
 
 @RequiredArgsConstructor
-@CircuitBreaker(name = "myCircuitBreaker")
 @Service
 public class AuthorServiceImpl implements AuthorService {
     private final AuthorRepository authorRepository;
 
     private final AuthorDtoConverter converter;
 
+    @CircuitBreaker(name = "serviceCircuitBreaker")
     @Override
     public List<AuthorDto> findAll() {
         return authorRepository.findAll().stream().map(converter::toDto).toList();

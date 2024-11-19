@@ -15,9 +15,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import ru.otus.hw.dto.BookDto;
 import ru.otus.hw.dto.BookDtoRequest;
 import ru.otus.hw.exception.EntityNotFoundException;
-import ru.otus.hw.service.AuthorService;
 import ru.otus.hw.service.BookService;
-import ru.otus.hw.service.GenreService;
 
 import java.util.List;
 
@@ -25,10 +23,6 @@ import java.util.List;
 @RestController
 public class BookRestController {
     private final BookService bookService;
-
-    private final AuthorService authorService;
-
-    private final GenreService genreService;
 
     @GetMapping("/api/v1/book/")
     public List<BookDto> readAllBooks() {
