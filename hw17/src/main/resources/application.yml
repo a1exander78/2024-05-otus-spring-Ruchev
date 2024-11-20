@@ -1,0 +1,67 @@
+spring:
+  data:
+    rest:
+      basePath: /rest
+
+  messages:
+    encoding: UTF-8
+
+  datasource:
+    url: jdbc:h2:mem:maindb
+
+  sql:
+    init:
+      mode: never
+      data-locations: data.sql
+      schema-locations: schema.sql
+
+  liquibase:
+    enabled: true
+    change-log: classpath:db/changelog/db.changelog-master.yml
+    contexts: hw05
+
+  jpa:
+    open-in-view: false
+    generate-ddl: false
+    hibernate:
+      ddl-auto: none
+
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+
+  jmx:
+    enabled: true
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health
+      base-path: /monitor
+  endpoint:
+    health:
+      show-details: always
+  health:
+    circuitbreakers:
+      enabled: true
+
+resilience4j.circuitbreaker:
+  configs:
+    default:
+      registerHealthIndicator: true
+      slidingWindowSize: 10
+      minimumNumberOfCalls: 5
+      permittedNumberOfCallsInHalfOpenState: 3
+      automaticTransitionFromOpenToHalfOpenEnabled: true
+      waitDurationInOpenState: 5s
+      failureRateThreshold: 50
+      eventConsumerBufferSize: 50
+  instances:
+    serviceCircuitBreaker:
+      baseConfig: default
+
+logging:
+  level:
+    ROOT: ERROR
