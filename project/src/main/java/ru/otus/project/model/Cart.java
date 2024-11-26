@@ -18,6 +18,7 @@ import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -25,17 +26,20 @@ import lombok.ToString;
 
 import java.util.List;
 
+@Builder
 @Getter
 @EqualsAndHashCode(exclude = {"cartStatus", "user", "bags"})
 @ToString(exclude = {"cartStatus", "user", "bags"})
 @AllArgsConstructor
 @NoArgsConstructor
-@NamedEntityGraphs({@NamedEntityGraph(name = "cart-user-entity-graph",
-        attributeNodes = @NamedAttributeNode("user")),
+@NamedEntityGraphs({
         @NamedEntityGraph(name = "cart-status-entity-graph",
                 attributeNodes = @NamedAttributeNode("cartStatus")),
+        @NamedEntityGraph(name = "cart-user-entity-graph",
+                attributeNodes = @NamedAttributeNode("user")),
         @NamedEntityGraph(name = "cart-bags-entity-graph",
-                attributeNodes = @NamedAttributeNode("bags"))})
+                attributeNodes = @NamedAttributeNode("bags"))
+})
 @Table(name = "cart")
 @Entity
 public class Cart {
