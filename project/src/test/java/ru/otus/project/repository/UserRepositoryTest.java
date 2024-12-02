@@ -99,6 +99,18 @@ class UserRepositoryTest {
         actualUsers.forEach(System.out::println);
     }
 
+    @DisplayName("должен загружать список пользователей по Authorities")
+    @Test
+    void shouldReturnCorrectUserListByAuthorities() {
+        var actualUsers = repository.findByAuthoritiesIn(List.of(1L));
+
+        var expectedUser = em.find(User.class, 1L);
+
+        assertThat(actualUsers).containsExactlyElementsOf(List.of(expectedUser));
+
+        actualUsers.forEach(System.out::println);
+    }
+
     @DisplayName("должен обновлять пароль")
     @Test
     void shouldUpdateUserPassword() {

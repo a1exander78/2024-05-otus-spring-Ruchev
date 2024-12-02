@@ -23,6 +23,8 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     List<User> findByAddressDistrict(String district);
 
+    List<User> findByAuthoritiesIn(List<Long> authorities);
+
     @Modifying
     @Query("update User u set u.password = :password where u.id = :id")
     int updateUserPassword(@Param(value = "id") long id, @Param(value = "password") String password);
