@@ -2,7 +2,11 @@ package ru.otus.project;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import ru.otus.project.props.AppProps;
+import ru.otus.project.props.SecurityProps;
 
+@EnableConfigurationProperties(AppProps.class)
 @SpringBootApplication
 public class Application {
 

@@ -1,4 +1,7 @@
 spring:
+  messages:
+    encoding: UTF-8
+
   h2:
     console.enabled: false
 
@@ -26,3 +29,10 @@ spring:
 logging:
   level:
     ROOT: ERROR
+
+app-props:
+  limitForBagsInHome: 6
+  limitForBagsInCart: 4
+
+security-props:
+  salt: "Salt"

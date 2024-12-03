@@ -1,13 +1,14 @@
 package ru.otus.project.service.impl;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.otus.project.dto.user.UserInfoDto;
 import ru.otus.project.dto.user.UserNoPasswordDto;
 import ru.otus.project.exception.CustomQueryException;
-import ru.otus.project.exception.PasswordChangingException;
+import ru.otus.project.exception.PasswordException;
 import ru.otus.project.mapper.UserMapper;
 import ru.otus.project.dto.user.UserDto;
 import ru.otus.project.model.Address;
@@ -31,6 +32,7 @@ public class UserServiceImpl implements UserService {
 
     private final PasswordEncoder passwordEncoder;
 
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     @Override
     public List<UserInfoDto> findAll() {
         return userRepository.findAll().stream().map(mapper::toInfoDto).toList();
@@ -46,6 +48,7 @@ public class UserServiceImpl implements UserService {
         return userRepository.findByLogin(login).map(mapper::toDto);
     }
 
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     @Override
     public List<UserInfoDto> findByHome(String street, String streetNumber) {
         return userRepository.findByAddressStreetAndAddressStreetNumber(street, streetNumber).stream()
@@ -53,16 +56,19 @@ public class UserServiceImpl implements UserService {
                 .toList();
     }
 
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     @Override
     public List<UserInfoDto> findByDistrict(String district) {
         return userRepository.findByAddressDistrict(district).stream().map(mapper::toInfoDto).toList();
     }
 
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     @Override
     public List<UserInfoDto> findByAuthority(long authority) {
         return userRepository.findByAuthoritiesIn(List.of(authority)).stream().map(mapper::toInfoDto).toList();
     }
 
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     @Transactional
     @Override
     public UserNoPasswordDto insert(String login, String password, Address address, List<Long> authorities) {
@@ -70,6 +76,7 @@ public class UserServiceImpl implements UserService {
         return mapper.toNoPasswordDto(newUser);
     }
 
+    @PreAuthorize("hasAuthority('ROLE_USER')")
     @Transactional
     @Override
     public UserDto updatePassword(long id, String password) {
@@ -79,9 +86,10 @@ public class UserServiceImpl implements UserService {
             }
             return mapper.toDto(entityService.getUserIfExists(id));
         }
-        throw new PasswordChangingException("New password should be different from old");
+        throw new PasswordException("New password should be different from old");
     }
 
+    @PreAuthorize("hasAuthority('ROLE_USER')")
     @Transactional
     @Override
     public UserNoPasswordDto updateUserName(long id, String userName) {
@@ -91,6 +99,7 @@ public class UserServiceImpl implements UserService {
         return mapper.toNoPasswordDto(entityService.getUserIfExists(id));
     }
 
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     @Transactional
     @Override
     public UserNoPasswordDto updateAuthorities(long id, List<Long> authorityIds) {
@@ -101,6 +110,7 @@ public class UserServiceImpl implements UserService {
         return mapper.toNoPasswordDto(userRepository.save(user));
     }
 
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     @Override
     public void delete(long id) {
         userRepository.deleteById(id);

@@ -9,7 +9,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-import ru.otus.project.exception.PasswordChangingException;
+import ru.otus.project.exception.PasswordException;
 import ru.otus.project.mapper.UserMapperImpl;
 import ru.otus.project.service.impl.UserServiceImpl;
 import ru.otus.project.service.util.EntityService;
@@ -106,7 +106,7 @@ class UserServiceTest extends TestData {
     void shouldNotUpdatePassword() {
         String newPassword = "1_1";
 
-        assertThatThrownBy(() -> userService.updatePassword(ID_2, newPassword)).isInstanceOf(PasswordChangingException.class);
+        assertThatThrownBy(() -> userService.updatePassword(ID_2, newPassword)).isInstanceOf(PasswordException.class);
     }
 
     @DirtiesContext(methodMode = DirtiesContext.MethodMode.AFTER_METHOD)

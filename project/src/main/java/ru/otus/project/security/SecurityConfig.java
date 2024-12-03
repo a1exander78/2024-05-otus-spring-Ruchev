@@ -29,7 +29,7 @@ public class SecurityConfig {
                 .sessionManagement((session) -> session
                         .sessionCreationPolicy(SessionCreationPolicy.ALWAYS))
                 .authorizeHttpRequests((authorize) -> authorize
-                        .requestMatchers("/h2-console/**").permitAll()
+                        .requestMatchers("/**").permitAll()
                         .anyRequest().denyAll()
                 )
                 .formLogin(Customizer.withDefaults())

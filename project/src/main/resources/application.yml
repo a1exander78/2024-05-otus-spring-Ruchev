@@ -1,4 +1,10 @@
 spring:
+  mvc:
+    hiddenmethod.filter.enabled: true
+
+  messages:
+    encoding: UTF-8
+
   h2:
     console.enabled: true
 
@@ -26,3 +32,10 @@ spring:
 logging:
   level:
     ROOT: ERROR
+
+app-props:
+  limitForBagsInHome: 6
+  limitForBagsInCart: 5
+
+security-props:
+  salt: "Salt"
