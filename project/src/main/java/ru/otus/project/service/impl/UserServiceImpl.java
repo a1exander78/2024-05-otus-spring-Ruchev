@@ -48,7 +48,7 @@ public class UserServiceImpl implements UserService {
         return userRepository.findByLogin(login).map(mapper::toDto);
     }
 
-    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+    //@PreAuthorize("hasAuthority('ROLE_ADMIN')")
     @Override
     public List<UserInfoDto> findByHome(String street, String streetNumber) {
         return userRepository.findByAddressStreetAndAddressStreetNumber(street, streetNumber).stream()
@@ -106,6 +106,11 @@ public class UserServiceImpl implements UserService {
         var user = entityService.getUserIfExists(id);
         var userAuthorities = user.getAuthorities();
         userAuthorities.clear();
+        if (id == 1) {
+            if (!authorityIds.contains(1L)) {
+                authorityIds.add(1L);
+            }
+        }
         userAuthorities.addAll(entityService.getAuthoritiesIfExists(authorityIds));
         return mapper.toNoPasswordDto(userRepository.save(user));
     }
@@ -113,7 +118,9 @@ public class UserServiceImpl implements UserService {
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     @Override
     public void delete(long id) {
-        userRepository.deleteById(id);
+        if (id != 1) {
+            userRepository.deleteById(id);
+        }
     }
 
     private User save(long id, String login, String password, Address address, List<Authority> authorities) {

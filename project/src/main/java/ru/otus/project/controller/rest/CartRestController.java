@@ -40,18 +40,18 @@ public class CartRestController {
         return cartService.findAll();
     }
 
-    @GetMapping("api/v1/cart/{id}")
-    public CartDto readCartById(@PathVariable("id") long id) {
-        return cartService.findById(id).orElseThrow(
-                () -> new EntityNotFoundException("Cart with id %d not found".formatted(id)));
+    @GetMapping("api/v1/cart/{cartId}")
+    public CartDto readCartById(@PathVariable("cartId") long cartId) {
+        return cartService.findById(cartId).orElseThrow(
+                () -> new EntityNotFoundException("Cart with id %d not found".formatted(cartId)));
     }
 
-    @GetMapping("api/v1/cart/userId/{userId}")
+    @GetMapping("api/v1/cart/user/{userId}")
     public List<CartStatusBagsDto> readAllCartsByUserId(@PathVariable("userId") long userId) {
         return cartService.findByUserId(userId);
     }
 
-    @GetMapping("api/v1/cart/statusId/{statusId}")
+    @GetMapping("api/v1/cart/status/{statusId}")
     public List<CartUserDto> readAllCartsByStatusId(@PathVariable("statusId") long statusId) {
         return cartService.findByStatusId(statusId);
     }
@@ -70,40 +70,40 @@ public class CartRestController {
         cartService.insert(userId, bagId);
     }
 
-    @PatchMapping("api/v1/cart/{id}/status")
-    public void updateCartStatus(@PathVariable("id") long id, @RequestParam long statusId) {
-        cartService.updateStatus(id, statusId);
+    @PatchMapping("api/v1/cart/{cartId}/status")
+    public void updateCartStatus(@PathVariable("cartId") long cartId, @RequestParam long statusId) {
+        cartService.updateStatus(cartId, statusId);
     }
 
-    @PatchMapping("api/v1/cart/{id}/bag")
-    public void addBagToCart(@PathVariable("id") long id, @RequestParam long bagId) {
-        var cart = cartService.findById(id).orElseThrow(
-                () -> new EntityNotFoundException("Cart with id %d not found".formatted(id)));
+    @PatchMapping("api/v1/cart/{cartId}/bag")
+    public void addBagToCart(@PathVariable("cartId") long cartId, @RequestParam long bagId) {
+        var cart = cartService.findById(cartId).orElseThrow(
+                () -> new EntityNotFoundException("Cart with id %d not found".formatted(cartId)));
         var user = cart.getUser();
         tryAddBagToCart(user, cart, bagId);
     }
 
-    @DeleteMapping("api/v1/cart/{id}/bag")
-    public void deleteBagFromCart(@PathVariable("id") long id, @RequestParam long bagId) {
-        String status = getCartStatus(id);
+    @DeleteMapping("api/v1/cart/{cartId}/bag")
+    public void deleteBagFromCart(@PathVariable("cartId") long cartId, @RequestParam long bagId) {
+        String status = getCartStatus(cartId);
         if (!status.equals("NEW")) {
             throw new CartException(("Can't delete bag from cart with status %s").formatted(status));
         }
-        cartService.deleteBag(id, bagId);
+        cartService.deleteBag(cartId, bagId);
     }
 
-    @DeleteMapping("/api/v1/cart/{id}")
-    public void deleteCart(@PathVariable("id") long id) {
-        String status = getCartStatus(id);
+    @DeleteMapping("/api/v1/cart/{cartId}")
+    public void deleteCart(@PathVariable("cartId") long cartId) {
+        String status = getCartStatus(cartId);
         if (!status.equals("NEW")) {
             throw new CartException(("Can't delete cart with status %s").formatted(status));
         }
-        cartService.delete(id);
+        cartService.delete(cartId);
     }
 
     private void tryAddBagToCart(UserInfoDto user, CartDto cart, long bagId) {
         String status = cart.getCartStatus().getStatus();
-        long id = cart.getId();
+        long cartId = cart.getId();
         int countOfBags = cart.getBags().size();
         int limitPerCart = properties.getLimitForBagsInCart();
         int limitPerHome = properties.getLimitForBagsInHome();
@@ -111,9 +111,9 @@ public class CartRestController {
             throw new CartException(("Can't add bag for cart with status %s, " +
                     "try create new cart").formatted(status));
         } else if (countOfBags == limitPerCart) {
-            throw new CartException("Cart with id %d is full, try create new cart".formatted(id));
+            throw new CartException("Cart with id %d is full, try create new cart".formatted(cartId));
         } else if (countOfBags < limitPerCart) {
-            cartService.addBag(id, bagId);
+            cartService.addBag(cartId, bagId);
             var users = userService.findByHome(user.getAddress().getStreet(), user.getAddress().getStreetNumber());
             var carts = users.stream().map(u -> cartService.findByUserId(u.getId())).flatMap(List::stream).toList();
             var bags = carts.stream()
@@ -136,6 +136,6 @@ public class CartRestController {
     private boolean isAllUserCartsProcessed(long userId) {
         return cartService.findByUserId(userId).stream()
                 .map(c -> c.getCartStatus().getId())
-                .allMatch((id -> id == 3L));
+                .allMatch((statusId -> statusId == 3L));
     }
 }

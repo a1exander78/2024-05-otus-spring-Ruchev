@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title th:text="#{add-bag-to-cart-page-title}">Add bag to cart</title>
+    <link rel="stylesheet" href="../static/css/style.css" th:href="@{/css/style.css}" type="text/css">
+    <script th:src="@{/js/scripts.js}" type="text/javascript"></script>
+</head>
+
+<body onload="getBags()">
+<form id="add-bag-to-cart-form" action="addBagToCart.html" th:action="@{/api/v1/cart/__${cartId}__/bag/}" th:method="patch">
+    <h3 th:text="#{add-bag-to-cart-form-header}">Add bag to cart:</h3>
+    <p/>
+    <div class="row">
+        <label for="cart-id-input" th:text="#{cart-field-id} + ':'">Cart ID:</label>
+        <input id="cart-id-input" type="text" readonly="readonly" name="id" th:value="${cartId}" value="1"/>
+    </div>
+
+    <p/>
+    <div class="row">
+        <label for="bag-select" th:text="#{bag-field-typeOfWaste} + ':'">Bag:</label>
+        <select id="bag-select" name="bag"></select>
+    </div>
+    <p/>
+    <div class="row">
+        <button type="button" onclick="addBagToCart()" th:text="#{save-button-caption}">Save</button>
+        <a href="singleCart.html" th:href="@{/user/{userId}/cart/{cartId}(userId=${userId}, cartId=${cartId})}">
+            <button type="button" th:text="#{cancel-button-caption}">Cancel</button>
+        </a>
+    </div>
+</form>
+</body>
+</html>

@@ -69,7 +69,7 @@ class CartRestControllerTest extends TestData {
     void shouldReturnCorrectCartsListByUser() throws Exception {
         given(cartService.findByUserId(ID_3)).willReturn(List.of(CART_STATUS_BAGS_2, CART_STATUS_BAGS_5));
 
-        mvc.perform(get("/api/v1/cart/userId/3"))
+        mvc.perform(get("/api/v1/cart/user/3"))
                 .andExpect(status().isOk())
                 .andExpect(content().json(mapper.writeValueAsString(List.of(CART_STATUS_BAGS_2, CART_STATUS_BAGS_5))));
     }
@@ -79,7 +79,7 @@ class CartRestControllerTest extends TestData {
     void shouldReturnCorrectCartsListByStatus() throws Exception {
         given(cartService.findByStatusId(ID_1)).willReturn(List.of(CART_USER_3, CART_USER_4));
 
-        mvc.perform(get("/api/v1/cart/statusId/1"))
+        mvc.perform(get("/api/v1/cart/status/1"))
                 .andExpect(status().isOk())
                 .andExpect(content().json(mapper.writeValueAsString(List.of(CART_USER_3, CART_USER_4))));
     }

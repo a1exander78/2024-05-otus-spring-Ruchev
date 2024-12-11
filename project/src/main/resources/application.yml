@@ -34,7 +34,7 @@ logging:
     ROOT: ERROR
 
 app-props:
-  limitForBagsInHome: 6
+  limitForBagsInHome: 5
   limitForBagsInCart: 5
 
 security-props:

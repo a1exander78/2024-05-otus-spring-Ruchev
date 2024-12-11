@@ -1,6 +1,8 @@
 package ru.otus.project.service.impl;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PostAuthorize;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.otus.project.dto.cart.CartDto;
@@ -26,26 +28,31 @@ public class CartServiceImpl implements CartService {
 
     private final CartMapper mapper;
 
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     @Override
     public List<CartStatusBagsDto> findAll() {
         return cartRepository.findAll().stream().map(mapper::toCartStatusBagsDto).toList();
     }
 
+    @PostAuthorize("hasAuthority('ROLE_ADMIN') || returnObject.get().user.login == authentication.name")
     @Override
     public Optional<CartDto> findById(long id) {
         return cartRepository.findById(id).map(mapper::toDto);
     }
 
+    @PreAuthorize("hasAuthority('ROLE_USER')")
     @Override
     public List<CartStatusBagsDto> findByUserId(long userId) {
         return cartRepository.findByUserId(userId).stream().map(mapper::toCartStatusBagsDto).toList();
     }
 
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     @Override
     public List<CartUserDto> findByStatusId(long statusId) {
         return cartRepository.findByCartStatusId(statusId).stream().map(mapper::toCartUserDto).toList();
     }
 
+    @PreAuthorize("!hasAuthority('ROLE_ADMIN')")
     @Transactional
     @Override
     public CartDto insert(long userId, long bagId) {
@@ -63,6 +70,7 @@ public class CartServiceImpl implements CartService {
         return mapper.toDto(entityService.getCartIfExists(id));
     }
 
+    @PreAuthorize("!hasAuthority('ROLE_ADMIN')")
     @Transactional
     @Override
     public CartDto addBag(long id, long bagId) {
@@ -73,6 +81,7 @@ public class CartServiceImpl implements CartService {
         return mapper.toDto(cartRepository.save(cart));
     }
 
+    @PreAuthorize("!hasAuthority('ROLE_ADMIN')")
     @Transactional
     @Override
     public CartDto deleteBag(long id, long bagId) {
@@ -83,6 +92,7 @@ public class CartServiceImpl implements CartService {
         return mapper.toDto(cartRepository.save(cart));
     }
 
+    @PreAuthorize("!hasAuthority('ROLE_ADMIN')")
     @Override
     public void delete(long id) {
         cartRepository.deleteById(id);

@@ -26,10 +26,10 @@ public class AuthorityRestController {
         return authorityService.findAll();
     }
 
-    @GetMapping("api/v1/authority/{id}")
-    public AuthorityDto readAuthority(@PathVariable("id") long id) {
-        return authorityService.findById(id).orElseThrow(
-                () -> new EntityNotFoundException("Authority with id %d not found".formatted(id)));
+    @GetMapping("api/v1/authority/{authorityId}")
+    public AuthorityDto readAuthority(@PathVariable("authorityId") long authorityId) {
+        return authorityService.findById(authorityId).orElseThrow(
+                () -> new EntityNotFoundException("Authority with id %d not found".formatted(authorityId)));
     }
 
     @PostMapping("/api/v1/authority/")
@@ -40,10 +40,10 @@ public class AuthorityRestController {
         }
     }
 
-    @DeleteMapping("/api/v1/authority/{id}")
-    public void deleteAuthority(@PathVariable("id") long id) {
-        if (authorityService.delete(id) != 1) {
-            throw new EntityUnprocessableException(("Authority with id %d already has users").formatted(id));
+    @DeleteMapping("/api/v1/authority/{authorityId}")
+    public void deleteAuthority(@PathVariable("authorityId") long authorityId) {
+        if (authorityService.delete(authorityId) != 1) {
+            throw new EntityUnprocessableException(("Authority with id %d already has users").formatted(authorityId));
         }
     }
 }

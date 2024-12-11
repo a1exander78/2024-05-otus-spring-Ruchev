@@ -6,7 +6,7 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import ru.otus.project.props.AppProps;
 import ru.otus.project.props.SecurityProps;
 
-@EnableConfigurationProperties(AppProps.class)
+@EnableConfigurationProperties({AppProps.class, SecurityProps.class})
 @SpringBootApplication
 public class Application {
 

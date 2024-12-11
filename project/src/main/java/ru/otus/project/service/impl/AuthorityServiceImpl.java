@@ -42,7 +42,7 @@ public class AuthorityServiceImpl implements AuthorityService {
     @Override
     public int delete(long id) {
         var users = userRepository.findByAuthoritiesIn(List.of(id));
-        if (!users.isEmpty()) {
+        if (!users.isEmpty() || id == 1) {
             return 0;
         }
         authorityRepository.deleteById(id);

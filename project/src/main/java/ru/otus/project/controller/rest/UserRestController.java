@@ -35,8 +35,8 @@ public class UserRestController {
         return userService.findAll();
     }
 
-    @GetMapping("api/v1/user/{id}")
-    public UserNoPasswordDto readUserById(@PathVariable("id") long id) {
+    @GetMapping("api/v1/user/{userId}")
+    public UserNoPasswordDto readUserById(@PathVariable("userId") long id) {
         return userService.findById(id).orElseThrow(
                 () -> new EntityNotFoundException("User with id %d not found".formatted(id)));
     }
@@ -53,7 +53,7 @@ public class UserRestController {
     }
 
     @GetMapping("api/v1/user/authority/{authorityId}")
-    public List<UserInfoDto> readAllUsersByAuthority(@PathVariable("authorityId") long authorityId) {
+    public List<UserInfoDto> readAllUsersByAuthorityId(@PathVariable("authorityId") long authorityId) {
         return userService.findByAuthority(authorityId);
     }
 
@@ -67,20 +67,20 @@ public class UserRestController {
         userService.insert(user.getLogin(), user.getRawPassword(), address, user.getAuthorities());
     }
 
-    @PatchMapping("api/v1/user/{id}/password")
-    public void updateUserPassword(@PathVariable("id") long id,
+    @PatchMapping("api/v1/user/{userId}/password")
+    public void updateUserPassword(@PathVariable("userId") long id,
                                    @Size(min = 3) @NotBlank @RequestParam String password) {
         userService.updatePassword(id, password);
     }
 
-    @PatchMapping("api/v1/user/{id}/name")
-    public void updateUserName(@PathVariable("id") long id,
+    @PatchMapping("api/v1/user/{userId}/name")
+    public void updateUserName(@PathVariable("userId") long id,
                                @NotBlank @RequestParam String name) {
         userService.updateUserName(id, name);
     }
 
-    @PatchMapping("api/v1/user/{id}/authority/")
-    public void updateUserAuthorities(@PathVariable("id") long id,
+    @PatchMapping("api/v1/user/{userId}/authority/")
+    public void updateUserAuthorities(@PathVariable("userId") long id,
                                       @Valid @RequestBody UserAuthoritiesDto user,
                                       BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
@@ -89,8 +89,8 @@ public class UserRestController {
         userService.updateAuthorities(id, user.getAuthorities());
     }
 
-    @DeleteMapping("/api/v1/user/{id}")
-    public void deleteUser(@PathVariable("id") long id) {
+    @DeleteMapping("/api/v1/user/{userId}")
+    public void deleteUser(@PathVariable("userId") long id) {
         userService.delete(id);
     }
 }

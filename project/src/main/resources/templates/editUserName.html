@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title th:text="#{edit-user-username-page-title}">Change authority</title>
+    <link rel="stylesheet" href="../static/css/style.css" th:href="@{/css/style.css}" type="text/css">
+    <script th:src="@{/js/scripts.js}" type="text/javascript"></script>
+</head>
+
+<body>
+<form id="edit-name-form" action="editUserName.html" th:action="@{/api/v1/user/__${userId}__/name/}" th:method="patch">
+    <h3 th:text="#{user-form-header}">User Info:</h3>
+    <p/>
+    <div class="row">
+        <label for="id-input" th:text="#{user-field-id} + ':'">ID:</label>
+        <input id="id-input" type="text" readonly="readonly" name="id" value="1" th:value="${userId}"/>
+    </div>
+    <p/>
+    <div class="row">
+        <label for="name-input" th:text="#{user-field-username} + ':'">Name:</label>
+        <input id="name-input" type="text" name="name" value="New name"/>
+    </div>
+    <p/>
+    <div class="row">
+        <button type="button" onclick="changeUserName()" th:text="#{save-button-caption}">Save</button>
+        <a href="singleUser.html" th:href="@{/user/{userId}(userId=${userId})}">
+            <button type="button" th:text="#{cancel-button-caption}">Cancel</button>
+        </a>
+    </div>
+</form>
+</body>
+</html>
