@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title th:text="#{add-user-page-title}">Add user</title>
+    <link rel="stylesheet" href="../static/css/style.css" th:href="@{/css/style.css}" type="text/css">
+    <script th:src="@{/js/scripts.js}" type="text/javascript"></script>
+</head>
+
+<body onload="getAuthorities()">
+<form id="add-form" action="addUser.html" th:action="@{/api/v1/user/}" th:method="post">
+    <h3 th:text="#{user-form-header}">User Info:</h3>
+    <p/>
+    <div class="row">
+        <label for="user-login-input" th:text="#{user-field-login} + ':'">Login:</label>
+        <input id="user-login-input" name="login" type="text" value="User"/>
+    </div>
+    <p/>
+    <div class="row">
+        <label for="user-password-input" th:text="#{user-field-password} + ':'">Password:</label>
+        <input id="user-password-input" name="password" type="password" value="User"/>
+    </div>
+    <p/>
+    <div class="row">
+        <label for="user-district-input" th:text="#{user-field-district} + ':'">District:</label>
+        <input id="user-district-input" name="district" type="text" value="District"/>
+    </div>
+    <p/>
+    <div class="row">
+        <label for="user-street-input" th:text="#{user-field-street} + ':'">Street:</label>
+        <input id="user-street-input" name="street" type="text" value="Street"/>
+    </div>
+    <p/>
+    <div class="row">
+        <label for="user-streetNumber-input" th:text="#{user-field-streetNumber} + ':'">Street number:</label>
+        <input id="user-streetNumber-input" name="streetNumber" type="text" value="13"/>
+    </div>
+    <p/>
+    <div class="row">
+        <label for="user-flatNumber-input" th:text="#{user-field-flat} + ':'">Flat:</label>
+        <input id="user-flatNumber-input" name="flat" type="text" value="Flat"/>
+    </div>
+    <p/>
+    <div class="row">
+        <label for="authority-select" th:text="#{user-field-authority} + ':'">Authority:</label>
+        <select id="authority-select" name="authority" multiple="multiple"></select>
+    </div>
+    <p/>
+    <div class="row">
+        <button type="button" onclick="addUser()" th:text="#{save-button-caption}">Save</button>
+        <a href="allUsers.html" th:href="@{/user/}">
+            <button type="button" th:text="#{cancel-button-caption}">Cancel</button>
+        </a>
+    </div>
+</form>
+</body>
+</html>

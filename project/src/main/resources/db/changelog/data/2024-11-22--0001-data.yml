@@ -1,0 +1,143 @@
+databaseChangeLog:
+  - changeSet:
+      id: 2024-11-22--0001-authority
+      author: a1exander78
+      context: project
+      runOnChange: true
+      loadData:
+        columns:
+          - column:
+              name: id
+              generationType: always
+          - column:
+              name: authority
+        file: data/2024-11-22--0001-authority.csv
+        relativeToChangelogFile: true
+        separator: ;
+        quotChar: '"'
+        encoding: UTF-8
+        tableName: authority
+
+  - changeSet:
+      id: 2024-11-22--0002-bag
+      author: a1exander78
+      context: project
+      runOnChange: true
+      loadData:
+        columns:
+          - column:
+              name: id
+              generationType: always
+          - column:
+              name: type_of_waste
+        file: data/2024-11-22--0002-bag.csv
+        relativeToChangelogFile: true
+        separator: ;
+        quotChar: '"'
+        encoding: UTF-8
+        tableName: bag
+
+  - changeSet:
+      id: 2024-11-22--0003-users
+      author: a1exander78
+      context: project
+      runOnChange: true
+      loadData:
+        columns:
+          - column:
+              name: id
+              generationType: always
+          - column:
+              name: login
+          - column:
+              name: password
+          - column:
+              name: name
+          - column:
+              name: district
+          - column:
+              name: street
+          - column:
+              name: street_number
+        file: data/2024-11-22--0003-users.csv
+        relativeToChangelogFile: true
+        separator: ;
+        quotChar: '"'
+        encoding: UTF-8
+        tableName: users
+
+  - changeSet:
+      id: 2024-11-22--0004-status
+      author: a1exander78
+      context: project
+      runOnChange: true
+      loadData:
+        columns:
+          - column:
+              name: id
+              generationType: always
+          - column:
+              name: status
+        file: data/2024-11-22--0004-status.csv
+        relativeToChangelogFile: true
+        separator: ;
+        quotChar: '"'
+        encoding: UTF-8
+        tableName: cart_status
+
+  - changeSet:
+      id: 2024-11-22--0005-cart
+      author: a1exander78
+      context: project
+      runOnChange: true
+      loadData:
+        columns:
+          - column:
+              name: id
+              generationType: always
+          - column:
+              name: status_id
+          - column:
+              name: user_id
+        file: data/2024-11-22--0005-cart.csv
+        relativeToChangelogFile: true
+        separator: ;
+        quotChar: '"'
+        encoding: UTF-8
+        tableName: cart
+
+  - changeSet:
+      id: 2024-11-22--0006-user_authority
+      author: a1exander78
+      context: project
+      runOnChange: true
+      loadData:
+        columns:
+          - column:
+              name: user_id
+          - column:
+              name: authority_id
+        file: data/2024-11-22--0006-user_authority.csv
+        relativeToChangelogFile: true
+        separator: ;
+        quotChar: '"'
+        encoding: UTF-8
+        tableName: user_authority
+
+  - changeSet:
+      id: 2024-11-22--0007-cart_bag
+      author: a1exander78
+      context: project
+      runOnChange: true
+      loadData:
+        columns:
+          - column:
+              name: cart_id
+          - column:
+              name: bag_id
+        file: data/2024-11-22--0007-cart_bag.csv
+        relativeToChangelogFile: true
+        separator: ;
+        quotChar: '"'
+        encoding: UTF-8
+        tableName: cart_bag

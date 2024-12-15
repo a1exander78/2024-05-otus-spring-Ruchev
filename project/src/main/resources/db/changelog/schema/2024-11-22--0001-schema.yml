@@ -1,0 +1,174 @@
+databaseChangeLog:
+  - changeSet:
+        id: 2024-11-22--0001-authority
+        author: a1exander78
+        context: project or test
+        createTable:
+          tableName: authority
+          columns:
+            - column:
+                name: id
+                type: bigint
+                autoIncrement: true
+                constraints:
+                  primaryKey: true
+                  nullable: false
+            - column:
+                name: authority
+                type: varchar(255)
+                constraints:
+                  nullable: false
+
+  - changeSet:
+      id: 2024-11-22--0002-bag
+      author: a1exander78
+      context: project or test
+      createTable:
+        tableName: bag
+        columns:
+          - column:
+              name: id
+              type: bigint
+              autoIncrement: true
+              constraints:
+                primaryKey: true
+                nullable: false
+          - column:
+              name: type_of_waste
+              type: varchar(128)
+              constraints:
+                constraints:
+                  nullable: false
+
+  - changeSet:
+      id: 2024-11-22--0003-users
+      author: a1exander78
+      context: project or test
+      createTable:
+        tableName: users
+        columns:
+          - column:
+              name: id
+              type: bigint
+              autoIncrement: true
+              constraints:
+                primaryKey: true
+                nullable: false
+          - column:
+              name: login
+              type: varchar(32)
+              constraints:
+                nullable: false
+          - column:
+              name: password
+              type: varchar(128)
+              constraints:
+                nullable: false
+          - column:
+              name: name
+              type: varchar(255)
+          - column:
+              name: district
+              type: varchar(255)
+              constraints:
+                nullable: false
+          - column:
+              name: street
+              type: varchar(255)
+              constraints:
+                nullable: false
+          - column:
+              name: street_number
+              type: varchar(255)
+              constraints:
+                nullable: false
+          - column:
+              name: flat_number
+              type: varchar(255)
+              constraints:
+                nullable: false
+
+  - changeSet:
+      id: 2024-11-22--0004-status
+      author: a1exander78
+      context: project or test
+      createTable:
+        tableName: cart_status
+        columns:
+          - column:
+              name: id
+              type: bigint
+              autoIncrement: true
+              constraints:
+                primaryKey: true
+                nullable: false
+          - column:
+              name: status
+              type: varchar(128)
+              constraints:
+                nullable: false
+
+  - changeSet:
+      id: 2024-11-22--0005-cart
+      author: a1exander78
+      context: project or test
+      createTable:
+        tableName: cart
+        columns:
+          - column:
+              name: id
+              type: bigint
+              autoIncrement: true
+              constraints:
+                primaryKey: true
+                nullable: false
+          - column:
+              name: status_id
+              type: bigint
+              constraints:
+                foreignKeyName: fk_cart_status
+                references: cart_status(id)
+                deleteCascade: true
+          - column:
+              name: user_id
+              type: bigint
+              constraints:
+                foreignKeyName: fk_cart_user
+                references: users(id)
+                deleteCascade: true
+
+  - changeSet:
+      id: 2024-11-22--0006-user_authority
+      author: a1exander78
+      context: project or test
+      createTable:
+        tableName: user_authority
+        columns:
+          - column:
+              name: user_id
+              type: bigint
+              constraints:
+                nullable: false
+          - column:
+              name: authority_id
+              type: bigint
+              constraints:
+                nullable: false
+
+  - changeSet:
+      id: 2024-11-22--0007-cart_bag
+      author: a1exander78
+      context: project or test
+      createTable:
+        tableName: cart_bag
+        columns:
+          - column:
+              name: cart_id
+              type: bigint
+              constraints:
+                nullable: false
+          - column:
+              name: bag_id
+              type: bigint
+              constraints:
+                nullable: false

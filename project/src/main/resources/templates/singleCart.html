@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title th:text="#{cart-page-title}">Update cart</title>
+    <link rel="stylesheet" href="../static/css/style.css" th:href="@{/css/style.css}" type="text/css">
+    <script th:src="@{/js/scripts.js}" type="text/javascript"></script>
+</head>
+
+<body th:attr="onload='showSingleCart(' + ${cartId} +')'">
+    <h3 th:text="#{cart-table-header}">User</h3>
+
+    <table class="element">
+        <thead>
+            <tr>
+                <th th:text="#{cart-field-id}">ID</th>
+                <th th:text="#{cart-field-status}">Status</th>
+                <th th:text="#{cart-field-bags}">Bags</th>
+                <th th:text="#{user-field-id}">id</th>
+                <th th:text="#{user-field-login}">login</th>
+                <th th:text="#{user-field-username}">name</th>
+                <th th:text="#{user-field-district}">district</th>
+                <th th:text="#{user-field-home}">home</th>
+                <th th:text="#{user-field-flat}">flat</th>
+            </tr>
+        </thead>
+        <tbody id="cart-table"></tbody>
+    </table>
+    <p/>
+    <div>
+        <a href="deleteCart.html" th:href="@{/user/{userId}/cart/{cartId}/delete(userId=${userId}, cartId=${cartId})}" th:text="#{delete-button-caption}" th:if="${role == 'USER'}">Delete</a>
+    </div>
+    <p/>
+    <div>
+        <a href="deleteBagFromCart.html" th:href="@{/user/{userId}/cart/{cartId}/bag/delete(userId=${userId}, cartId=${cartId})}" th:text="#{delete-bag-from-cart-page-button-caption}" th:if="${role == 'USER'}">Delete bag from cart</a>
+    </div>
+    <p/>
+    <div>
+        <a href="addBagToCart.html" th:href="@{/user/{userId}/cart/{cartId}/bag/add(userId=${userId}, cartId=${cartId})}" th:text="#{add-bag-to-cart-page-button-caption}" th:if="${role == 'USER'}">Add bag to cart</a>
+    </div>
+    <p/>
+    <div>
+        <a href="allCartsByUser.html" th:href="@{/user/{userId}/cart/(userId=${userId})}" th:text="#{show-carts-button-caption}" th:if="${role == 'USER'}">Show carts</a></div>
+    </div>
+
+    <p/>
+    <div>
+        <a href="updateCartStatus.html" th:href="@{/cart/{cartId}/status/update(cartId=${cartId})}" th:text="#{update-cart-status-page-button-caption}" th:if="${role == 'ADMIN'}">Update cart status</a>
+    </div>
+    <p/>
+    <div>
+        <a href="start.html" th:href="@{/main}" th:text="#{main-page-button-caption}">Main page</a>
+    </div>
+</body>
+</html>

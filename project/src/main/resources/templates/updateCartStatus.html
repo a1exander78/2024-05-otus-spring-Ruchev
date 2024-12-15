@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title th:text="#{update-cart-status-page-title}">Update cart status</title>
+    <link rel="stylesheet" href="../static/css/style.css" th:href="@{/css/style.css}" type="text/css">
+    <script th:src="@{/js/scripts.js}" type="text/javascript"></script>
+</head>
+
+<body onload="getCartStatuses()">
+<form id="update-status-form" action="updateCartStatus.html" th:action="@{/api/v1/cart/__${cartId}__/status}" th:method="patch">
+    <h3 th:text="#{cart-form-header}">User Info:</h3>
+    <p/>
+    <div class="row">
+        <label for="id-input" th:text="#{cart-field-id} + ':'">ID:</label>
+        <input id="id-input" type="text" readonly="readonly" name="id" value="1" th:value="${cartId}"/>
+    </div>
+    <p/>
+    <div class="row">
+        <label for="status-select" th:text="#{cart-field-status} + ':'">Status:</label>
+        <select id="status-select" name="status"></select>
+    </div>
+    <p/>
+    <div class="row">
+        <button type="button" onclick="updateCartStatus()" th:text="#{save-button-caption}">Save</button>
+        <a href="allCarts.html" th:href="@{/cart/}">
+            <button type="button" th:text="#{cancel-button-caption}">Cancel</button>
+        </a>
+    </div>
+</form>
+</body>
+</html>

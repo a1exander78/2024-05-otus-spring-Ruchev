@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title th:text="#{delete-cart-page-title}">Delete cart</title>
+    <link rel="stylesheet" href="../static/css/style.css" th:href="@{/css/style.css}" type="text/css">
+    <script th:src="@{/js/scripts.js}" type="text/javascript"></script>
+</head>
+
+<body>
+    <form id="delete-cart-form" action="deleteCart.html" th:action="@{/api/v1/cart/{cartId}(cartId=${cartId})}" th:method="delete">
+        <h3 th:text="#{confirm-header}">Are you sure?</h3>
+        <div class="row">
+            <button type="button" th:attr="onclick='deleteCart(' + ${cartId} +')'" th:text="#{confirm-button-caption}">Confirm</button>
+            <a href="allCartsByUser.html" th:href="@{/user/{userId}/cart/(userId=${userId})}">
+                <button type="button" th:text="#{cancel-button-caption}">Cancel</button>
+            </a>
+        </div>
+    </form>
+</body>
+</html>

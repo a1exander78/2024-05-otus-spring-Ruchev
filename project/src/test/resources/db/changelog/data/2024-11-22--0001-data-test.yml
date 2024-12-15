@@ -1,0 +1,143 @@
+databaseChangeLog:
+  - changeSet:
+      id: 2024-11-22--0001-authority-test
+      author: a1exander78
+      context: test
+      runOnChange: true
+      loadData:
+        columns:
+          - column:
+              name: id
+              generationType: always
+          - column:
+              name: authority
+        file: data/2024-11-22--0001-authority-test.csv
+        relativeToChangelogFile: true
+        separator: ;
+        quotChar: '"'
+        encoding: UTF-8
+        tableName: authority
+
+  - changeSet:
+      id: 2024-11-22--0002-bag-test
+      author: a1exander78
+      context: test
+      runOnChange: true
+      loadData:
+        columns:
+          - column:
+              name: id
+              generationType: always
+          - column:
+              name: type_of_waste
+        file: data/2024-11-22--0002-bag-test.csv
+        relativeToChangelogFile: true
+        separator: ;
+        quotChar: '"'
+        encoding: UTF-8
+        tableName: bag
+
+  - changeSet:
+      id: 2024-11-22--0003-users-test
+      author: a1exander78
+      context: test
+      runOnChange: true
+      loadData:
+        columns:
+          - column:
+              name: id
+              generationType: always
+          - column:
+              name: login
+          - column:
+              name: password
+          - column:
+              name: name
+          - column:
+              name: district
+          - column:
+              name: street
+          - column:
+              name: street_number
+        file: data/2024-11-22--0003-users-test.csv
+        relativeToChangelogFile: true
+        separator: ;
+        quotChar: '"'
+        encoding: UTF-8
+        tableName: users
+
+  - changeSet:
+      id: 2024-11-22--0004-status-test
+      author: a1exander78
+      context: test
+      runOnChange: true
+      loadData:
+        columns:
+          - column:
+              name: id
+              generationType: always
+          - column:
+              name: status
+        file: data/2024-11-22--0004-status-test.csv
+        relativeToChangelogFile: true
+        separator: ;
+        quotChar: '"'
+        encoding: UTF-8
+        tableName: cart_status
+
+  - changeSet:
+      id: 2024-11-22--0005-cart-test
+      author: a1exander78
+      context: test
+      runOnChange: true
+      loadData:
+        columns:
+          - column:
+              name: id
+              generationType: always
+          - column:
+              name: status_id
+          - column:
+              name: user_id
+        file: data/2024-11-22--0005-cart-test.csv
+        relativeToChangelogFile: true
+        separator: ;
+        quotChar: '"'
+        encoding: UTF-8
+        tableName: cart
+
+  - changeSet:
+      id: 2024-11-22--0006-user_authority-test
+      author: a1exander78
+      context: test
+      runOnChange: true
+      loadData:
+        columns:
+          - column:
+              name: user_id
+          - column:
+              name: authority_id
+        file: data/2024-11-22--0006-user_authority-test.csv
+        relativeToChangelogFile: true
+        separator: ;
+        quotChar: '"'
+        encoding: UTF-8
+        tableName: user_authority
+
+  - changeSet:
+      id: 2024-11-22--0007-cart_bag-test
+      author: a1exander78
+      context: test
+      runOnChange: true
+      loadData:
+        columns:
+          - column:
+              name: cart_id
+          - column:
+              name: bag_id
+        file: data/2024-11-22--0007-cart_bag-test.csv
+        relativeToChangelogFile: true
+        separator: ;
+        quotChar: '"'
+        encoding: UTF-8
+        tableName: cart_bag
