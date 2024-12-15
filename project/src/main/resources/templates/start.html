@@ -7,29 +7,48 @@
 </head>
 
 <body>
-    <h3 th:text="#{lang-switcher-header}">Select language</h3>
+    <div class="block" id="selector">
+        <h3 th:text="#{lang-switcher-header}">Select language</h3>
 
-    <div>
-        <div class="row"><a href="#" th:href="@{/main(lang=en)}" th:text="#{en-lang-switch-button-caption}">Language - EN</a></div>
-        <div class="row"><a href="#" th:href="@{/main(lang=ru)}" th:text="#{ru-lang-switch-button-caption}">Language - RU</a></div>
+        <div>
+            <div class="row"><a href="#" th:href="@{/main(lang=en)}" th:text="#{en-lang-switch-button-caption}">Language - EN</a></div>
+            <div class="row"><a href="#" th:href="@{/main(lang=ru)}" th:text="#{ru-lang-switch-button-caption}">Language - RU</a></div>
+        </div>
+
+        <h3 th:text="#{page-switcher-header}">Select page</h3>
+
+        <div>
+            <div class="row"><a href="singleUser.html" th:href="@{/user/{userId}(userId=${userId})}" th:text="#{my-profile-button-caption}">My page</a></div>
+        </div>
+        <p/>
+        <div>
+            <div class="row"><a href="allCartsByUser.html" th:href="@{/user/{userId}/cart/(userId=${userId})}" th:text="#{show-carts-button-caption}" th:if="${role == 'USER'}">Show carts</a></div>
+        </div>
+        <p/>
+        <div>
+            <div class="row"><a href="allUsers.html" th:href="@{/user/}" th:text="#{all-users-page-button-caption}" th:if="${role == 'ADMIN'}">Users</a></div>
+        </div>
+        <p/>
+        <div>
+            <div class="row"><a href="allCarts.html" th:href="@{/cart/}" th:text="#{all-carts-page-button-caption}" th:if="${role == 'ADMIN'}">Users</a></div>
+        </div>
     </div>
 
-    <h3 th:text="#{page-switcher-header}">Select page</h3>
-
-    <div>
-        <div class="row"><a href="singleUser.html" th:href="@{/user/{userId}(userId=${userId})}" th:text="#{my-profile-button-caption}">My page</a></div>
-    </div>
-    <p/>
-    <div>
-        <div class="row"><a href="allCartsByUser.html" th:href="@{/user/{userId}/cart/(userId=${userId})}" th:text="#{show-carts-button-caption}" th:if="${role == 'USER'}">Show carts</a></div>
-    </div>
-    <p/>
-    <div>
-        <div class="row"><a href="allUsers.html" th:href="@{/user/}" th:text="#{all-users-page-button-caption}" th:if="${role == 'ADMIN'}">Users</a></div>
-    </div>
-    <p/>
-    <div>
-        <div class="row"><a href="allCarts.html" th:href="@{/cart/}" th:text="#{all-carts-page-button-caption}" th:if="${role == 'ADMIN'}">Users</a></div>
+    <div class="block" id="baseInfo">
+        <h2 th:text="#{base-info}">Base info</h2>
+        <h4 th:text="#{types-and-preparation}">Types and preparation</h4>
+        <h4 th:text="#{glass-type}">Glass</h4>
+        <p th:text="#{accept-glass-waste}">Accept</p>
+        <p th:text="#{deny-glass-waste}">Deny</p>
+        <p th:text="#{preparation-glass-waste}">Preparation</p>
+        <h4 th:text="#{paper-type}">Paper</h4>
+        <p th:text="#{accept-paper-waste}">Accept</p>
+        <p th:text="#{deny-paper-waste}">Deny</p>
+        <p th:text="#{preparation-paper-waste}">Preparation</p>
+        <h4 th:text="#{plastic-type}">Plastic</h4>
+        <p th:text="#{accept-plastic-waste}">Accept</p>
+        <p th:text="#{deny-plastic-waste}">Deny</p>
+        <p th:text="#{preparation-plastic-waste}">Preparation</p>
     </div>
 </body>
 </html>

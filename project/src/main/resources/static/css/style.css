@@ -32,6 +32,11 @@ input:read-only {
     margin-top: 10px;
 }
 
+h2 {
+    padding: 2px;
+    padding-left: 300px;
+}
+
 h3 {
     background-image: url("../pics/listmark.png");
     background-repeat: no-repeat;
@@ -41,4 +46,18 @@ h3 {
 
 .errors {
     color: red;
+}
+
+.block {
+    display: inline-block;
+    vertical-align: top;
+    margin-left: 50px;
+}
+
+#selector{
+    padding-top: 50px;
+}
+
+#baseInfo{
+    width: 900px;
 }
